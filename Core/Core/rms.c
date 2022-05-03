@@ -28,25 +28,25 @@ static void current_select_line(uint32_t *Sample);
 */
 static void current_select_line(uint32_t *Sample)
 {
-	static uint8_t _countSaturation[3]={0,0,0};
+	static uint8_t _countSaturation[TL_NO_PHASE]={0,0,0};
 	static uint8_t _tempCount=0; 
 	_tempCount++; // increment every call this functions
 	
 	// check if it is sample start saturated.
-	if(Sample[0]>4000 || Sample[0]<50)
+	if(Sample[R_PHASE]>4000 || Sample[R_PHASE]<50)
 	 {
 		 //no of sample saturated per cycle
-		 _countSaturation[0]++;
+		 _countSaturation[R_PHASE]++;
 	 }
 	 // similar for 2nd phase
-	if(Sample[1]>4000 || Sample[1]<50)
+	if(Sample[Y_PHASE]>4000 || Sample[Y_PHASE]<50)
 	 {
-		_countSaturation[1]++;
+		_countSaturation[Y_PHASE]++;
 	 }
 	 // similar for 2nd phase
-	 if(Sample[2]>4000 || Sample[2]<50)
+	 if(Sample[B_PHASE]>4000 || Sample[B_PHASE]<50)
 	 {
-		_countSaturation[2]++;
+		_countSaturation[R_PHASE]++;
 	 }
 	 
 	 // check if one cycle has completed
@@ -56,29 +56,29 @@ static void current_select_line(uint32_t *Sample)
 		_tempCount=0; //make zero and start for next cycle
 		
 		//check is sample saturated , if greater than minimum value
-		if( _countSaturation[0]>2) // at least 2 smaple should go beyond the limit
+		if( _countSaturation[R_PHASE]>2) // at least 2 smaple should go beyond the limit
 		{
-			_countSaturation[0]=0;
-			select_curr_line|=(0x07 & (1<<0)); //set zero bit 
+			_countSaturation[R_PHASE]=0;
+			select_curr_line|=(0x07 & (1<<R_PHASE)); //set zero bit 
 		}
 		else
-			select_curr_line&= (~(1<<0)); //else reset zero bit
+			select_curr_line&= (~(R_PHASE<<0)); //else reset zero bit
 		
-		if( _countSaturation[1]>2) //same for second
+		if( _countSaturation[Y_PHASE]>2) //same for second
 		{
-			_countSaturation[1]=0;
-			select_curr_line|=(0x07  & (1<<1)); //set 1 bit 
+			_countSaturation[Y_PHASE]=0;
+			select_curr_line|=(0x07  & (1<<Y_PHASE)); //set 1 bit 
 		}
 		else
-			select_curr_line &= (~(1<<1)); //else reset 1 bit
+			select_curr_line &= (~(1<<Y_PHASE)); //else reset 1 bit
 		
-		if( _countSaturation[2]>2)
+		if( _countSaturation[B_PHASE]>2)
 		{
-			_countSaturation[2]=0;
-			select_curr_line|=(0x07&(1<<2)); //set 2 bit
+			_countSaturation[B_PHASE]=0;
+			select_curr_line|=(0x07&(1<<B_PHASE)); //set 2 bit
 		}
 		else
-			select_curr_line&=(~(1<<2)); //else reset 2 bit
+			select_curr_line&=(~(1<<B_PHASE)); //else reset 2 bit
 	}
 	
 
@@ -157,18 +157,19 @@ inline void  Adc_Sample_Calculations(uint32_t *Adc_Sample)
 	phase_t phase;
 	int32_t va[TOTAL_PHASE];
 	
-	//TODO selec right adc channel for each  parameters
-			 _curr_withgain[IR_CURR]=Adc_Sample[2];
-			_curr_withgain[IY_CURR]=Adc_Sample[5];
-			_curr_withgain[IB_CURR]=Adc_Sample[6];
+	//TODO select right adc channel for each  parameters
+	// verify the Acd channel configuration based on circuit diagram
+			_curr_withgain[R_PHASE]=Adc_Sample[2];
+			_curr_withgain[Y_PHASE]=Adc_Sample[5];
+			_curr_withgain[B_PHASE]=Adc_Sample[6];
 	
-		   _curr_withoutgain[IR_CURR]=Adc_Sample[0];
-			_curr_withoutgain[IY_CURR]=Adc_Sample[3];
-			_curr_withoutgain[IB_CURR]=Adc_Sample[8];
+		   _curr_withoutgain[R_PHASE]=Adc_Sample[0];
+			_curr_withoutgain[Y_PHASE]=Adc_Sample[3];
+			_curr_withoutgain[B_PHASE]=Adc_Sample[8];
 	
-			_volt_sample[VR_PHASE]=Adc_Sample[1];
-			_volt_sample[VY_PHASE]=Adc_Sample[4];
-			_volt_sample[VB_PHASE]=Adc_Sample[7];
+			_volt_sample[R_PHASE]=Adc_Sample[1];
+			_volt_sample[Y_PHASE]=Adc_Sample[4];
+			_volt_sample[B_PHASE]=Adc_Sample[7];
 			
 	for(phase=0; phase< TOTAL_PHASE;phase++)
 	 {	 
@@ -288,7 +289,7 @@ void Scaling_Calculations(void)
 	  		
 	// current scalling without gain
 		//TODO GAIN
-		scaling_factor.curr_scal_without_gain[phase]= 	scaling_factor.curr_scal_gain[phase]/(float)GAIN; //GAIN :check the gain fator and define
+		scaling_factor.curr_scal_without_gain[phase]= scaling_factor.curr_scal_gain[phase]/(float)GAIN; //GAIN :check the gain fator and define
 		
 		// volatge scalling with gain
 		scaling_factor.volt_scal[phase]= (float)VOLT_MULTIPLIER/\
@@ -306,11 +307,6 @@ void Scaling_Calculations(void)
 
 			PT24xx_write(CURR_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_without_gain,sizeof(scaling_factor.curr_scal_without_gain));
 
-			PT24xx_write(POW_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_gain,sizeof(scaling_factor.power_scal_gain));
-
-			PT24xx_write(POW_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_without_gain,sizeof(scaling_factor.power_scal_without_gain));
-
-
 }
 
 /*
@@ -327,27 +323,32 @@ void Rms_Calculations(void)
 		 rms.voltage[phase]=sqrt(store.Store_Adc__SQR_Volt_Sample[phase])*scaling_factor.volt_scal[phase];
 		 
 		 	//current rms with gain
-		 rms.current_gain[phase]=sqrt(store.Store_Adc_Curr_sample_with_gain[phase])*scaling_factor.curr_scal_gain[phase];
+		 rms.current_gain[phase]=sqrt(store.Store_Adc__SQR_Curr_sample_with_gain[phase])*scaling_factor.curr_scal_gain[phase];
 		 	//voltage rms without gain
-		 rms.current_withoutgain[phase]=sqrt(store.Store_Adc_Curr_sample_without_gain[phase])*scaling_factor.curr_scal_without_gain[phase];
+		 rms.current_withoutgain[phase]=sqrt(store.Store_Adc__SQR_Curr_sample_without_gain[phase])*scaling_factor.curr_scal_without_gain[phase];
 		 
 		
 		 // KVA,KWA,KVAR power
 		 /*
 				if required convert to in Kilo by divide 1000;
+		
 		 */
-		if(select_curr_line & 0x07)
+		if(((select_curr_line & 0x01)&&phase==R_PHASE) ||  ((select_curr_line & 0x02)&&phase==Y_PHASE) 
+			|| ((select_curr_line & 0x04)&&phase==B_PHASE))
 		{
-			rms.power[KVA][phase]= rms.voltage[phase]*rms.current_withoutgain[phase];
-			rms.power[KW][phase]= sqrt(store.Store_KW_Sample[phase])*scaling_factor.power_scal_without_gain[phase];
-			rms.power[KVAR][phase]=sqrt(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_without_gain[phase];
+			/*  remove CURRENT_Mul by dividing because power scalling factor =current*vol so volt has 100 and current has 10000 */
+			/* final result would be extra 100 multiples actucal supply power */ 
+			
+			rms.power[KVA][phase]= (rms.voltage[phase]*rms.current_withoutgain[phase])/CURRENT_Mul;
+			rms.power[KW][phase]= (sqrt(store.Store_KW_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
+			rms.power[KVAR][phase]=(sqrt(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
 			
 		}
 		else
 		{
-			rms.power[KVA][phase]= rms.voltage[phase]*rms.current_gain[phase];
-			rms.power[KW][phase]= sqrt(store.Store_KW_Sample[phase])*scaling_factor.power_scal_gain[phase];
-			rms.power[KVAR][phase]=sqrt(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_gain[phase];
+			rms.power[KVA][phase]= (rms.voltage[phase]*rms.current_gain[phase])/CURRENT_Mul;
+			rms.power[KW][phase]= (sqrt(store.Store_KW_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
+			rms.power[KVAR][phase]=(sqrt(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
 		}
 		 
 	 }
@@ -362,18 +363,23 @@ void Rms_Calculations(void)
 
 void Read_Eeprom_Data(void)
 {	
-		
+	
+		//read data from eeprom
 	PT24xx_read(VOLT_SCAL_ADDR,(uint32_t*)scaling_factor.volt_scal,sizeof(scaling_factor.volt_scal));
 	PT24xx_read(CURR_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_gain,sizeof(scaling_factor.curr_scal_gain));
 	PT24xx_read(CURR_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_without_gain,sizeof(scaling_factor.curr_scal_without_gain));
-	PT24xx_read(POW_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_gain,sizeof(scaling_factor.power_scal_gain));
-	PT24xx_read(POW_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_without_gain,sizeof(scaling_factor.power_scal_without_gain));
+	//PT24xx_read(POW_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_gain,sizeof(scaling_factor.power_scal_gain));
+	//PT24xx_read(POW_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_without_gain,sizeof(scaling_factor.power_scal_without_gain));
 			
 	phase_t phase;
 	for(phase=0; phase<TL_NO_PHASE;phase++)
 	 {
 			avg.volt[phase]=((AN_VREF)*(float)(ADC_MAXOUT))/(VDC_OFFSET);
 			avg.curr[phase]=((AN_VREF)*(float)(ADC_MAXOUT))/(VDC_OFFSET);
+		 
+		 //POWER SCALLING FACTORS
+		  scaling_factor.power_scal_gain[phase]=scaling_factor.volt_scal[phase]*scaling_factor.curr_scal_gain[phase];
+			scaling_factor.power_scal_without_gain[phase]=scaling_factor.volt_scal[phase]*scaling_factor.curr_scal_without_gain[phase];
 	 }	
 		
 	// Enable for calibarations

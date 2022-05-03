@@ -14,7 +14,7 @@
 /***************************************************************************************/
 
 /***********************Write preprocessor directives*************************************************/
-//#define __ENABLE_CAL //enable or disable calibartions
+#define __ENABLE_CAL //enable or disable calibartions
 
 /*
 	set gain  which measeured by the ratio of register across OP_AMP value as per hardwa
@@ -156,21 +156,13 @@ enum{
 	TOTAL_MSD_DATA
 };
 
-
 typedef enum
 {
-	VR_PHASE=0,
-	VY_PHASE,
-	VB_PHASE,
+	R_PHASE=0,
+	Y_PHASE,
+	B_PHASE,
 	TL_NO_PHASE
 }phase_t;
-
-enum
-{
-	IR_CURR=0,
-	IY_CURR,
-	IB_CURR,
-};
 
 typedef enum 
 {

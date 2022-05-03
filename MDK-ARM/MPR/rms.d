@@ -43,3 +43,4 @@ mpr\rms.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h
 mpr\rms.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h
 mpr\rms.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h
 mpr\rms.o: ..\Core\Core\rms.h
+mpr\rms.o: ..\Core\Store\eeprom_addr.h

@@ -1,11 +1,10 @@
 --cpu Cortex-M0+
 "mpr\startup_stm32g070xx.o"
+"mpr\rms.o"
+"mpr\pt24xx.o"
 "mpr\main.o"
 "mpr\stm32g0xx_it.o"
 "mpr\stm32g0xx_hal_msp.o"
-"mpr\motor_protection.o"
-"mpr\rms.o"
-"mpr\pt24xx.o"
 "mpr\stm32g0xx_hal_gpio.o"
 "mpr\stm32g0xx_hal_adc.o"
 "mpr\stm32g0xx_hal_adc_ex.o"
