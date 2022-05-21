@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include<stdlib.h>
 #include "rms.h"
 #include "pt24xx.h"
 /* USER CODE END Includes */
@@ -44,6 +45,8 @@
 
 uint32_t ADC_DATA[NO_OF_ADC_CHANNEL];
 bool acc_data_ready=false;
+
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/

@@ -19,6 +19,7 @@ uint8_t select_curr_line=0; // 0 bit- 1 line,1 bit- 2 line,2 bit- 3 line , defau
 
 /** local function declarations start here*************/
 static void current_select_line(uint32_t *Sample);
+static inline void processFrequencyCalculations(int32_t currSample);
 /*
 @Discriptions: function use for selecting current channel/line, gain or without gain for further operations
 @parameters : sample -> gain current adc sample array,
@@ -83,6 +84,56 @@ static void current_select_line(uint32_t *Sample)
 	
 
 }
+
+/* To be called at sampling frequency for frequency measurement
+*		Refer ti rms.h for calculation details
+*///static 
+	int32_t prevSample;
+	//static 
+		int32_t cycleCounter = 1; /* Ignore very first cycle frequency 
+																			measurement */
+	//static 
+		float sampleCounter;
+	
+static inline void _ProcessFrequencyCalculation( int32_t currSample )
+{
+	float fracSample;
+	
+	// ZCD: Zero Crossing Detect check
+	if( prevSample <= 0 && currSample > 0)
+	{
+		// Is it a Frequency Measurement Cycle (FMC) ?
+		if( cycleCounter > 0) 
+		{
+			cycleCounter--; // Start of a new cycle
+			sampleCounter += 1; // a ZCD cycle, but not a FMC
+		}
+		else // End of FMC, accumulate frequency of last FMC
+		{
+			// Calculate fractional sample: eqn.(6) d = X(n)/(X(n)-X(n+1))
+			fracSample = (float)prevSample / (float)( prevSample - currSample);
+			// Reload cycle counter
+			cycleCounter = MFM_NUM_CYCLE_FREQ-1;
+			/* Accumulate sample counter and take average while
+					calculating frequency value */
+			// Accumulate current cycle's sample counter value 
+			common.freqSampleCounter_acc_curr += (sampleCounter+fracSample);
+			// count number of accumulation cycles
+			common.freqSampleZCDCounter_curr++;	
+			// Assign residual sample for new cycle
+			sampleCounter = 1.0f - fracSample; 
+		}
+	}
+	else
+	{
+		sampleCounter += 1; // Not a ZCD cycle
+	}
+	
+	// Retain current sample
+	prevSample = currSample;
+	
+}	/* End of _ProcessFrequencyCalculation() */
+
 
 
 static void phasereversal(int32_t sample[])
@@ -231,7 +282,7 @@ inline void Store_Adc_Data(void)
 {
 
 	phase_t phase;
-	for(phase=0; phase<3;phase++)
+	for(phase=0; phase<TL_NO_PHASE;phase++)
 	 {
 	     //printf(" ll %d\n",common.Adc_volt_ll_sample[phase]);
 		 // copy all data accumulated adc sample data
@@ -265,8 +316,10 @@ inline void Store_Adc_Data(void)
 		avg.curr[phase] =(uint16_t)(store.Store_Adc_Curr_sample_with_gain[phase]*Average_Mul);	
 			
 	}
-			
-
+			/* stored sample counter and zero crossing sample counter */
+					store.Store_freqSampleCounter_acc_curr=common.freqSampleCounter_acc_curr;
+					store.Store_freqSampleZCDCounter_curr=common.freqSampleZCDCounter_curr;
+					
 	
 }
 /*
@@ -317,6 +370,13 @@ void Scaling_Calculations(void)
 void Rms_Calculations(void)
 {
 	phase_t phase;
+	
+		energy_t energy_IDX=0;
+	 float _energy[TL_PARA_POWER][TL_NO_PHASE]={0};
+	 float _total_power[TL_PARA_POWER]={0};
+	 float _total_energy[TL_PARA_POWER]={0};
+	
+	 
 	for(phase=0; phase<TL_NO_PHASE;phase++)
 	 {
 			//voltage rms
@@ -350,7 +410,29 @@ void Rms_Calculations(void)
 			rms.power[KW][phase]= (sqrt(store.Store_KW_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
 			rms.power[KVAR][phase]=(sqrt(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
 		}
-		 
+		
+		
+		/* Accumulate total power */
+		  _total_power[KVA] +=rms.power[KVA][phase];
+		  _total_power[KW] +=rms.power[KW][phase];
+			_total_power[KVAR] +=rms.power[KVAR][phase];
+	
+		
+	
+ }
+		rms.power_total[KVA]= _total_power[KVA];
+		rms.power_total[KW]= _total_power[KW];
+		rms.power_total[KVAR]= _total_power[KVAR];
+		
+ /* make sure accumulation time 
+			Enery +=power/per unit time  power/sec */
+	for(energy_IDX=0;energy_IDX<TL_PARA_ENERGY;energy_IDX++)
+	 {
+			if(rms.power_total[energy_IDX]>0)
+			{
+				rms.energy[energy_IDX]+=rms.power_total[energy_IDX]/ENERY_PER_SEC;
+			}
+		
 	 }
 	 
 	 

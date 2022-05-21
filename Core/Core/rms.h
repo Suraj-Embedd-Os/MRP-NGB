@@ -33,6 +33,7 @@
 	
 */
 #define TIME_TO_CAL					 (100U) //100 ms
+#define ENERY_PER_SEC				 (TIME_TO_CAL/10)
 #define INPUT_Frequency			 (50U) 				
 #define TOTAL_NO_SAMPLE      (800)  
 #define SMAPLING_PERIOD			 ((1000*TIME_TO_CAL)/TOTAL_NO_SAMPLE) // sampling period time in usec
@@ -51,7 +52,7 @@
 		 
 #define      CALIBARTION_EIN_DIS   (0)  /* enable and disable the calibartions */
   
-
+#define 		MFM_NUM_CYCLE_FREQ		(10U)
 #define      VOLT_Mul            (100U)
 #define      CURRENT_Mul		 (10000U)	
 #define      VOLT_MULTIPLIER     (230*VOLT_Mul)    
@@ -239,6 +240,9 @@ typedef struct Common_Variable
 			KW_Sample[TOTAL_PHASE], // ADC KW  sample
 			KVAR_Sample[TOTAL_PHASE]; // ADC KVAR  sample
 	
+		float freqSampleCounter_acc_curr,
+					freqSampleZCDCounter_curr;
+	
 
 }Common_Var_t;
 
@@ -259,6 +263,9 @@ typedef struct Store
 		        
 			Store_KW_Sample[TOTAL_PHASE], // ADC KW  sample
 			Store_KVAR_Sample[TOTAL_PHASE]; // ADC KVAR  sample
+	
+		float Store_freqSampleCounter_acc_curr,
+					Store_freqSampleZCDCounter_curr;
 	
 }Store_Data_t;
 
@@ -336,6 +343,178 @@ void meter_init(void);
 
 int64_t read_value (RMS_READING_t id);
 
+
+
+/* Exported functions ------------------------------------------------------- */
+
+void system_reset ( void );
+/** @brief Function name: void meter_init ( void )
+ *  @Category: Initialize
+ *	@note Initializes following items:
+ *		Voltage Indexes
+ *		Read EEPROM and load saved energy values 
+ */
+extern void meter_init ( void );
+
+
+
+/** @brief Function name: void meter_calibration ( void )
+ *  @Category: Calibration
+ *	@note Calculates scaling factor for VAP
+ */
+extern void meter_calibration (void);
+
+/** @brief Function name: void meter_evt_VASampleReceived ( void )
+ *  @Category: Event handler
+ *	@note Frequency of this event: MFM_SAMPLING_PERIOD_US
+ *
+ *	Description
+ * Periodic Event when fresh voltage and current samples are received
+ *	Where, 
+ *  DC offset removal is done, 
+ *	samples are accumulated to calculate Average V and A
+ *	samples are squared and accumulated for RMS voltage and current 
+ *  calculation. 
+ *  90 degree delayed voltage and instant current samples are multiplied to 
+ *	calculate kvar.
+ *
+ *	Average V and A calculation:
+ * 		Vacc += V(i); Aacc += A(i)
+ *	Offset removal:
+ *		V(i) -= Vavg; where, Vavg=average of voltage samples
+ *		A(i) -= Aavg;		Aavg=average of current samples	 
+ *	For RMS Voltage and current:
+ *		Vsq_acc += V(i) * V(i);	where, V(i)=instant volatge sample
+ *		Asq_acc += A(i) * A(i); where, A(i)=instant current sample
+ *	For kvar:
+ *		KVARacc += V(i-n) * A(i); 
+ *			where, V(i-n)=90 degree delayed volatge sample
+ *                 n=number of samples collected in one quarter
+ * @param NONE
+ * @return NONE
+ */
+extern inline void meter_evt_VASampleReceived ( uint32_t sample[], uint8_t slot);
+
+
+/******************************************************************************/
+
+/** @brief Function name: void meter_storeAccumulators ( void )
+ *  @Category: Functional
+ *	
+ *	@note This routine will be called by each time when defined number of 
+ *	samples are obtained and accumulator's value are ready to be used.
+ *	This routine obtains accumulator's value and store in different location
+ *	so that accumulators can be used for next cycles.
+ *	The stored accumulator values are safe data and remain unaffected till
+ *	next calculation cycle. These stored accumulator's value will be input 
+ *	for all parameter's calculation. 
+ *
+ * @param NONE  
+ * @return NONE
+ */
+extern inline void meter_storeAccumulators ( void );
+
+/******************************************************************************/
+
+/** @brief Function name: void meter_evt_MDCalculation ( void )
+ *  @Category: Event handler
+ *	@note Frequency of this event: MFM_SAMPLING_PERIOD_US*MFM_N_ACC_SAMPLE 
+ *
+ * Periodic Event when 
+ *	Average voltage and current are calculated
+ *	kw, kvar and kvah are calculated 
+ *	Accumulate power parameters to calculate kwh, kvarh and kvah
+ * 	
+ *	Average Calculation:
+ *		Vavg = Vacc/N; Aavg = Aacc/N;
+ *	RMS Calculation:
+ *		Vrms = Sqrt(Vsq_acc/N); Arms = Sqrt(Asq_acc/N);
+ *	kw, kvar, kva calculation:
+ *		kw = Vrms*Arms
+ *		kvar = KVARacc/N
+ *		kva = Sqrt(kw*kw+kvar*kvar)
+ *	for kwh, kvarh, kvah calculation:
+ *		KWHacc += kw;
+ *		KVARacc += kvar;
+ *		KVAHacc += kvah;
+ *	Note: 
+ *		To accomodate >32-bit Accumulator value another set of 32-bit
+ *		space will be used. For final clculation of kw, kvar and kvah
+ *		all accumulated values will be used to calculate kwh, kvarh and kvah
+ *
+ *	Where, N=Smaple Count in one cycle
+ * @param NONE
+ * @return NONE
+ */
+extern inline void meter_evt_MDCalculation ( void );
+
+
+#ifdef ENABLE_CALIBRATION
+/******************************************************************************/
+
+/** @brief Function name: void meter_evt_SFCalculation ( void )
+ *  @Category: Fuctional
+ *	
+ *	@note This routine calculates Scaling Factor in following way:
+ *	SF for V&A RMS = sqrt(Accumulated squared VA sample) / Desired Input
+ *  Where, Desired Input is set input value and 
+ *				 same value is expected to measure
+ *  SF for power = SF for V * SF for A 
+ *
+ *	Ideally, it is expected to be 
+ *	MF = ((Maximum Voltage Possible at ADC input=3.3) *
+ *				(value of resistance in voltage divider ciruit=401)) /
+ *				sqrt(no. of accumulated sample=1000) /
+ *				((Maximum ADC Output=4096) 
+ * @param Parameter's ID  
+ * @return Parameter's value
+ */
+extern inline void meter_evt_SFCalculation ( void );
+#endif
+
+
+
+/******************************************************************************/
+
+/** @brief Function name: 
+	*								void _ProcessFrequencyCalculation ( int32_t currSample )
+ *  @Category: Functional
+ *	
+ *	@note This routine will be called to calculate frequency
+ *
+ *		Method:
+ *			At every sample capture of R-Phase voltage signal,
+ *			Identify whether zero-crossing is detected [ZCD event] or not
+ *				[CurrentSample>DC_Offset && PrevSample<=DC_Offset]
+ *			At every ZCD event, count number of cycles
+ *				When number of cycles, N == 10, N=1 in very first cycle
+ *				calculate fractional sample of last cycle
+ * 			Where, fractional sample of last cycle, FracSample = number of sample 
+ * 			between PrevSample and when SampleValue==DC_Offset
+ *			Calculate, 
+ *			Frequency = N/(Total Sample Count in N cycle * 
+												Sampling Interval in seconds)
+ *			and store remaining fractional sample, (1-FracSample) in sample counter
+ *			Repeat above steps.
+ *			************************
+ *			To calculate fractional sample: 
+ *        X(n) = an + b [Previous Sample]   -- (1)
+ *				X(n+1) = a(n+1) + b [Current Sample]  -- (2)
+ *				X(n+d) = a(n+d) + b, where sample value X(n+d) = 0  -- (3)
+ *        Solve (1) and (2) eqn. to get a and b.
+ *				a = X(n+1) - X(n), b = (n+1)* X(n) - n * X(n+1) -- (4)
+ *				eqn. (3) to get
+ *				d = -b/a - n -- (5)
+ *        Substitute a and b from (4) into (5) to get
+ *				d = X(n) / (X(n)- X(n+1)) --(6) 
+ *			
+ *
+ * @param Current value of DC offset compensated R-phase voltage sample  
+ * @return None
+ * @Remarks: This routine is local, called for backgroung calculation only
+ *						and need not to be called outside
+ *	
+ */
 
 
 /**************************************************************************************************/
