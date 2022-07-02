@@ -5,7 +5,6 @@
 "mpr\main.o"
 "mpr\stm32g0xx_it.o"
 "mpr\stm32g0xx_hal_msp.o"
-"mpr\motor_protection.o"
 "mpr\stm32g0xx_hal_gpio.o"
 "mpr\stm32g0xx_hal_adc.o"
 "mpr\stm32g0xx_hal_adc_ex.o"
