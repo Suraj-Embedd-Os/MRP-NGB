@@ -22,79 +22,171 @@ Dialog DLL:      TARMCM1.DLL V1.14.3.0
  
 <h2>Project:</h2>
 D:\Nagoba\MPR\MRP-NGB\MDK-ARM\MPR.uvprojx
-Project File Date:  05/03/2022
+Project File Date:  06/26/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Rebuild target 'MPR'
-assembling startup_stm32g070xx.s...
-compiling pt24xx.c...
-..\Core\Store\eeprom_addr.h(15): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Store\pt24xx.c: 1 warning, 0 errors
-compiling main.c...
-../Core/Src/main.c(283): warning:  #188-D: enumerated type mixed with another type
-    hadc1.Init.LowPowerAutoWait = DISABLE;
-../Core/Src/main.c(284): warning:  #188-D: enumerated type mixed with another type
-    hadc1.Init.LowPowerAutoPowerOff = DISABLE;
-../Core/Src/main.c(285): warning:  #188-D: enumerated type mixed with another type
-    hadc1.Init.ContinuousConvMode = DISABLE;
-../Core/Src/main.c(287): warning:  #188-D: enumerated type mixed with another type
-    hadc1.Init.DiscontinuousConvMode = DISABLE;
-../Core/Src/main.c(290): warning:  #188-D: enumerated type mixed with another type
-    hadc1.Init.DMAContinuousRequests = ENABLE;
-../Core/Src/main.c(294): warning:  #188-D: enumerated type mixed with another type
-    hadc1.Init.OversamplingMode = DISABLE;
-../Core/Src/main.c: 6 warnings, 0 errors
+Build target 'MPR'
 compiling rms.c...
 ..\Core\Store\eeprom_addr.h(15): warning:  #1-D: last line of file ends without a newline
   #endif
-..\Core\Core\rms.c(174): warning:  #188-D: enumerated type mixed with another type
+..\Core\Core\rms.c(228): warning:  #188-D: enumerated type mixed with another type
   	for(phase=0; phase< TOTAL_PHASE;phase++)
-..\Core\Core\rms.c(234): warning:  #188-D: enumerated type mixed with another type
-  	for(phase=0; phase<3;phase++)
-..\Core\Core\rms.c(283): warning:  #188-D: enumerated type mixed with another type
+..\Core\Core\rms.c(299): warning:  #188-D: enumerated type mixed with another type
+  	for(phase=0; phase<TL_NO_PHASE;phase++)
+..\Core\Core\rms.c(356): warning:  #188-D: enumerated type mixed with another type
   	for(phase=0; phase<	TL_NO_PHASE;phase++)
-..\Core\Core\rms.c(320): warning:  #188-D: enumerated type mixed with another type
+..\Core\Core\rms.c(397): warning:  #188-D: enumerated type mixed with another type
+  		energy_t energy_IDX=0;
+..\Core\Core\rms.c(403): warning:  #188-D: enumerated type mixed with another type
   	for(phase=0; phase<TL_NO_PHASE;phase++)
-..\Core\Core\rms.c(375): warning:  #188-D: enumerated type mixed with another type
+..\Core\Core\rms.c(463): warning:  #188-D: enumerated type mixed with another type
+  	for(energy_IDX=0;energy_IDX<TL_PARA_ENERGY;energy_IDX++)
+..\Core\Core\rms.c(398): warning:  #177-D: variable "_energy"  was declared but never referenced
+  	 float _energy[TL_PARA_POWER][TL_NO_PHASE]={0};
+..\Core\Core\rms.c(400): warning:  #177-D: variable "_total_energy"  was declared but never referenced
+  	 float _total_energy[TL_PARA_POWER]={0};
+..\Core\Core\rms.c(508): warning:  #188-D: enumerated type mixed with another type
   	for(phase=0; phase<TL_NO_PHASE;phase++)
-..\Core\Core\rms.c(537): warning:  #940-D: missing return statement at end of non-void function "read_value" 
-  }
-..\Core\Core\rms.c(88): warning:  #177-D: function "phasereversal"  was declared but never referenced
+..\Core\Core\rms.c(580): warning:  #111-D: statement is unreachable
+  		break;
+..\Core\Core\rms.c(25): warning:  #177-D: function "processFrequencyCalculations"  was declared but never referenced
+  static inline void processFrequencyCalculations(int32_t currSample);
+..\Core\Core\rms.c(142): warning:  #177-D: function "phasereversal"  was declared but never referenced
   static void phasereversal(int32_t sample[])
-..\Core\Core\rms.c: 8 warnings, 0 errors
-compiling stm32g0xx_it.c...
-compiling stm32g0xx_hal_msp.c...
-compiling stm32g0xx_hal_gpio.c...
-compiling stm32g0xx_ll_adc.c...
-compiling stm32g0xx_hal_adc_ex.c...
-compiling stm32g0xx_hal_adc.c...
-compiling stm32g0xx_hal_i2c.c...
-compiling stm32g0xx_hal_i2c_ex.c...
-compiling stm32g0xx_hal_rtc_ex.c...
-compiling stm32g0xx_hal_rtc.c...
-compiling stm32g0xx_hal_tim_ex.c...
-compiling stm32g0xx_hal_uart.c...
-compiling stm32g0xx_hal_tim.c...
-compiling stm32g0xx_hal_uart_ex.c...
-compiling stm32g0xx_ll_rcc.c...
-compiling stm32g0xx_hal_rcc.c...
-compiling stm32g0xx_hal_rcc_ex.c...
-compiling stm32g0xx_hal_flash.c...
-compiling stm32g0xx_hal_dma.c...
-compiling stm32g0xx_hal_flash_ex.c...
-compiling stm32g0xx_hal_pwr_ex.c...
-compiling stm32g0xx_hal_pwr.c...
-compiling stm32g0xx_hal_dma_ex.c...
-compiling stm32g0xx_hal_cortex.c...
-compiling stm32g0xx_hal_exti.c...
-compiling stm32g0xx_hal.c...
-compiling system_stm32g0xx.c...
+..\Core\Core\rms.c: 13 warnings, 0 errors
+compiling motor_protection.c...
+..\Core\Core\motor_protection.c(30): warning:  #1295-D: Deprecated declaration isUnderVolt - give arg types
+  static bool isUnderVolt();
+..\Core\Core\motor_protection.c(31): warning:  #1295-D: Deprecated declaration isOverVolt - give arg types
+  static bool isOverVolt();
+..\Core\Core\motor_protection.c(32): warning:  #1295-D: Deprecated declaration isPhaseFailueVolt - give arg types
+  static bool isPhaseFailueVolt();
+..\Core\Core\motor_protection.c(33): warning:  #1295-D: Deprecated declaration isPhaseUnbalanceVolt - give arg types
+  static bool isPhaseUnbalanceVolt();
+..\Core\Core\motor_protection.c(34): warning:  #1295-D: Deprecated declaration isPhaseReversalVolt - give arg types
+  static bool isPhaseReversalVolt();
+..\Core\Core\motor_protection.c(36): warning:  #1295-D: Deprecated declaration isUnderCurr - give arg types
+  static bool isUnderCurr();
+..\Core\Core\motor_protection.c(37): warning:  #1295-D: Deprecated declaration isOverCurr - give arg types
+  static bool isOverCurr();
+..\Core\Core\motor_protection.c(38): warning:  #1295-D: Deprecated declaration isPhaseFailueCurr - give arg types
+  static bool isPhaseFailueCurr();
+..\Core\Core\motor_protection.c(39): warning:  #1295-D: Deprecated declaration isPhaseUnbalanceCurr - give arg types
+  static bool isPhaseUnbalanceCurr();
+..\Core\Core\motor_protection.c(40): warning:  #1295-D: Deprecated declaration isPhaseReversalCurr - give arg types
+  static bool isPhaseReversalCurr();
+..\Core\Core\motor_protection.c(41): warning:  #1295-D: Deprecated declaration isRotorLockCurr - give arg types
+  static bool isRotorLockCurr();
+..\Core\Core\motor_protection.c(42): warning:  #1295-D: Deprecated declaration isProlongStartCurr - give arg types
+  static bool isProlongStartCurr();
+..\Core\Core\motor_protection.c(43): warning:  #1295-D: Deprecated declaration InvCurrOverLoad - give arg types
+  static bool InvCurrOverLoad();
+..\Core\Core\motor_protection.c(45): warning:  #1295-D: Deprecated declaration isOverPower - give arg types
+  static bool isOverPower();
+..\Core\Core\motor_protection.c(46): warning:  #1295-D: Deprecated declaration isUnderPower - give arg types
+  static bool isUnderPower();
+..\Core\Core\motor_protection.c(49): warning:  #1295-D: Deprecated declaration isGroundFault - give arg types
+  static bool isGroundFault();
+..\Core\Core\motor_protection.c(50): warning:  #1295-D: Deprecated declaration isEarthFault - give arg types
+  static bool isEarthFault();
+..\Core\Core\motor_protection.c(52): warning:  #1295-D: Deprecated declaration isContactorFault - give arg types
+  static bool isContactorFault();
+..\Core\Core\motor_protection.c(181): warning:  #9-D: nested comment is not allowed
+  /*
+..\Core\Core\motor_protection.c(182): warning:  #9-D: nested comment is not allowed
+  /*
+..\Core\Core\motor_protection.c(325): warning:  #9-D: nested comment is not allowed
+  	/**phase unbalnce delay*/
+..\Core\Core\motor_protection.c(422): warning:  #940-D: missing return statement at end of non-void function "Short_Circuit" 
+   }
+..\Core\Core\motor_protection.c(460): warning:  #940-D: missing return statement at end of non-void function "Rotor_Lock" 
+   }
+..\Core\Core\motor_protection.c(473): warning:  #9-D: nested comment is not allowed
+  		/* && Average_All_phase_Current < FULL_LOAD_CURRENT_PERCENTAGE(PROLONG_STARTING_MAX))*/
+..\Core\Core\motor_protection.c(503): warning:  #940-D: missing return statement at end of non-void function "Prolong_Starting" 
+   }
+..\Core\Core\motor_protection.c(679): warning:  #9-D: nested comment is not allowed
+  	 / if(menu_config[PHASE_LOSS_ED]!=0 && isPhaseLoss()/*||isPhaseReversal()*/)
+..\Core\Core\motor_protection.c(971): warning:  #940-D: missing return statement at end of non-void function "isPhaseLoss" 
+  }
+..\Core\Core\motor_protection.c(1007): warning:  #940-D: missing return statement at end of non-void function "isPhaseReversal" 
+  }
+..\Core\Core\motor_protection.c(1055): warning:  #940-D: missing return statement at end of non-void function "isPhaseUnblanceCurr" 
+  }
+..\Core\Core\motor_protection.c(30): warning:  #177-D: function "isUnderVolt"  was declared but never referenced
+  static bool isUnderVolt();
+..\Core\Core\motor_protection.c(31): warning:  #177-D: function "isOverVolt"  was declared but never referenced
+  static bool isOverVolt();
+..\Core\Core\motor_protection.c(164): warning:  #177-D: function "isPhaseFailueVolt"  was declared but never referenced
+  static bool isPhaseFailueVolt()
+..\Core\Core\motor_protection.c(33): warning:  #177-D: function "isPhaseUnbalanceVolt"  was declared but never referenced
+  static bool isPhaseUnbalanceVolt();
+..\Core\Core\motor_protection.c(34): warning:  #177-D: function "isPhaseReversalVolt"  was declared but never referenced
+  static bool isPhaseReversalVolt();
+..\Core\Core\motor_protection.c(36): warning:  #177-D: function "isUnderCurr"  was declared but never referenced
+  static bool isUnderCurr();
+..\Core\Core\motor_protection.c(37): warning:  #177-D: function "isOverCurr"  was declared but never referenced
+  static bool isOverCurr();
+..\Core\Core\motor_protection.c(38): warning:  #177-D: function "isPhaseFailueCurr"  was declared but never referenced
+  static bool isPhaseFailueCurr();
+..\Core\Core\motor_protection.c(39): warning:  #177-D: function "isPhaseUnbalanceCurr"  was declared but never referenced
+  static bool isPhaseUnbalanceCurr();
+..\Core\Core\motor_protection.c(40): warning:  #177-D: function "isPhaseReversalCurr"  was declared but never referenced
+  static bool isPhaseReversalCurr();
+..\Core\Core\motor_protection.c(41): warning:  #177-D: function "isRotorLockCurr"  was declared but never referenced
+  static bool isRotorLockCurr();
+..\Core\Core\motor_protection.c(42): warning:  #177-D: function "isProlongStartCurr"  was declared but never referenced
+  static bool isProlongStartCurr();
+..\Core\Core\motor_protection.c(43): warning:  #177-D: function "InvCurrOverLoad"  was declared but never referenced
+  static bool InvCurrOverLoad();
+..\Core\Core\motor_protection.c(45): warning:  #177-D: function "isOverPower"  was declared but never referenced
+  static bool isOverPower();
+..\Core\Core\motor_protection.c(46): warning:  #177-D: function "isUnderPower"  was declared but never referenced
+  static bool isUnderPower();
+..\Core\Core\motor_protection.c(49): warning:  #177-D: function "isGroundFault"  was declared but never referenced
+  static bool isGroundFault();
+..\Core\Core\motor_protection.c(50): warning:  #177-D: function "isEarthFault"  was declared but never referenced
+  static bool isEarthFault();
+..\Core\Core\motor_protection.c(52): warning:  #177-D: function "isContactorFault"  was declared but never referenced
+  static bool isContactorFault();
+..\Core\Core\motor_protection.c(72): warning:  #177-D: function "extact_data"  was declared but never referenced
+  static void extact_data(uint32_t *src,uint16_t *dest,uint8_t index,uint8_t num)
+..\Core\Core\motor_protection.c(118): warning:  #177-D: function "isUnderVoltage"  was declared but never referenced
+  static bool isUnderVoltage()
+..\Core\Core\motor_protection.c(141): warning:  #177-D: function "isOverVoltage"  was declared but never referenced
+  static bool isOverVoltage()
+..\Core\Core\motor_protection.c(186): warning:  #177-D: function "isUnderCurrent"  was declared but never referenced
+  static bool isUnderCurrent()
+..\Core\Core\motor_protection.c(207): warning:  #177-D: function "isOverCurrent"  was declared but never referenced
+  static bool isOverCurrent()
+..\Core\Core\motor_protection.c(234): warning:  #177-D: function "invTimeCal"  was declared but never referenced
+  static void invTimeCal()
+..\Core\Core\motor_protection.c(513): warning:  #177-D: function "imidiateTrip"  was declared but never referenced
+   static void imidiateTrip()
+..\Core\Core\motor_protection.c(573): warning:  #177-D: function "motorConditionCheck"  was declared but never referenced
+   static void motorConditionCheck()
+..\Core\Core\motor_protection.c(673): warning:  #177-D: function "preStartingMotorStatus"  was declared but never referenced
+  	static void preStartingMotorStatus()
+..\Core\Core\motor_protection.c: 56 warnings, 0 errors
+compiling main.c...
+../Core/Src/main.c(281): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.LowPowerAutoWait = DISABLE;
+../Core/Src/main.c(282): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.LowPowerAutoPowerOff = DISABLE;
+../Core/Src/main.c(283): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.ContinuousConvMode = DISABLE;
+../Core/Src/main.c(285): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.DiscontinuousConvMode = DISABLE;
+../Core/Src/main.c(288): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.DMAContinuousRequests = ENABLE;
+../Core/Src/main.c(292): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.OversamplingMode = DISABLE;
+../Core/Src/main.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=20500 RO-data=312 RW-data=44 ZI-data=2956  
+Program Size: Code=21080 RO-data=312 RW-data=56 ZI-data=2992  
 FromELF: creating hex file...
-"MPR\MPR.axf" - 0 Error(s), 15 Warning(s).
+"MPR\MPR.axf" - 0 Error(s), 75 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -117,7 +209,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.5.0
-Build Time Elapsed:  00:00:27
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

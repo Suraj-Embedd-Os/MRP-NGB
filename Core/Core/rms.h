@@ -19,7 +19,7 @@
 /*
 	set gain  which measeured by the ratio of register across OP_AMP value as per hardwa
 */
-#define  GAIN  (21.0f)
+#define  GAIN  (16.0f)
 
 #define VDC_OFFSET 							  1.65f // DC Offset Voltage
 #define AN_VREF							      3.30f	// Analog Reference Voltage
@@ -35,7 +35,7 @@
 #define TIME_TO_CAL					 (100U) //100 ms
 #define ENERY_PER_SEC				 (TIME_TO_CAL/10)
 #define INPUT_Frequency			 (50U) 				
-#define TOTAL_NO_SAMPLE      (800)  
+#define TOTAL_NO_SAMPLE      (400)  
 #define SMAPLING_PERIOD			 ((1000*TIME_TO_CAL)/TOTAL_NO_SAMPLE) // sampling period time in usec
 #define NO_OF_SAMPE_PER_CYCLE	 ((1000000U/SMAPLING_PERIOD)/INPUT_Frequency)
 
@@ -52,7 +52,7 @@
 		 
 #define      CALIBARTION_EIN_DIS   (0)  /* enable and disable the calibartions */
   
-#define 		MFM_NUM_CYCLE_FREQ		(10U)
+#define 		 NUM_CYCLE_FREQ		(10U)
 #define      VOLT_Mul            (100U)
 #define      CURRENT_Mul		 (10000U)	
 #define      VOLT_MULTIPLIER     (230*VOLT_Mul)    
@@ -180,23 +180,36 @@ typedef enum
 	KVARH,
 	TL_PARA_ENERGY	
 }energy_t;
+
+typedef enum
+{
+	RY_PHASE,
+	YB_PHASE,
+	BR_PHASE,
+	
+	TL_LL_NO_PHASE
+}phase_ll_t;
  
 typedef struct rms_data
 {
 		float voltage[TL_NO_PHASE],//voltage per phase
+					voltage_LL[TL_NO_PHASE],// Line to Line voltage
 					current_gain[TL_NO_PHASE], //current per phase with gain
 					current_withoutgain[TL_NO_PHASE], //current per phase without gain
 					display_currnet[TL_NO_PHASE], //current per phase to display
 					power[TL_PARA_POWER][TL_NO_PHASE], //power per phase
 					power_total[TL_PARA_POWER], // total power
-					energy[TL_PARA_ENERGY]; // enery total
+					energy[TL_PARA_ENERGY], // enery total
+					power_factor[TL_NO_PHASE],
+					total_power_factor,
+					frequency;	
 			  
 }rms_data_t;
 
 
 typedef struct measured_data
 {
-	float all_measured_data[TOTAL_MSD_DATA];  
+	float all_measured_data[TOTAL_MSD_DATA];  //all measured
 	
 }measured_data_t;
 
@@ -204,7 +217,8 @@ typedef struct measured_data
 typedef struct average_cal
 {
 	uint16_t volt[TL_NO_PHASE]; //volagte average
-	uint16_t curr[TL_NO_PHASE];  //current average
+	uint16_t curr_without_gain[TL_NO_PHASE];  //current average
+	uint16_t curr_gain[TL_NO_PHASE];
 	
 }average_cal_t;
 
@@ -225,19 +239,21 @@ typedef struct scaling
 
 typedef struct Common_Variable
 {	
-	uint32_t  Volt_sqr_sample_arr[NO_OF_SAMPE_PER_QUATER+1][TOTAL_PHASE];
+	uint32_t  Volt_sample_arr[NO_OF_SAMPE_PER_QUATER+2][TOTAL_PHASE];
 	
-	uint32_t Adc_volt_ll_sample[TOTAL_PHASE],  // for volt average_cal 
+	uint32_t Adc_volt_sample[TOTAL_PHASE],  // for volt average_cal 
 	         Adc_Curr_sample_with_gain[TOTAL_PHASE], // for currnet average_ca
 	         Adc_Curr_sample_without_gain[TOTAL_PHASE];  // for currnet average_ca
 			 
 	
 	
-			uint32_t Adc_SQR_Volt_Sample[TOTAL_PHASE],   // ADC volt square sample
-			 Adc_SQR_Curr_sample_with_gain[TOTAL_LINE], // ADC current with gain square sample
-	         Adc_SQR_Curr_sample_without_gain[TOTAL_LINE],  // ADC current without gain square sample
+	uint32_t Adc_SQR_Volt_Sample[TOTAL_PHASE],   // ADC volt square sample
+			Adc_SQR_Curr_sample_with_gain[TOTAL_LINE], // ADC current with gain square sample
+	    Adc_SQR_Curr_sample_without_gain[TOTAL_LINE];  // ADC current without gain square sample
+	
+ uint32_t Adc_SQR_LL_Volt_Sample[TOTAL_PHASE];
 		       
-			KW_Sample[TOTAL_PHASE], // ADC KW  sample
+		int32_t	KW_Sample[TOTAL_PHASE], // ADC KW  sample
 			KVAR_Sample[TOTAL_PHASE]; // ADC KVAR  sample
 	
 		float freqSampleCounter_acc_curr,
@@ -251,7 +267,7 @@ typedef struct Common_Variable
 typedef struct Store
 {
 	
-	uint32_t Store_Adc_volt_ll_sample[TOTAL_PHASE],  // for volt average_cal 
+	uint32_t Store_Adc_volt_sample[TOTAL_PHASE],  // for volt average_cal 
 	         Store_Adc_Curr_sample_with_gain[TOTAL_PHASE], // for currnet average_ca
 	         Store_Adc_Curr_sample_without_gain[TOTAL_PHASE];  // for currnet average_ca
 			 
@@ -259,9 +275,11 @@ typedef struct Store
 	
 	uint32_t Store_Adc__SQR_Volt_Sample[TOTAL_PHASE],   // ADC volt square sample
 			 Store_Adc__SQR_Curr_sample_with_gain[TOTAL_LINE], // ADC current with gain square sample
-	         Store_Adc__SQR_Curr_sample_without_gain[TOTAL_LINE],  // ADC current without gain square sample
+	         Store_Adc__SQR_Curr_sample_without_gain[TOTAL_LINE];  // ADC current without gain square sample
+	
+	uint32_t Store_Adc_SQR_LL_Volt_Sample[TOTAL_PHASE];
 		        
-			Store_KW_Sample[TOTAL_PHASE], // ADC KW  sample
+			int32_t Store_KW_Sample[TOTAL_PHASE], // ADC KW  sample
 			Store_KVAR_Sample[TOTAL_PHASE]; // ADC KVAR  sample
 	
 		float Store_freqSampleCounter_acc_curr,
@@ -341,183 +359,10 @@ void meter_init(void);
 
 //RMS_t * getRMSHandler(void);
 
-int64_t read_value (RMS_READING_t id);
+float read_value (RMS_READING_t id);
 
 
 
-/* Exported functions ------------------------------------------------------- */
-
-void system_reset ( void );
-/** @brief Function name: void meter_init ( void )
- *  @Category: Initialize
- *	@note Initializes following items:
- *		Voltage Indexes
- *		Read EEPROM and load saved energy values 
- */
-extern void meter_init ( void );
-
-
-
-/** @brief Function name: void meter_calibration ( void )
- *  @Category: Calibration
- *	@note Calculates scaling factor for VAP
- */
-extern void meter_calibration (void);
-
-/** @brief Function name: void meter_evt_VASampleReceived ( void )
- *  @Category: Event handler
- *	@note Frequency of this event: MFM_SAMPLING_PERIOD_US
- *
- *	Description
- * Periodic Event when fresh voltage and current samples are received
- *	Where, 
- *  DC offset removal is done, 
- *	samples are accumulated to calculate Average V and A
- *	samples are squared and accumulated for RMS voltage and current 
- *  calculation. 
- *  90 degree delayed voltage and instant current samples are multiplied to 
- *	calculate kvar.
- *
- *	Average V and A calculation:
- * 		Vacc += V(i); Aacc += A(i)
- *	Offset removal:
- *		V(i) -= Vavg; where, Vavg=average of voltage samples
- *		A(i) -= Aavg;		Aavg=average of current samples	 
- *	For RMS Voltage and current:
- *		Vsq_acc += V(i) * V(i);	where, V(i)=instant volatge sample
- *		Asq_acc += A(i) * A(i); where, A(i)=instant current sample
- *	For kvar:
- *		KVARacc += V(i-n) * A(i); 
- *			where, V(i-n)=90 degree delayed volatge sample
- *                 n=number of samples collected in one quarter
- * @param NONE
- * @return NONE
- */
-extern inline void meter_evt_VASampleReceived ( uint32_t sample[], uint8_t slot);
-
-
-/******************************************************************************/
-
-/** @brief Function name: void meter_storeAccumulators ( void )
- *  @Category: Functional
- *	
- *	@note This routine will be called by each time when defined number of 
- *	samples are obtained and accumulator's value are ready to be used.
- *	This routine obtains accumulator's value and store in different location
- *	so that accumulators can be used for next cycles.
- *	The stored accumulator values are safe data and remain unaffected till
- *	next calculation cycle. These stored accumulator's value will be input 
- *	for all parameter's calculation. 
- *
- * @param NONE  
- * @return NONE
- */
-extern inline void meter_storeAccumulators ( void );
-
-/******************************************************************************/
-
-/** @brief Function name: void meter_evt_MDCalculation ( void )
- *  @Category: Event handler
- *	@note Frequency of this event: MFM_SAMPLING_PERIOD_US*MFM_N_ACC_SAMPLE 
- *
- * Periodic Event when 
- *	Average voltage and current are calculated
- *	kw, kvar and kvah are calculated 
- *	Accumulate power parameters to calculate kwh, kvarh and kvah
- * 	
- *	Average Calculation:
- *		Vavg = Vacc/N; Aavg = Aacc/N;
- *	RMS Calculation:
- *		Vrms = Sqrt(Vsq_acc/N); Arms = Sqrt(Asq_acc/N);
- *	kw, kvar, kva calculation:
- *		kw = Vrms*Arms
- *		kvar = KVARacc/N
- *		kva = Sqrt(kw*kw+kvar*kvar)
- *	for kwh, kvarh, kvah calculation:
- *		KWHacc += kw;
- *		KVARacc += kvar;
- *		KVAHacc += kvah;
- *	Note: 
- *		To accomodate >32-bit Accumulator value another set of 32-bit
- *		space will be used. For final clculation of kw, kvar and kvah
- *		all accumulated values will be used to calculate kwh, kvarh and kvah
- *
- *	Where, N=Smaple Count in one cycle
- * @param NONE
- * @return NONE
- */
-extern inline void meter_evt_MDCalculation ( void );
-
-
-#ifdef ENABLE_CALIBRATION
-/******************************************************************************/
-
-/** @brief Function name: void meter_evt_SFCalculation ( void )
- *  @Category: Fuctional
- *	
- *	@note This routine calculates Scaling Factor in following way:
- *	SF for V&A RMS = sqrt(Accumulated squared VA sample) / Desired Input
- *  Where, Desired Input is set input value and 
- *				 same value is expected to measure
- *  SF for power = SF for V * SF for A 
- *
- *	Ideally, it is expected to be 
- *	MF = ((Maximum Voltage Possible at ADC input=3.3) *
- *				(value of resistance in voltage divider ciruit=401)) /
- *				sqrt(no. of accumulated sample=1000) /
- *				((Maximum ADC Output=4096) 
- * @param Parameter's ID  
- * @return Parameter's value
- */
-extern inline void meter_evt_SFCalculation ( void );
-#endif
-
-
-
-/******************************************************************************/
-
-/** @brief Function name: 
-	*								void _ProcessFrequencyCalculation ( int32_t currSample )
- *  @Category: Functional
- *	
- *	@note This routine will be called to calculate frequency
- *
- *		Method:
- *			At every sample capture of R-Phase voltage signal,
- *			Identify whether zero-crossing is detected [ZCD event] or not
- *				[CurrentSample>DC_Offset && PrevSample<=DC_Offset]
- *			At every ZCD event, count number of cycles
- *				When number of cycles, N == 10, N=1 in very first cycle
- *				calculate fractional sample of last cycle
- * 			Where, fractional sample of last cycle, FracSample = number of sample 
- * 			between PrevSample and when SampleValue==DC_Offset
- *			Calculate, 
- *			Frequency = N/(Total Sample Count in N cycle * 
-												Sampling Interval in seconds)
- *			and store remaining fractional sample, (1-FracSample) in sample counter
- *			Repeat above steps.
- *			************************
- *			To calculate fractional sample: 
- *        X(n) = an + b [Previous Sample]   -- (1)
- *				X(n+1) = a(n+1) + b [Current Sample]  -- (2)
- *				X(n+d) = a(n+d) + b, where sample value X(n+d) = 0  -- (3)
- *        Solve (1) and (2) eqn. to get a and b.
- *				a = X(n+1) - X(n), b = (n+1)* X(n) - n * X(n+1) -- (4)
- *				eqn. (3) to get
- *				d = -b/a - n -- (5)
- *        Substitute a and b from (4) into (5) to get
- *				d = X(n) / (X(n)- X(n+1)) --(6) 
- *			
- *
- * @param Current value of DC offset compensated R-phase voltage sample  
- * @return None
- * @Remarks: This routine is local, called for backgroung calculation only
- *						and need not to be called outside
- *	
- */
-
-
-/**************************************************************************************************/
 
 /************************ (C) COPYRIGHT NAGOBA ELECTRONICS  MAY 2022*****END OF FILE****/
 

@@ -8,7 +8,7 @@
 #include "main.h"
 
 /***DEFINE*********/
-#define volt_multiple         (100U)
+#define volt_multiple     (100U)
 #define Current_scal		  (10000U)
 
 #define UC_LIMIT				  (0.5*Current_scal) // under current 
@@ -48,6 +48,7 @@ int32_t NOMINAL_VOLTAGE(uint16_t percentage);
 
 typedef enum
 {
+	NONE,
 	UV,   //under volt
 	OV, 	//over volt
 	VPH_F,	//volt phase failure 
@@ -75,7 +76,34 @@ typedef enum
 	
 }capture_fault_t;
 
-
+typedef enum
+{
+	SETUP_UV,   //under volt
+	SETUP_OV, 	//over volt
+	SETUP_VPH_F,	//volt phase failure 
+	SETUP_UB_V,	//volt unbalanced
+	SETUP_VPH_R, //voltage phase reversal
+	
+	SETUP_UC,	//under current
+	SETUP_OC,	//over current
+	SETUP_INVT_OL,	//inverse time overload
+	SETUP_UB_C,	//Current unbalanced
+	SETUP_RL,		//rotor jam
+	SETUP_PS,	//PROLONG START
+	SETUP_CPH_F,	//Current phase failure
+	SETUP_CPH_R, //voltage phase reversal
+	
+	SETUP_UP,	//under power
+	SETUP_OP,	//over power
+	
+	SETUP_GR_F,	//ground fault
+	SETUP_O_TEMP, //over temp
+	SETUP_ER_F,	//earth fault
+	SETUP_CON_F,	//contatctor failure
+	SETUP_FULL_LOAD_CURR,
+	SETUP_NOMINAL_VOLT,
+	TOTAL_SETUP_PARA
+}setup_t;
 
 typedef struct{
 	
@@ -89,29 +117,28 @@ typedef struct{
 
 typedef struct
 {
-	uint16_t _counter[TOTAL_PARA_FAILURE];
+	uint16_t _counter[TOTAL_PARA_FAILURE-1];
 }fault_counter_t;
 
 typedef struct
 {
-	uint16_t _delaySetup[TOTAL_PARA_FAILURE];
+	uint16_t _delaySetup[TOTAL_PARA_FAILURE-1];
 }delaySetup_t;
 
 /*
 	All fault related paramerte 
 */
-typedef struct
-{
+typedef struct{
 	delaySetup_t			setup_delay;		// stored setup delay
 	fault_counter_t	  counter;		//Timmer running 
 	uint32_t 					capture_fault_value; //strored capure value
-	phase_failure_t 					phase; // capture phase for fault
+	phase_failure_t 		phase; // capture phase for fault
 
 	/* see capture_fault_t enum for all bit
 		eg OV-0bit, UV-1 bit,.....etc*/
 	uint32_t fault_status_reg;  // fault status register 
 	
-	//  Use to display falut text on display check range  capture_fault_t enum tor 
+	//  Use to display falut text on display check range  capture_fault_t enum  
 	uint8_t 	cause_of_trip_reg;
 
 	//uint8_t value_at_fault; // 0 -bit =stop,1-bit =run,2-bit =start
@@ -127,6 +154,7 @@ typedef struct
 #endif
 
 
+/************************ (C) COPYRIGHT NAGOBA ELECTRONICS  MAY 2022*****END OF FILE****/
 
 
 

@@ -418,6 +418,26 @@
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32g0xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>motor_protection.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Core\motor_protection.h</FilePath>
+            </File>
+            <File>
+              <FileName>communications.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Core\communications.h</FilePath>
+            </File>
+            <File>
+              <FileName>motor_protection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Core\motor_protection.c</FilePath>
+            </File>
+            <File>
+              <FileName>setup.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\setup.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

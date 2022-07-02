@@ -1,6 +1,7 @@
 
 #include "motor_protection.h"
 #include "rms.h"
+#include "setup.h"
 
 
 #define ON  (1U)
@@ -17,6 +18,7 @@ extern uint8_t Motor_Class[7];
 extern uint32_t All_phase_current;
 
 extern rms_data_t   rms;  // all reading parameter
+extern meter_setup_t			meter_setup;
 
  bool stop=true,start=false,running=false;
 /****START function only belong to that functions*******/
@@ -53,13 +55,35 @@ static bool isContactorFault();
 void thermalCapacity(void);
 
 /*
+										No of bits			Bit postions		requirmnet				    range(in dec)
+1	Enable/ Disable = 1 bits ,				0							0,1												0-2
+	parameters
+2	Auto reset			=	2 bits					1-2						00,01,10,11(NA)						0-3			
+3	trip relay 1		=	2 bits,					3-4						00,01, 11(NA)						0-3
+4	alarm relay 2		=	2 bits					5-6						00,01, 11(NA)						0-3
+5	trip-setting		=	10 bits,				7-16					(1-1000)%of nominal val		0-1023
+	range																						 	
+6 Alarm range			= 7 bits 					17-23					(50-100)%of setted val		0-127
+7	Time delay/trip = 7+1 bits				24-30					(0.3-100)sec 						 0-127
+										 1 bits				  31						0,1
+1 means less than 1 sec.
+				total bits= 32(used)
+*/
+static void extact_data(uint32_t *src,uint16_t *dest,uint8_t index,uint8_t num)
+{
+		uint8_t temp=0;
+	for(temp=0;temp<num;temp++)
+		*dest |= (*src & (1<<(index+temp)));
+}
+
+/*
 @ helper function return current value
 @Arg: pass percentage
 @return  :if succes return value or else -1;
 */
 int32_t FULL_LOAD_CURRENT(uint16_t percentage)
 {
-	int32_t rated_curr=48000; /// 4.8 amp //10000 multipilcations //read from menu_config
+	int32_t rated_curr=meter_setup.meter_setup_menu[SETUP_FULL_LOAD_CURR]; /// 4.8 amp //10000 multipilcations //read from menu_config
 		if(percentage>0)
 		{
 				return (rated_curr*percentage)/100;
@@ -74,7 +98,7 @@ int32_t FULL_LOAD_CURRENT(uint16_t percentage)
 */
 int32_t NOMINAL_VOLTAGE(uint16_t percentage)
 {
-	int32_t nominal_voltage=4400; /// 4.8 amp //100 multipilcations
+	int32_t nominal_voltage=meter_setup.meter_setup_menu[SETUP_NOMINAL_VOLT]; /// 4.8 amp //100 multipilcations
 		if(percentage>0)
 		{
 				return (nominal_voltage*percentage)/100;

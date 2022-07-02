@@ -38,6 +38,7 @@ mpr\main.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h
 mpr\main.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h
 mpr\main.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h
 mpr\main.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h
+mpr\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 mpr\main.o: ..\Core\Core\rms.h
 mpr\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 mpr\main.o: ..\Core\Store\pt24xx.h

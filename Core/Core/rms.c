@@ -3,7 +3,9 @@
 #include "pt24xx.h"
 #include "rms.h"
 #include "eeprom_addr.h"
+#include "setup.h"
 #define SQR(X)  ((X)*(X))
+#define KILOHOURS 1000
 
 /**global variable declare start******/
 average_cal_t 		avg;
@@ -13,6 +15,7 @@ average_cal_t 		avg;
 measured_data_t 	msd;
 scaling_factor_t	scaling_factor;
 rms_data_t          rms;
+meter_setup_t			meter_setup;
 
 extern bool acc_data_ready;
 uint8_t select_curr_line=0; // 0 bit- 1 line,1 bit- 2 line,2 bit- 3 line , default current with gain line selected.
@@ -88,12 +91,12 @@ static void current_select_line(uint32_t *Sample)
 /* To be called at sampling frequency for frequency measurement
 *		Refer ti rms.h for calculation details
 *///static 
-	int32_t prevSample;
+	int32_t prevSample=0;
 	//static 
 		int32_t cycleCounter = 1; /* Ignore very first cycle frequency 
 																			measurement */
 	//static 
-		float sampleCounter;
+		float sampleCounter=0.0f;
 	
 static inline void _ProcessFrequencyCalculation( int32_t currSample )
 {
@@ -113,7 +116,7 @@ static inline void _ProcessFrequencyCalculation( int32_t currSample )
 			// Calculate fractional sample: eqn.(6) d = X(n)/(X(n)-X(n+1))
 			fracSample = (float)prevSample / (float)( prevSample - currSample);
 			// Reload cycle counter
-			cycleCounter = MFM_NUM_CYCLE_FREQ-1;
+			cycleCounter = NUM_CYCLE_FREQ-1;
 			/* Accumulate sample counter and take average while
 					calculating frequency value */
 			// Accumulate current cycle's sample counter value 
@@ -197,7 +200,7 @@ static void phasereversal(int32_t sample[])
 
 inline void  Adc_Sample_Calculations(uint32_t *Adc_Sample)
 {
-	static uint8_t  volt_Curr_Id = NO_OF_SAMPE_PER_QUATER,
+	static uint8_t  volt_Curr_Id = NO_OF_SAMPE_PER_QUATER+1,
 									volt_delay90Idx=0;
 	
 	
@@ -229,15 +232,15 @@ inline void  Adc_Sample_Calculations(uint32_t *Adc_Sample)
 			va[2]=(int32_t)_curr_withoutgain[phase];
 			
 			//Accoumulated for average calculations
-			common.Adc_volt_ll_sample[phase]         		+=(uint32_t)va[0];
+			common.Adc_volt_sample[phase]         		+=(uint32_t)va[0];
 			common.Adc_Curr_sample_with_gain[phase]  		+=(uint32_t)va[1];
 			common.Adc_Curr_sample_without_gain[phase]	+=(uint32_t)va[2];
 		 
 		 	 //remove off set / refrence volt form the sample
 			 va[0]-=avg.volt[ phase] ; // 12 bit adc =4096
 																	// average=2048
-			 va[1]-=avg.curr[ phase] ;
-			 va[2]-=avg.curr[ phase] ;
+			 va[1]-=avg.curr_gain[ phase] ;
+			 va[2]-=avg.curr_without_gain[ phase] ;
 		 
 		
 		  //Accoumulated sqr sample
@@ -246,21 +249,29 @@ inline void  Adc_Sample_Calculations(uint32_t *Adc_Sample)
 		   common.Adc_SQR_Curr_sample_without_gain[phase] 	+=(uint32_t)SQR(va[2]);
 		
 			// store Sample_per_quarter for kvar calculation
-		   common.Volt_sqr_sample_arr[volt_Curr_Id][phase]=va[0];
+		   common.Volt_sample_arr[volt_Curr_Id][phase]=va[0];
 		   
 		    // accumulates sample for kvr and kw calculation
 		   if(select_curr_line & (1<<phase))
 		   {
 				 //if saturated then go for without gain current
-				common.KVAR_Sample[phase]+= common.Volt_sqr_sample_arr[volt_Curr_Id][phase]*va[2];
-				common.KW_Sample[phase]+= common.Volt_sqr_sample_arr[volt_delay90Idx][phase]*va[2]; 
+				common.KVAR_Sample[phase]+= common.Volt_sample_arr[volt_delay90Idx][phase]*va[2];
+				common.KW_Sample[phase]+= common.Volt_sample_arr[volt_Curr_Id][phase]*va[2]; 
 		   }
 		   else
 		   {
-			  common.KVAR_Sample[phase]+= common.Volt_sqr_sample_arr[volt_Curr_Id][phase]*va[1];
-			  common.KW_Sample[phase]+= common.Volt_sqr_sample_arr[volt_delay90Idx][phase]*va[1]; 
+			  common.KVAR_Sample[phase]+= common.Volt_sample_arr[volt_delay90Idx][phase]*va[1];
+			  common.KW_Sample[phase]+= common.Volt_sample_arr[volt_Curr_Id][phase]*va[1]; 
 		   }
 		}
+	
+			// Line-Line Voltage calculation for 3-phase system
+		common.Adc_SQR_LL_Volt_Sample[RY_PHASE] +=(uint32_t)(_volt_sample[R_PHASE]-
+																												_volt_sample[Y_PHASE]);
+		common.Adc_SQR_LL_Volt_Sample[YB_PHASE] +=(uint32_t)(_volt_sample[Y_PHASE]-
+																												_volt_sample[B_PHASE]);
+		common.Adc_SQR_LL_Volt_Sample[BR_PHASE] +=(uint32_t)(_volt_sample[B_PHASE]-
+																												_volt_sample[R_PHASE]);
 		
 			volt_delay90Idx++;
 			volt_Curr_Id++;
@@ -270,6 +281,9 @@ inline void  Adc_Sample_Calculations(uint32_t *Adc_Sample)
 			volt_Curr_Id=0;
 		/* check current adc saturations */ 
 		current_select_line(&_curr_withgain[0]);
+		
+		// for frequency calculations
+		_ProcessFrequencyCalculation((int32_t)common.Volt_sample_arr[volt_Curr_Id][R_PHASE]);
 
 	 		
 }
@@ -286,21 +300,24 @@ inline void Store_Adc_Data(void)
 	 {
 	     //printf(" ll %d\n",common.Adc_volt_ll_sample[phase]);
 		 // copy all data accumulated adc sample data
-		 store.Store_Adc_volt_ll_sample[phase]=common.Adc_volt_ll_sample[phase];
+		 store.Store_Adc_volt_sample[phase]				=common.Adc_volt_sample[phase];
 		 store.Store_Adc_Curr_sample_with_gain[phase]			=common.Adc_Curr_sample_with_gain[phase];
 		 store.Store_Adc_Curr_sample_without_gain[phase]		=common.Adc_Curr_sample_without_gain[phase];
+		 store.Store_Adc_SQR_LL_Volt_Sample[phase]=common.Adc_SQR_LL_Volt_Sample[phase];
 		 
+
 		 store.Store_Adc__SQR_Volt_Sample[phase]				=common.Adc_SQR_Volt_Sample[phase];
 		 store.Store_Adc__SQR_Curr_sample_with_gain[phase]		=common.Adc_SQR_Curr_sample_with_gain[phase];
 		 store.Store_Adc__SQR_Curr_sample_without_gain[phase]	=common.Adc_SQR_Curr_sample_without_gain[phase];
 		        
 		 store.Store_KW_Sample[phase]							=common.KW_Sample[phase];
 		 store.Store_KVAR_Sample[phase]						=common.KVAR_Sample[phase];
+		 
 			
     	//printf(" store %d\n",store.Store_Adc_volt_ll_sample[phase]);
 	
 	/*clear buffer  */
-			common.Adc_volt_ll_sample[phase]					=0;
+			common.Adc_volt_sample[phase]					=0;
 	    common.Adc_Curr_sample_with_gain[phase]			=0;
 	    common.Adc_Curr_sample_without_gain[phase]		=0;
 			 
@@ -312,8 +329,11 @@ inline void Store_Adc_Data(void)
 			common.KVAR_Sample[phase]							=0;
 	
 			//Average Calculations
-		avg.volt[phase] =(uint16_t)( store.Store_Adc_volt_ll_sample[phase]*Average_Mul);
-		avg.curr[phase] =(uint16_t)(store.Store_Adc_Curr_sample_with_gain[phase]*Average_Mul);	
+		avg.volt[phase] =(uint16_t)( store.Store_Adc_volt_sample[phase]*Average_Mul);
+		avg.curr_gain[phase] =(uint16_t)(store.Store_Adc_Curr_sample_with_gain[phase]*Average_Mul);
+		avg.curr_without_gain[phase] =(uint16_t)(store.Store_Adc_Curr_sample_without_gain[phase]*Average_Mul);
+
+		
 			
 	}
 			/* stored sample counter and zero crossing sample counter */
@@ -337,12 +357,15 @@ void Scaling_Calculations(void)
 	  {	
 		
 		// current scalling with gain
-		scaling_factor.curr_scal_gain[phase]= (float)CURRENT_MULTIPLIER/\
+		//scaling_factor.curr_scal_gain[phase]= (float)CURRENT_MULTIPLIER/\
 			                      (float)sqrt(store.Store_Adc__SQR_Curr_sample_with_gain[phase]);
+		
+		scaling_factor.curr_scal_without_gain[phase]=(float)CURRENT_MULTIPLIER/\
+															(float)sqrt(store.Store_Adc__SQR_Curr_sample_without_gain[phase]);
 	  		
 	// current scalling without gain
 		//TODO GAIN
-		scaling_factor.curr_scal_without_gain[phase]= scaling_factor.curr_scal_gain[phase]/(float)GAIN; //GAIN :check the gain fator and define
+		scaling_factor.curr_scal_gain[phase]= scaling_factor.curr_scal_without_gain[phase]/(float)GAIN; //GAIN :check the gain fator and define
 		
 		// volatge scalling with gain
 		scaling_factor.volt_scal[phase]= (float)VOLT_MULTIPLIER/\
@@ -358,7 +381,7 @@ void Scaling_Calculations(void)
 			PT24xx_write(VOLT_SCAL_ADDR,(uint32_t*)scaling_factor.volt_scal,sizeof(scaling_factor.volt_scal));
 			PT24xx_write(CURR_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_gain,sizeof(scaling_factor.curr_scal_gain));
 
-			PT24xx_write(CURR_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_without_gain,sizeof(scaling_factor.curr_scal_without_gain));
+			//PT24xx_write(CURR_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_without_gain,sizeof(scaling_factor.curr_scal_without_gain));
 
 }
 
@@ -382,6 +405,10 @@ void Rms_Calculations(void)
 			//voltage rms
 		 rms.voltage[phase]=sqrt(store.Store_Adc__SQR_Volt_Sample[phase])*scaling_factor.volt_scal[phase];
 		 
+		 //Line to Line voltage(phase volatge)
+		 rms.voltage_LL[phase]=sqrt(store.Store_Adc_SQR_LL_Volt_Sample[phase])*scaling_factor.volt_scal[phase];
+		 
+		 
 		 	//current rms with gain
 		 rms.current_gain[phase]=sqrt(store.Store_Adc__SQR_Curr_sample_with_gain[phase])*scaling_factor.curr_scal_gain[phase];
 		 	//voltage rms without gain
@@ -399,23 +426,26 @@ void Rms_Calculations(void)
 			/*  remove CURRENT_Mul by dividing because power scalling factor =current*vol so volt has 100 and current has 10000 */
 			/* final result would be extra 100 multiples actucal supply power */ 
 			
-			rms.power[KVA][phase]= (rms.voltage[phase]*rms.current_withoutgain[phase])/CURRENT_Mul;
-			rms.power[KW][phase]= (sqrt(store.Store_KW_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
-			rms.power[KVAR][phase]=(sqrt(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
+			rms.power[KVA][phase]= ((float)rms.voltage[phase]*rms.current_withoutgain[phase])/CURRENT_Mul;
+			rms.power[KW][phase]= ((float)(store.Store_KW_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
+			rms.power[KVAR][phase]=((float)(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
 			
 		}
 		else
 		{
-			rms.power[KVA][phase]= (rms.voltage[phase]*rms.current_gain[phase])/CURRENT_Mul;
-			rms.power[KW][phase]= (sqrt(store.Store_KW_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
-			rms.power[KVAR][phase]=(sqrt(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
+			rms.power[KVA][phase]= ((float)rms.voltage[phase]*rms.current_gain[phase])/CURRENT_Mul;
+			rms.power[KW][phase]= ((float)(store.Store_KW_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
+			rms.power[KVAR][phase]=((float)(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
 		}
 		
 		
 		/* Accumulate total power */
 		  _total_power[KVA] +=rms.power[KVA][phase];
-		  _total_power[KW] +=rms.power[KW][phase];
+		  _total_power[KW] 	+=rms.power[KW][phase];
 			_total_power[KVAR] +=rms.power[KVAR][phase];
+		
+		// individual power factors
+		rms.power_factor[phase]=(1000*rms.power[KW][phase])/rms.power[KVA][phase];
 	
 		
 	
@@ -423,6 +453,10 @@ void Rms_Calculations(void)
 		rms.power_total[KVA]= _total_power[KVA];
 		rms.power_total[KW]= _total_power[KW];
 		rms.power_total[KVAR]= _total_power[KVAR];
+ 
+		// PF = Watt/VA
+		rms.total_power_factor =(1000*rms.power_total[KW])/rms.power_total[KVA];
+	
 		
  /* make sure accumulation time 
 			Enery +=power/per unit time  power/sec */
@@ -430,11 +464,28 @@ void Rms_Calculations(void)
 	 {
 			if(rms.power_total[energy_IDX]>0)
 			{
-				rms.energy[energy_IDX]+=rms.power_total[energy_IDX]/ENERY_PER_SEC;
+				rms.energy[energy_IDX]+=(rms.power_total[energy_IDX]/ENERY_PER_SEC)/KILOHOURS;
 			}
 		
 	 }
 	 
+	 // frequency calculations
+	 if(store.Store_freqSampleZCDCounter_curr >0)
+	 {
+		 /* Calculate average number of samples per NUM_CYCLE_FREQ =
+		  A=(store.Store_freqSampleCounter_acc_curr/store.Store_freqSampleZCDCounter_curr)
+		 Convert average number of sample into second =
+			B = A * (Sampling time in uS/1000000)  s
+		 Calculate frequency = no. of cycles(=NUM_CYCLE_FREQ) / 
+				avg. time spent in each cycle in sec(=B)
+		*/
+		rms.frequency = (float)(NUM_CYCLE_FREQ * 
+												(1000000000.0f / ((store.Store_freqSampleCounter_acc_curr / 
+												store.Store_freqSampleZCDCounter_curr) * 
+												(float)SMAPLING_PERIOD)));
+		store.Store_freqSampleZCDCounter_curr = 0;
+		 
+	 }
 	 
 } 
 
@@ -449,16 +500,18 @@ void Read_Eeprom_Data(void)
 		//read data from eeprom
 	PT24xx_read(VOLT_SCAL_ADDR,(uint32_t*)scaling_factor.volt_scal,sizeof(scaling_factor.volt_scal));
 	PT24xx_read(CURR_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_gain,sizeof(scaling_factor.curr_scal_gain));
-	PT24xx_read(CURR_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_without_gain,sizeof(scaling_factor.curr_scal_without_gain));
+	//PT24xx_read(CURR_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_without_gain,sizeof(scaling_factor.curr_scal_without_gain));
 	//PT24xx_read(POW_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_gain,sizeof(scaling_factor.power_scal_gain));
 	//PT24xx_read(POW_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_without_gain,sizeof(scaling_factor.power_scal_without_gain));
 			
 	phase_t phase;
 	for(phase=0; phase<TL_NO_PHASE;phase++)
 	 {
-			avg.volt[phase]=((AN_VREF)*(float)(ADC_MAXOUT))/(VDC_OFFSET);
-			avg.curr[phase]=((AN_VREF)*(float)(ADC_MAXOUT))/(VDC_OFFSET);
-		 
+			avg.volt[phase]=((float)(ADC_MAXOUT)*(VDC_OFFSET))/AN_VREF;
+			avg.curr_without_gain[phase]=((float)(ADC_MAXOUT)*(VDC_OFFSET))/AN_VREF;
+		 	avg.curr_gain[phase]=((float)(ADC_MAXOUT)*(VDC_OFFSET))/AN_VREF;
+
+		 scaling_factor.curr_scal_without_gain[phase]=scaling_factor.curr_scal_gain[phase]*GAIN;
 		 //POWER SCALLING FACTORS
 		  scaling_factor.power_scal_gain[phase]=scaling_factor.volt_scal[phase]*scaling_factor.curr_scal_gain[phase];
 			scaling_factor.power_scal_without_gain[phase]=scaling_factor.volt_scal[phase]*scaling_factor.curr_scal_without_gain[phase];
@@ -497,125 +550,38 @@ void Calibaration(void)
 
 /* Displaying and other purpose used functions */	
 
-int64_t read_value (RMS_READING_t id)
+float read_value (RMS_READING_t id)
 {
-	/*int64_t value_return;
+	float value_return;
 	switch(id)
 	{	
 		//normal parameters
 		case PARA_VRMS_RY:
-			value_return=Rms_t.voltageRms[RY_PHASE];
 			break;
 		case PARA_VRMS_YB: 
-			value_return=Rms_t.voltageRms[YB_PHASE];
 				break;
 		case PARA_VRMS_RB:
-			value_return=Rms_t.voltageRms[BR_PHASE];;//3rd voltage
 				break;
 		case PARA_IRMS_R:
-			value_return=getCurrentValue(RY_PHASE);
 				break;
 		case PARA_IRMS_Y:
-			value_return=getCurrentValue(YB_PHASE) ;///3rd current show as 2nd current
 				break;
 		case PARA_IRMS_B:
-			value_return=getCurrentValue(BR_PHASE); 
 		break;
 		case PARA_THERMAL_CAPACITY:
-			value_return= (presentTHCapacity*100); 
 				break;
 		
 		case PARA_FAULT_VALUE:
-			value_return= faultCap_Val;//(presentTHCapacity*100); 
 				break;	
-		
 		case PARA_SET_VALUE:
-			value_return= temp_menu_config[Index_SV];
 				break;	
-		
-		//Setting parameters
-		case PARA_UV:
-			value_return= temp_menu_config[UNDER_VOLTAGE];			
-			break;
-		case PARA_UV_DELAY:
-			value_return= temp_menu_config[UNDER_VOLTAGE_DELAY];			
-			break;
-		case PARA_OV:
-			value_return=temp_menu_config[OVER_VOLTAGE];			
-			break;
-			case PARA_OV_DELAY:
-			value_return=temp_menu_config[OVER_VOLTAGE_DELAY];			
-			break;
-		case PARA_UC:
-			value_return=temp_menu_config[UNDER_CURRENT];			
-			break;
-		case PARA_UC_DELAY:
-			value_return=temp_menu_config[UNDER_CURRENT_DELAY];			
-			break;
-			case PARA_SC:
-			value_return=temp_menu_config[SHORT_CIRCUIT];			
-			break;
-			case PARA_RL:
-			value_return=temp_menu_config[ROTOR_LOCK];			
-			break;
-			case PARA_RL_DELAY:
-			value_return=temp_menu_config[ROTOR_LOCK_DELAY];			
-			break;
-			case PARA_UB_V:
-			value_return=temp_menu_config[PHASE_UNBALANCE_VOLTAGE];			
-			break;
-				case PARA_UB_V_DELAY:
-			value_return=temp_menu_config[PHASE_UNBALANCE_VOLTAGE_DELAY];			
-			break;
-				case PARA_UB_C:
-			value_return=temp_menu_config[PHASE_UNBALANCE_CURRENT];			
-			break;
-			case PARA_UB_C_DELAY:
-			value_return=temp_menu_config[PHASE_UNBALANCE_CURRENT_DELAY];			
-			break;			
-			case PARA_OC:
-			value_return=temp_menu_config[OVER_CURRENT];			
-			break;			
-		case PARA_OC_DELAY:
-			value_return=temp_menu_config[OVER_CURRENT_DELAY];			
-			break;
-			case PARA_PS:
-			value_return=temp_menu_config[PROLONG_STARTING];			
-			break;			
-		case PARA_PS_DELAY:
-			value_return=temp_menu_config[PROLONG_STARTING_DELAY];			
-			break;
-		case PARA_PL_E_D:
-			value_return=temp_menu_config[PHASE_LOSS_ED];		
-			break;			
-		case PARA_PR_E_D:
-			value_return=temp_menu_config[PHASE_REVERSAL_E_D];		
-		break;	
-		case PARA_IC_E_D:
-			value_return=temp_menu_config[INVERSE_CURRENT_E_D];		
-		break;	
-		case PARA_FULL_LOAD_CURRENT:
-			value_return=temp_menu_config[FULL_LOAD_CURRENT];			
-			break;
-		case PARA_MOTOR_CLASS:
-			value_return= Motor_Class[temp_menu_config[MOTOR_CLASS]];
-			break;
-//		case PARA_ADDRESS:
-//			value_return=temp_menu_config[ADDRESS];		
-//		break;
-//		case PARA_BAUD_RATE:
-//			value_return=Menu_Baud_Rate[temp_menu_config[BAUD_RATE]];
-//		break;
-//		case PARA_PARITY:
-//			value_return=temp_menu_config[PARITY];		
-//		break;
-		case PARA_FACTORY_RST:
-			value_return=temp_menu_config[FACTORY_RST];
+					
+	
 		break;
 		default :			
 			break;
 	}
-	return value_return;*/
+	return value_return;
 }
 
 
