@@ -5,7 +5,7 @@
 #include "eeprom_addr.h"
 #include "setup.h"
 #define SQR(X)  ((X)*(X))
-#define KILOHOURS 1000
+#define KILOHOUR_PERSEC ((float)1000/3600) 
 
 /**global variable declare start******/
 average_cal_t 		avg;
@@ -50,7 +50,7 @@ static void current_select_line(uint32_t *Sample)
 	 // similar for 2nd phase
 	 if(Sample[B_PHASE]>4000 || Sample[B_PHASE]<50)
 	 {
-		_countSaturation[R_PHASE]++;
+		_countSaturation[B_PHASE]++;
 	 }
 	 
 	 // check if one cycle has completed
@@ -66,7 +66,7 @@ static void current_select_line(uint32_t *Sample)
 			select_curr_line|=(0x07 & (1<<R_PHASE)); //set zero bit 
 		}
 		else
-			select_curr_line&= (~(R_PHASE<<0)); //else reset zero bit
+			select_curr_line&= (~(1<<R_PHASE)); //else reset zero bit
 		
 		if( _countSaturation[Y_PHASE]>2) //same for second
 		{
@@ -266,11 +266,11 @@ inline void  Adc_Sample_Calculations(uint32_t *Adc_Sample)
 		}
 	
 			// Line-Line Voltage calculation for 3-phase system
-		common.Adc_SQR_LL_Volt_Sample[RY_PHASE] +=(uint32_t)(_volt_sample[R_PHASE]-
+		common.Adc_SQR_LL_Volt_Sample[RY_PHASE] +=(uint32_t)SQR(_volt_sample[R_PHASE]-
 																												_volt_sample[Y_PHASE]);
-		common.Adc_SQR_LL_Volt_Sample[YB_PHASE] +=(uint32_t)(_volt_sample[Y_PHASE]-
+		common.Adc_SQR_LL_Volt_Sample[YB_PHASE] +=(uint32_t)SQR(_volt_sample[Y_PHASE]-
 																												_volt_sample[B_PHASE]);
-		common.Adc_SQR_LL_Volt_Sample[BR_PHASE] +=(uint32_t)(_volt_sample[B_PHASE]-
+		common.Adc_SQR_LL_Volt_Sample[BR_PHASE] +=(uint32_t)SQR(_volt_sample[B_PHASE]-
 																												_volt_sample[R_PHASE]);
 		
 			volt_delay90Idx++;
@@ -309,6 +309,7 @@ inline void Store_Adc_Data(void)
 		 store.Store_Adc__SQR_Volt_Sample[phase]				=common.Adc_SQR_Volt_Sample[phase];
 		 store.Store_Adc__SQR_Curr_sample_with_gain[phase]		=common.Adc_SQR_Curr_sample_with_gain[phase];
 		 store.Store_Adc__SQR_Curr_sample_without_gain[phase]	=common.Adc_SQR_Curr_sample_without_gain[phase];
+		 
 		        
 		 store.Store_KW_Sample[phase]							=common.KW_Sample[phase];
 		 store.Store_KVAR_Sample[phase]						=common.KVAR_Sample[phase];
@@ -320,6 +321,7 @@ inline void Store_Adc_Data(void)
 			common.Adc_volt_sample[phase]					=0;
 	    common.Adc_Curr_sample_with_gain[phase]			=0;
 	    common.Adc_Curr_sample_without_gain[phase]		=0;
+			common.Adc_SQR_LL_Volt_Sample[phase]		=0;
 			 
 			common.Adc_SQR_Volt_Sample[phase]					=0;
 			common.Adc_SQR_Curr_sample_with_gain[phase]		=0;
@@ -339,7 +341,8 @@ inline void Store_Adc_Data(void)
 			/* stored sample counter and zero crossing sample counter */
 					store.Store_freqSampleCounter_acc_curr=common.freqSampleCounter_acc_curr;
 					store.Store_freqSampleZCDCounter_curr=common.freqSampleZCDCounter_curr;
-					
+					common.freqSampleCounter_acc_curr=0;
+					common.freqSampleZCDCounter_curr=0;
 	
 }
 /*
@@ -357,10 +360,10 @@ void Scaling_Calculations(void)
 	  {	
 		
 		// current scalling with gain
-		//scaling_factor.curr_scal_gain[phase]= (float)CURRENT_MULTIPLIER/\
+		scaling_factor.curr_scal_gain[phase]= (float)CURRENT_MULTIPLIER/\
 			                      (float)sqrt(store.Store_Adc__SQR_Curr_sample_with_gain[phase]);
 		
-		scaling_factor.curr_scal_without_gain[phase]=(float)CURRENT_MULTIPLIER/\
+		//scaling_factor.curr_scal_without_gain[phase]=(float)CURRENT_MULTIPLIER/\
 															(float)sqrt(store.Store_Adc__SQR_Curr_sample_without_gain[phase]);
 	  		
 	// current scalling without gain
@@ -460,13 +463,23 @@ void Rms_Calculations(void)
 		
  /* make sure accumulation time 
 			Enery +=power/per unit time  power/sec */
+ 
+ static uint8_t temp_count=0;
 	for(energy_IDX=0;energy_IDX<TL_PARA_ENERGY;energy_IDX++)
 	 {
 			if(rms.power_total[energy_IDX]>0)
 			{
-				rms.energy[energy_IDX]+=(rms.power_total[energy_IDX]/ENERY_PER_SEC)/KILOHOURS;
+				rms.energy[energy_IDX]+=(((rms.power_total[energy_IDX]/(float)ENERY_PER_SEC)/1000)/3600);
 			}
 		
+	 }
+	 temp_count++;
+	 if(temp_count==ENERY_PER_SEC)
+	 {
+		 temp_count=0;
+			/* store energy to eeprom at every sec */
+		 PT24xx_write(ENERGY_ADDR,(uint32_t*)rms.energy,sizeof(rms.energy));
+
 	 }
 	 
 	 // frequency calculations
@@ -500,6 +513,9 @@ void Read_Eeprom_Data(void)
 		//read data from eeprom
 	PT24xx_read(VOLT_SCAL_ADDR,(uint32_t*)scaling_factor.volt_scal,sizeof(scaling_factor.volt_scal));
 	PT24xx_read(CURR_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_gain,sizeof(scaling_factor.curr_scal_gain));
+	
+	PT24xx_read(ENERGY_ADDR,(uint32_t*)rms.energy,sizeof(rms.energy));
+
 	//PT24xx_read(CURR_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.curr_scal_without_gain,sizeof(scaling_factor.curr_scal_without_gain));
 	//PT24xx_read(POW_SCAL_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_gain,sizeof(scaling_factor.power_scal_gain));
 	//PT24xx_read(POW_SCAL_WITHOUT_GAIN_ADDR,(uint32_t*)scaling_factor.power_scal_without_gain,sizeof(scaling_factor.power_scal_without_gain));

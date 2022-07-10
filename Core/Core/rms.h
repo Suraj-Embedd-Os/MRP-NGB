@@ -14,7 +14,7 @@
 /***************************************************************************************/
 
 /***********************Write preprocessor directives*************************************************/
-#define __ENABLE_CAL //enable or disable calibartions
+//#define __ENABLE_CAL //enable or disable calibartions
 
 /*
 	set gain  which measeured by the ratio of register across OP_AMP value as per hardwa
