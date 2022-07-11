@@ -19,6 +19,7 @@ extern uint32_t All_phase_current;
 
 extern rms_data_t   rms;  // all reading parameter
 extern meter_setup_t			meter_setup;
+fault_counter_t fault_trip_counter;
 
  bool stop=true,start=false,running=false;
 /****START function only belong to that functions*******/
@@ -27,32 +28,32 @@ extern meter_setup_t			meter_setup;
 @ helper function Motor On and off
 */
 /* volt related fault ***/
-static bool isUnderVolt();
-static bool isOverVolt();
-static bool isPhaseFailueVolt();
-static bool isPhaseUnbalanceVolt();
-static bool isPhaseReversalVolt();
+static void UnderVolt(void);
+static void OverVolt(void);
+static void PhaseFailueVolt(void);
+static void PhaseUnbalanceVolt(void);
+static void PhaseReversalVolt(void);
 
-static bool isUnderCurr();
-static bool isOverCurr();
-static bool isPhaseFailueCurr();
-static bool isPhaseUnbalanceCurr();
-static bool isPhaseReversalCurr();
-static bool isRotorLockCurr();
-static bool isProlongStartCurr();
-static bool InvCurrOverLoad();
+static void UnderCurr(void);
+static void OverCurr(void);
+static void PhaseFailueCurr(void);
+static void PhaseUnbalanceCurr(void);
+static void PhaseReversalCurr(void);
+static void RotorLockCurr(void);
+static void ProlongStartCurr(void);
+static void InvCurrOverLoad(void);
 
-static bool isOverPower();
-static bool isUnderPower();
-
-
-static bool isGroundFault();
-static bool isEarthFault();
-
-static bool isContactorFault();
+static void OverPower(void);
+static void UnderPower(void);
 
 
-void thermalCapacity(void);
+static void GroundFault(void);
+static void EarthFault(void);
+
+static void ContactorFault(void);
+
+
+static void thermalCapacity(void);
 
 /*
 										No of bits			Bit postions		requirmnet				    range(in dec)
@@ -108,6 +109,15 @@ int32_t NOMINAL_VOLTAGE(uint16_t percentage)
 }
 /********************************************/
 
+static float find_max(float *x,float *y,float *z)
+{
+	return (*x>*y?*x>*z?*x:*z:*y>*z?*y:*z);
+}
+
+static float find_min(float *x,float *y,float *z)
+{
+	return (*x<*y?*x<*z?*x:*z:*y<*z?*y:*z);
+}
 /*******************************************/
 
 /*
@@ -115,21 +125,25 @@ int32_t NOMINAL_VOLTAGE(uint16_t percentage)
 	@helper function to check UnderVolt
 */
 
-static bool isUnderVoltage()
+static  void UnderVolt()
 {
-			uint16_t _test;//=(uint16_t)menu_config[UV];
+			uint16_t _under_volt_per;//=(uint16_t)menu_config[UV];
+
 	
-	if((rms.voltage[RY_PHASE]<(float)NOMINAL_VOLTAGE(_test))|| \
-		(rms.voltage[YB_PHASE]<(float)NOMINAL_VOLTAGE(_test))|| \
-			(rms.voltage[BR_PHASE]<(float)NOMINAL_VOLTAGE(_test)))
+	if((rms.voltage[RY_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
+		(rms.voltage[YB_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
+			(rms.voltage[BR_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per)))
 	{
-			motor_var.fault_status_reg |=(1<<UV); //set UC bit high
-			return true;
+			motor_var.fault_status_reg |=UV_fault; //set UC bit high
+			fault_trip_counter._counter[UV]++;
+		
+			return ;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=~(1<<UV); //Reset UC bit high
-			return false;
+			motor_var.fault_status_reg &=(~UV_fault); //Reset UC bit high
+			fault_trip_counter._counter[UV]=0;
+			return ;
 	}
 }
 
@@ -138,21 +152,23 @@ Discriptions: if voltage is greater than setted voltages
 helper function to check overvolt
 */
 
-static bool isOverVoltage()
+static void OverVoltage()
 {
-			uint16_t _test;//=(uint16_t)menu_config[OV];
+			uint16_t _over_volt_per;//=(uint16_t)menu_config[OV];
 	
-	if((rms.voltage[RY_PHASE]>(float)NOMINAL_VOLTAGE(_test))|| \
-		(rms.voltage[YB_PHASE]>(float)NOMINAL_VOLTAGE(_test))|| \
-			(rms.voltage[BR_PHASE]>(float)NOMINAL_VOLTAGE(_test)))
+	if((rms.voltage[RY_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
+		(rms.voltage[YB_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
+			(rms.voltage[BR_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per)))
 	{
-			motor_var.fault_status_reg |=(1<<OV); //set UC bit high
-			return true;
+			motor_var.fault_status_reg |=OV_fault; //set UC bit high
+		fault_trip_counter._counter[OV]++;
+			return ;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=~(1<<OV); //Reset UC bit high
-			return false;
+			motor_var.fault_status_reg &=(~OV_fault); //Reset UC bit high
+		fault_trip_counter._counter[OV]=0;
+			return ;
 	}
 }
 
@@ -161,66 +177,188 @@ static bool isOverVoltage()
 Discrption: if any one of phase is less than certain limit consider as phase loss or failure
 @helper function to check voltage phase failure
 */
-static bool isPhaseFailueVolt()
+static void PhaseFailueVolt()
 {
-	uint16_t _test=50000; // 50 percent of nominal voltage;
-	if((rms.voltage[RY_PHASE]>(float)NOMINAL_VOLTAGE(_test))|| \
-		(rms.voltage[YB_PHASE]>(float)NOMINAL_VOLTAGE(_test))|| \
-			(rms.voltage[BR_PHASE]>(float)NOMINAL_VOLTAGE(_test)))
+	uint16_t _phase_failure_per= 50;//percent of nominal voltage;
+	if((rms.voltage[RY_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
+		(rms.voltage[YB_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
+			(rms.voltage[BR_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per)))
 	{
-			motor_var.fault_status_reg |=(1<<VPH_F); //set UC bit high
-			return true;
+			motor_var.fault_status_reg |=VPH_F; //set UC bit high
+			fault_trip_counter._counter[VPH_F]++;
+			return;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=~(1<<VPH_F); //Reset UC bit high
-			return false;
+			motor_var.fault_status_reg &=(~VPH_F_fault); //Reset UC bit high
+		fault_trip_counter._counter[VPH_F]=0;
+			return ;
 	}
 }
-/*
-/*
-/*
-@ helper function to check undercurrent
-*/
 
-static bool isUnderCurrent()
+static void PhaseUnbalanceVolt(void)
 {
-	uint16_t _test;//=(uint16_t)menu_config[UC];
+	uint16_t _phase_ub_volt_per=10;
+	float max_volt =find_max(&rms.voltage[R_PHASE],&rms.voltage[Y_PHASE],&rms.voltage[B_PHASE]);
+	float min_volt =find_min(&rms.voltage[R_PHASE],&rms.voltage[Y_PHASE],&rms.voltage[B_PHASE]);
 	
-	if((rms.display_currnet[RY_PHASE]<(float)FULL_LOAD_CURRENT(_test))|| \
-		(rms.display_currnet[YB_PHASE]<(float)FULL_LOAD_CURRENT(_test))|| \
-			(rms.display_currnet[BR_PHASE]<(float)FULL_LOAD_CURRENT(_test)))
+	int _per_error = (int)((100*(max_volt-min_volt))/max_volt);
+	
+	if(_phase_ub_volt_per>_per_error)
 	{
-			motor_var.fault_status_reg |=(1<<UC); //set UC bit high
-			return true;
+		motor_var.fault_status_reg |=UB_V_fault;
+		fault_trip_counter._counter[UB_V]++;
+		return;
+		
 	}
 	else
 	{
-			motor_var.fault_status_reg &=~(1<<UC); //Reset UC bit high
-			return false;
+		motor_var.fault_status_reg &=(~UB_V_fault);
+		fault_trip_counter._counter[UB_V]=0;
 	}
 	
-}
-/*
-@ helper function to check Overcurrent
-*/
-static bool isOverCurrent()
-{
-		uint16_t _test;//=(uint16_t)menu_config[OC];
 	
-	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_test))|| \
-		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_test))|| \
-			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_test)))
+}
+static void PhaseReversalVolt(void)
+{
+	
+
+}
+
+static void UnderCurr(void)
+{
+	uint16_t _under_curr_per;//=(uint16_t)menu_config[UC];
+	
+	if((rms.display_currnet[RY_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per))|| \
+		(rms.display_currnet[YB_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per))|| \
+			(rms.display_currnet[BR_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per)))
 	{
-			motor_var.fault_status_reg |=(1<<OC); //set UC bit high
-			return true;
+			motor_var.fault_status_reg |=UC_fault; //set UC bit high
+			fault_trip_counter._counter[UC]++;
+			return ;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=~(1<<OC); //Reset UC bit high
-			return false;
+			motor_var.fault_status_reg &=(~UC_fault); //Reset UC bit high
+			fault_trip_counter._counter[UC]=0;
+			return ;
+	
 	}
 }
+	
+static void OverCurr(void)
+{
+	uint16_t _oc_per;//=(uint16_t)menu_config[OC];
+	
+	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per))|| \
+		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per))|| \
+			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per)))
+	{
+			motor_var.fault_status_reg |=OC_fault; //set UC bit high
+			fault_trip_counter._counter[OC]++;
+			return;
+	}
+	else
+	{
+			motor_var.fault_status_reg &=~(OC_fault); //Reset UC bit high
+			fault_trip_counter._counter[OC]=0;
+			return ;
+	}
+	
+}
+
+static void PhaseFailueCurr(void)
+{
+	
+	
+}
+static void PhaseUnbalanceCurr(void)
+{
+	uint16_t _phase_ub_curr_per=10;
+	float max_curr =find_max(&rms.display_currnet[R_PHASE],&rms.display_currnet[Y_PHASE],&rms.display_currnet[B_PHASE]);
+	float min_curr =find_min(&rms.display_currnet[R_PHASE],&rms.display_currnet[Y_PHASE],&rms.display_currnet[B_PHASE]);
+	
+	int _per_error = (int)((100*(max_curr-min_curr))/max_curr);
+	
+	if(_phase_ub_curr_per>_per_error)
+	{
+		motor_var.fault_status_reg |=UB_C_fault;
+		fault_trip_counter._counter[UB_C]++;
+		return;
+		
+	}
+	else
+	{
+		motor_var.fault_status_reg &=(~UB_C_fault);
+		fault_trip_counter._counter[UB_C]=0;
+	}
+	
+	
+}
+
+static void PhaseReversalCurr(void)
+{
+	
+	
+}
+
+static void RotorLockCurr(void)
+{
+	
+}
+
+
+static void ProlongStartCurr(void)
+{
+	
+	
+}
+
+static void InvCurrOverLoad(void)
+{
+	
+	
+}
+
+static void OverPower(void)
+{
+	
+	
+}
+
+static void UnderPower(void)
+{
+	
+	
+}
+
+
+static void GroundFault(void)
+{
+	
+	
+}
+
+static void EarthFault(void)
+{
+	
+	
+}
+
+static void ContactorFault(void)
+{
+	
+	
+}
+
+
+static void thermalCapacity(void)
+{
+	
+	
+}
+
+
 
 
 
@@ -297,13 +435,7 @@ void coolingMotor()
 /*
 	check the presentage
 */
-uint8_t getPersentage(void)
-{
-  	uint8_t _temp=0;
-		// _temp=(10*Average_All_phase_Current)/(menu_config[FULL_LOAD_CURRENT]);
-		
-	  return _temp;
-}
+
 /*
 	initila starting delay
 */
@@ -313,18 +445,7 @@ uint8_t getPersentage(void)
 */
  void delayselect()
 {	
-/*delaySetup_t.__delaySetup[UnderVolt_tim]=menu_config[UNDER_VOLTAGE_DELAY]; //under voltage	
-delaySetup_t.__delaySetup[OverVolt_tim]=menu_config[OVER_VOLTAGE_DELAY]; //over voltage
-		 
-delaySetup_t.__delaySetup[UnderCurr_tim]=menu_config[UNDER_CURRENT_DELAY];		
-delaySetup_t.__delaySetup[OverCurr_tim]=menu_config[OVER_CURRENT_DELAY]; 
-		
-delaySetup_t.__delaySetup[ProLong_tim]=menu_config[PROLONG_STARTING_DELAY]; 
-delaySetup_t.__delaySetup[RotorLock_tim]=menu_config[ROTOR_LOCK_DELAY]; 	
-		
-	/**phase unbalnce delay*/
-//delaySetup_t.__delaySetup[PhaseUnblanceVolt_tim]=menu_config[PHASE_UNBALANCE_VOLTAGE_DELAY];
-//delaySetup_t.__delaySetup[PhaseUnblanceCurr_tim]=menu_config[PHASE_UNBALANCE_CURRENT_DELAY];*/
+
 	
 }
 /****End function only belong to that functions*******/
@@ -727,7 +848,7 @@ bool autostartflag=false;
 								
 					}
 				}
-		*/
+		
 		#endif
  }
 /***********************/

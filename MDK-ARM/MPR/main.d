@@ -42,3 +42,4 @@ mpr\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 mpr\main.o: ..\Core\Core\rms.h
 mpr\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 mpr\main.o: ..\Core\Store\pt24xx.h
+mpr\main.o: ..\Core\Core\motor_protection.h

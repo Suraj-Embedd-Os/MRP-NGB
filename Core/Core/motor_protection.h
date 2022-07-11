@@ -76,34 +76,35 @@ typedef enum
 	
 }capture_fault_t;
 
-typedef enum
-{
-	SETUP_UV,   //under volt
-	SETUP_OV, 	//over volt
-	SETUP_VPH_F,	//volt phase failure 
-	SETUP_UB_V,	//volt unbalanced
-	SETUP_VPH_R, //voltage phase reversal
+ enum{
 	
-	SETUP_UC,	//under current
-	SETUP_OC,	//over current
-	SETUP_INVT_OL,	//inverse time overload
-	SETUP_UB_C,	//Current unbalanced
-	SETUP_RL,		//rotor jam
-	SETUP_PS,	//PROLONG START
-	SETUP_CPH_F,	//Current phase failure
-	SETUP_CPH_R, //voltage phase reversal
+	NONE_fault=0,
+	UV_fault=1<<UV,   //under volt
+	OV_fault=1<<OV, 	//over volt
+	VPH_F_fault=1<<VPH_F,	//volt phase failure 
+	UB_V_fault=1<<UB_V,	//volt unbalanced
+	VPH_R_fault=1<<VPH_R, //voltage phase reversal
 	
-	SETUP_UP,	//under power
-	SETUP_OP,	//over power
+	UC_fault=1<<UC,	//under current
+	OC_fault=1<<OC,	//over current
+	INVT_OL_fault=1<<INVT_OL,	//inverse time overload
+	UB_C_fault=1<<UB_C,	//Current unbalanced
+	RL_fault=1<<RL,		//rotor jam
+	PS_fault=1<<PS,	//PROLONG START
+	CPH_F_fault=1<<CPH_F,	//Current phase failure
+	CPH_R_fault=1<<CPH_R, //voltage phase reversal
 	
-	SETUP_GR_F,	//ground fault
-	SETUP_O_TEMP, //over temp
-	SETUP_ER_F,	//earth fault
-	SETUP_CON_F,	//contatctor failure
-	SETUP_FULL_LOAD_CURR,
-	SETUP_NOMINAL_VOLT,
-	TOTAL_SETUP_PARA
-}setup_t;
+	UP_fault=1<<UP,	//under power
+	OP_fault=1<<OP,	//over power
+	
+	GR_F_fault=1<<GR_F,	//ground fault
+	O_TEMP_fault=1<<O_TEMP, //over temp
+	ER_F_fault=1<<ER_F,	//earth fault
+	CON_F_fault=1<<CON_F,	//contatctor failure
+	
+};
+
+
 
 typedef struct{
 	
@@ -114,6 +115,8 @@ typedef struct{
 	uint8_t volt_phase_failue; //0 bits -RY, 1-bits=YB,2 -bits =BR
 	uint8_t curr_phase_failue; //0 bits -RY, 1-bits=YB,2 -bits =BR
 }phase_failure_t;
+
+
 
 typedef struct
 {

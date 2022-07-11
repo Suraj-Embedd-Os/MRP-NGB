@@ -41,6 +41,33 @@ EXAMPLE			= (1.000.0011),(00.0110.0100),(00.0110.0100),(01),(01),(01),(1)
 
 						
 */
+
+typedef enum
+{
+	SETUP_UV,   //under volt
+	SETUP_OV, 	//over volt
+	SETUP_UB_V,	//volt unbalanced
+	
+	SETUP_UC,	//under current
+	SETUP_OC,	//over current
+	SETUP_INVT_OL,	//inverse time overload
+	SETUP_UB_C,	//Current unbalanced
+	SETUP_RL,		//rotor jam
+	SETUP_PS,	//PROLONG START
+	
+	SETUP_UP,	//under power
+	SETUP_OP,	//over power
+	
+	SETUP_GR_F,	//ground fault
+	SETUP_O_TEMP, //over temp
+	SETUP_ER_F,	//earth fault
+	SETUP_CON_F,	//contatctor failure
+	SETUP_FULL_LOAD_CURR, //full load current
+	SETUP_NOMINAL_VOLT, // nominal voltage
+	TOTAL_SETUP_PARA
+}setup_t;
+
+
 typedef struct meter_setupxxxx
 {
 	uint32_t meter_setup_menu[TOTAL_SETUP_PARA];

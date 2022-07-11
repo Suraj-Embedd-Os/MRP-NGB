@@ -26,6 +26,7 @@
 #include<stdlib.h>
 #include "rms.h"
 #include "pt24xx.h"
+#include "motor_protection.h"
 
 /* USER CODE END Includes */
 
@@ -179,6 +180,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
 		adc_init();
 		hardware_init();
+		/* for reset eeprom */
+	//PT24xx_write(0x00,(uint32_t*)0,512);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
