@@ -193,6 +193,7 @@ int main(void)
 		if(acc_data_ready==true)
 		{
 				Rms_Calculations();
+				
 				acc_data_ready=false;
 		}
     /* USER CODE END WHILE */
@@ -691,7 +692,8 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, RL1_Pin|GPIO_PIN_8|GPIO_PIN_9|ESP_IN_OUT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, RL1_Pin|RL2_Pin|GPIO_PIN_8|GPIO_PIN_9 
+                          |ESP_IN_OUT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, Thermal_Pin|GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2 
@@ -716,17 +718,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : RL1_Pin PC8 PC9 ESP_IN_OUT_Pin */
-  GPIO_InitStruct.Pin = RL1_Pin|GPIO_PIN_8|GPIO_PIN_9|ESP_IN_OUT_Pin;
+  /*Configure GPIO pins : RL1_Pin RL2_Pin PC8 PC9 
+                           ESP_IN_OUT_Pin */
+  GPIO_InitStruct.Pin = RL1_Pin|RL2_Pin|GPIO_PIN_8|GPIO_PIN_9 
+                          |ESP_IN_OUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : EXT_RST_Pin LV_RST_Pin RL2_Pin SW4_Pin 
-                           SW2_Pin */
-  GPIO_InitStruct.Pin = EXT_RST_Pin|LV_RST_Pin|RL2_Pin|SW4_Pin 
-                          |SW2_Pin;
+  /*Configure GPIO pins : EXT_RST_Pin LV_RST_Pin SW4_Pin SW2_Pin */
+  GPIO_InitStruct.Pin = EXT_RST_Pin|LV_RST_Pin|SW4_Pin|SW2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);

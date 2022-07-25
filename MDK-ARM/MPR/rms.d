@@ -5,6 +5,7 @@ mpr\rms.o: ..\Core\Store\pt24xx.h
 mpr\rms.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 mpr\rms.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 mpr\rms.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+mpr\rms.o: ..\Core\Store\eeprom_addr.h
 mpr\rms.o: ../Core/Inc/main.h
 mpr\rms.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h
 mpr\rms.o: ../Core/Inc/stm32g0xx_hal_conf.h
@@ -43,6 +44,6 @@ mpr\rms.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h
 mpr\rms.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h
 mpr\rms.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h
 mpr\rms.o: ..\Core\Core\rms.h
-mpr\rms.o: ..\Core\Store\eeprom_addr.h
-mpr\rms.o: ../Core/Inc/setup.h
+mpr\rms.o: ..\Core\setup\setup.h
 mpr\rms.o: ..\Core\Core\motor_protection.h
+mpr\rms.o: ..\Core\Core\common_def.h

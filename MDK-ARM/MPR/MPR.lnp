@@ -2,6 +2,8 @@
 "mpr\startup_stm32g070xx.o"
 "mpr\rms.o"
 "mpr\pt24xx.o"
+"mpr\motor_protection.o"
+"mpr\setup.o"
 "mpr\main.o"
 "mpr\stm32g0xx_it.o"
 "mpr\stm32g0xx_hal_msp.o"

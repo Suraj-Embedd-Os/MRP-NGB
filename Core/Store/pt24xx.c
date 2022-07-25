@@ -1,7 +1,7 @@
 #include "pt24xx.h"
 #include "stdlib.h"
 #include "string.h"
-#include "eeprom_addr.h"
+
 
 
 static void *PT24xxPort;

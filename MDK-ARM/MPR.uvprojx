@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G070xx,USE_HAL_DRIVER,STM32G070xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;      ../Drivers/STM32G0xx_HAL_Driver/Inc;      ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy;      ../Drivers/CMSIS/Device/ST/STM32G0xx/Include;      ../Drivers/CMSIS/Include;      ..\Core\Core;      ..\Core\ui;      ..\Core\Store;      ..\Core\serialcomm;      .\MPR</IncludePath>
+              <IncludePath>../Core/Inc; ../Drivers/STM32G0xx_HAL_Driver/Inc; ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32G0xx/Include; ../Drivers/CMSIS/Include; ..\Core\Core; ..\Core\ui; ..\Core\Store; ..\Core\serialcomm; .\MPR; ..\Core\setup</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -404,6 +404,21 @@
               <FilePath>..\Core\Store\pt24xx.c</FilePath>
             </File>
             <File>
+              <FileName>common_def.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Core\common_def.h</FilePath>
+            </File>
+            <File>
+              <FileName>motor_protection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Core\motor_protection.c</FilePath>
+            </File>
+            <File>
+              <FileName>setup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\setup\setup.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -417,16 +432,6 @@
               <FileName>stm32g0xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32g0xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>common_def.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Core\common_def.h</FilePath>
-            </File>
-            <File>
-              <FileName>motor_protection.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Core\motor_protection.c</FilePath>
             </File>
           </Files>
         </Group>

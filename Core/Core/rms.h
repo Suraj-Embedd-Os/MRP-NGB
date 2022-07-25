@@ -284,6 +284,7 @@ typedef struct Store
 	
 		float Store_freqSampleCounter_acc_curr,
 					Store_freqSampleZCDCounter_curr;
+		uint8_t Store_phase_shift_count[2][2];
 	
 }Store_Data_t;
 

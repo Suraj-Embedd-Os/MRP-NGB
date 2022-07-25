@@ -11,8 +11,11 @@
 
 #define  ENERGY_ADDR									(0x24) //36-47
 
+#define SETUP_PARA_ADDR											(0x64)
+
 
 
 
 
 #endif
+

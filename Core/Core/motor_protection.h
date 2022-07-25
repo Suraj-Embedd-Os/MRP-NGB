@@ -20,28 +20,7 @@
 
 
 /***function defintion here***/
-bool IsAutoStartSet(void);
-void IsMotorStartButtonPress(void);
-bool OverUnderCurrFault(void);
-bool OverUnderVoltFault(void);
 
-void motorfunctions(void);
-void TripRelay(void);
-void reset(void);
-
-/**** failure detect functions  here****/
-bool isOverCondition(void); // return true if any volt,current,power
-bool isUnderCondition(void); // return true if any volt,current,power 
-bool isPhaseLoss(void); // return true if any volt,current,power
-bool isPhaseReversal(void); // return true if any volt,current,power
-bool isPhaseUnblance(void); // return true if any volt,current,power
-
-void relayOnOff(bool Switch);
-void clearFlag(void);
-void hysteresis(void);
-void Check_Motor_status(void);
-uint8_t getPersentage(void);
-void delayselect(void);
 
 int32_t FULL_LOAD_CURRENT(uint16_t percentage); //return full current value for comparing fault
 int32_t NOMINAL_VOLTAGE(uint16_t percentage);
@@ -107,7 +86,6 @@ typedef enum
 
 
 typedef struct{
-	
 	/*
 		bits (0-2) =volgate phase failure
 		bits (3- ) =volgate phase unbalanced
@@ -117,34 +95,52 @@ typedef struct{
 }phase_failure_t;
 
 
+typedef enum 
+{
+	TIM_UV,   //under volt
+	TIM_OV, 	//over volt
+	TIM_UB_V,	//volt unbalanced
+	
+	TIM_UC,	//under current
+	TIM_OC,	//over current
+	TIM_INVT_OL,	//inverse time overload
+	TIM_UB_C,	//Current unbalanced
+	TIM_RL,		//rotor jam
+	TIM_PS,	//PROLONG START
+	
+	TIM_UP,	//under power
+	TIM_OP,	//over power
+	
+	TIM_GR_F,	//ground fault
+	TIM_O_TEMP, //over temp
+	TIM_ER_F,	//earth fault
+	TIM_CON_F,	//contatctor failure
+	
+	TIM_TOTAL_PARA
+	
+}timmer_t;
 
 typedef struct
 {
-	uint16_t _counter[TOTAL_PARA_FAILURE-1];
+	uint16_t tripTimer[TIM_TOTAL_PARA];
 }fault_counter_t;
 
 typedef struct
 {
-	uint16_t _delaySetup[TOTAL_PARA_FAILURE-1];
+	uint16_t delaySetup[TIM_TOTAL_PARA];
 }delaySetup_t;
 
 /*
 	All fault related paramerte 
 */
-typedef struct{
-	delaySetup_t			setup_delay;		// stored setup delay
-	fault_counter_t	  counter;		//Timmer running 
-	uint32_t 					capture_fault_value; //strored capure value
-	phase_failure_t 		phase; // capture phase for fault
-
+typedef struct{	
+	uint32_t 	capture_fault_value; //strored capure value
 	/* see capture_fault_t enum for all bit
 		eg OV-0bit, UV-1 bit,.....etc*/
 	uint32_t fault_status_reg;  // fault status register 
-	
+	uint32_t value_at_fault; // 0 -bit =stop,1-bit =run,2-bit =start
 	//  Use to display falut text on display check range  capture_fault_t enum  
 	uint8_t 	cause_of_trip_reg;
-
-	//uint8_t value_at_fault; // 0 -bit =stop,1-bit =run,2-bit =start
 	
 }capture_t;
 

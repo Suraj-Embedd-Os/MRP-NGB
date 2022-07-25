@@ -41,4 +41,5 @@ mpr\motor_protection.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex
 mpr\motor_protection.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h
 mpr\motor_protection.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h
 mpr\motor_protection.o: ..\Core\Core\rms.h
-mpr\motor_protection.o: ../Core/Inc/setup.h
+mpr\motor_protection.o: ..\Core\setup\setup.h
+mpr\motor_protection.o: ..\Core\Core\common_def.h

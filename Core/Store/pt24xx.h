@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include "eeprom_addr.h"
 
 #include "main.h"
 

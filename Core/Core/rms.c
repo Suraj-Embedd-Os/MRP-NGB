@@ -15,7 +15,7 @@ average_cal_t 		avg;
 measured_data_t 	msd;
 scaling_factor_t	scaling_factor;
 rms_data_t          rms;
-meter_setup_t			meter_setup;
+extern meter_setup_t			meter_setup;
 
 extern bool acc_data_ready;
 uint8_t select_curr_line=0; // 0 bit- 1 line,1 bit- 2 line,2 bit- 3 line , default current with gain line selected.
@@ -137,46 +137,137 @@ static inline void _ProcessFrequencyCalculation( int32_t currSample )
 	
 }	/* End of _ProcessFrequencyCalculation() */
 
+/*
 
+@Discriptions: function use for checking collecting phase shift data for voltage and current phase reversal
+@parameters : 
+@Extra info:	
+	
 
-static void phasereversal(int32_t sample[])
+*/
+
+uint8_t phaseShiftCounter[2][TL_NO_PHASE];
+uint8_t phase_shift_difference[2][2];
+static void phaseShiftCount(int16_t voltsample[],int16_t currsample[])
 {
-//	  tempCount++;
-//	  static int32_t prev[2]={0},_curr[2]={0};
-//	  _curr[0]=sample[0];
-//	  _curr[1]=sample[1];
-//	
-//	 if( _curr[0]>0 && prev[0]<=0)
-//	 {
-//		 __test=1;
-//		 _ZCDflasg1=true;
-//		 phaseCounter[0]=tempCount;
-//		
-//	 }
-//	
-//	  if( _curr[1]>0 && prev[1]<=0)
-//	 {
-//		 if(__test==1)
-//	 {
-//		 __test=0;
-//		 _ZCDflasg2=true;
-//		 phaseCounter[1]=tempCount;
-//	 }
-//	 }
-// 
-//	 
-//	 if(_ZCDflasg1 && _ZCDflasg2)
-//	 {
-//			 _ZCDflasg1=false;
-//		   _ZCDflasg2=false;
-//		 if(phaseCounter[0] < phaseCounter[1])
-//			{
-//			 _diffcount=phaseCounter[1]-phaseCounter[0];
-//			}
-//			tempCount=0;
-//	}
-//	 prev[0]=_curr[0];
-//	 prev[1]=_curr[1];
+	  static uint8_t _tempCount[2]={0}; // 0 for volt 1 for current
+		static uint8_t _ZCDFLAG=0; // _ZCDFLAG  ={0 =bit(R_PHASE votl} ,1 =bit(Y_PHASE votl},2 =bit(B_PHASE votl}
+																				// {3 =bit(RY_PHASE current} ,4 =bit(YB_PHASE current},5 =bit(BR_PHASE current}
+	
+	  static int16_t _prev[2][TL_NO_PHASE]={0},_curr[2][TL_NO_PHASE]={0};
+		_curr[0][R_PHASE]=voltsample[R_PHASE];
+		_curr[0][Y_PHASE]=voltsample[Y_PHASE];
+		_curr[0][B_PHASE]=voltsample[B_PHASE];
+		
+		_curr[1][RY_PHASE]=currsample[RY_PHASE];
+		_curr[1][YB_PHASE]=currsample[YB_PHASE];
+		_curr[1][BR_PHASE]=currsample[BR_PHASE];
+		
+	 
+		_tempCount[0]++;
+		_tempCount[1]++;
+		
+		/* FOR VLOTAGE PHASE */
+		
+	 if( _curr[0][R_PHASE]>0 && _prev[0][R_PHASE]<=0)
+	 {
+		 _ZCDFLAG |=(0x3f&(1<<R_PHASE)); //Set R_Phase voltage cross leading zero cross
+			phaseShiftCounter[0][R_PHASE]=_tempCount[0];
+		
+	 }
+	
+	 if( _curr[0][Y_PHASE]>0 && _prev[0][Y_PHASE]<=0)
+	 {
+		 //check R_Phase voltage cross leading zero cross
+		 if(_ZCDFLAG & (1<<R_PHASE))
+		 {
+			_ZCDFLAG |=(0x3f&(1<<Y_PHASE));
+			phaseShiftCounter[0][Y_PHASE]=_tempCount[0];
+		 }
+		
+	 }
+	 
+	 if( _curr[0][B_PHASE]>0 && _prev[0][B_PHASE]<=0)
+	 {
+		 if(_ZCDFLAG & (1<<Y_PHASE))
+		 {
+			_ZCDFLAG |=(0x3f&(1<<B_PHASE));
+			phaseShiftCounter[0][B_PHASE]=_tempCount[0];
+			 
+		 }
+	 }
+ 
+	 
+	 if(_ZCDFLAG & 0x7)
+	 {
+			_ZCDFLAG &=0x38;//Not clear current bit first from 3-5 bits
+		 if(phaseShiftCounter[0][R_PHASE] < phaseShiftCounter[0][Y_PHASE])
+			{
+					phase_shift_difference[0][0]=phaseShiftCounter[0][Y_PHASE]-phaseShiftCounter[0][R_PHASE];
+			}
+			
+			if(phaseShiftCounter[0][Y_PHASE] < phaseShiftCounter[0][B_PHASE])
+			{
+					phase_shift_difference[0][1]=phaseShiftCounter[0][B_PHASE]-phaseShiftCounter[0][Y_PHASE];
+			}
+			_tempCount[0]=0;
+			
+	}
+	 
+	/* FOR CURRENT */
+	if( _curr[1][RY_PHASE]>0 && _prev[1][RY_PHASE]<=0)
+	 {
+		 _ZCDFLAG |=(0x3f&(1<<(RY_PHASE+3))); //Set R_Phase voltage cross leading zero cross
+			phaseShiftCounter[1][RY_PHASE]=_tempCount[1];
+		
+	 }
+	
+	 if( _curr[1][YB_PHASE]>0 && _prev[1][YB_PHASE]<=0)
+	 {
+		 //check R_Phase voltage cross leading zero cross
+		 if(_ZCDFLAG & (1<<(RY_PHASE+3)))
+		 {
+			_ZCDFLAG |=(0x3f&(1<<(YB_PHASE+3)));
+			phaseShiftCounter[1][YB_PHASE]=_tempCount[1];
+		 }
+		
+	 }
+	 
+	 if( _curr[1][BR_PHASE]>0 && _prev[1][BR_PHASE]<=0)
+	 {
+		 if(_ZCDFLAG & (1<<(YB_PHASE+3)))
+		 {
+			_ZCDFLAG |=(0x3f&(1<<(BR_PHASE+3)));
+			phaseShiftCounter[1][BR_PHASE]=_tempCount[1];
+			 
+		 }
+	 }
+ 
+	 
+	 if(_ZCDFLAG & 0x38)
+	 {
+			_ZCDFLAG &=0x07;//Not clear vpltage bit first 3 bits
+		 if(phaseShiftCounter[1][RY_PHASE] < phaseShiftCounter[1][YB_PHASE])
+			{
+					phase_shift_difference[1][0]=phaseShiftCounter[1][YB_PHASE]-phaseShiftCounter[1][RY_PHASE];
+			}
+			
+			if(phaseShiftCounter[0][YB_PHASE] < phaseShiftCounter[0][BR_PHASE])
+			{
+					phase_shift_difference[1][1]=phaseShiftCounter[1][BR_PHASE]-phaseShiftCounter[1][YB_PHASE];
+			}
+			_tempCount[1]=0;
+			
+	}
+	 
+	
+		_prev[0][R_PHASE]=_curr[0][R_PHASE];
+		_prev[0][Y_PHASE]=_curr[0][Y_PHASE];
+		_prev[0][B_PHASE]=_curr[0][B_PHASE];
+		
+		_prev[1][RY_PHASE]=_curr[1][RY_PHASE];
+		_prev[1][YB_PHASE]=_curr[1][YB_PHASE];
+		_prev[1][BR_PHASE]=_curr[1][BR_PHASE];
 }
 
 
@@ -343,6 +434,21 @@ inline void Store_Adc_Data(void)
 					store.Store_freqSampleZCDCounter_curr=common.freqSampleZCDCounter_curr;
 					common.freqSampleCounter_acc_curr=0;
 					common.freqSampleZCDCounter_curr=0;
+	
+		/* store phase shift count */
+	//voltage
+	store.Store_phase_shift_count[0][0]=phase_shift_difference[0][0];
+	store.Store_phase_shift_count[0][1]=phase_shift_difference[0][1];
+	
+	// current
+	store.Store_phase_shift_count[1][0]=phase_shift_difference[1][0];
+	store.Store_phase_shift_count[1][1]=phase_shift_difference[1][1];
+	
+	//clear phase shfit buffer
+	phase_shift_difference[0][0]=0;
+	phase_shift_difference[0][1]=0;
+	phase_shift_difference[1][0]=0;
+	phase_shift_difference[1][1]=0;
 	
 }
 /*
@@ -593,7 +699,6 @@ float read_value (RMS_READING_t id)
 				break;	
 					
 	
-		break;
 		default :			
 			break;
 	}
