@@ -7,23 +7,66 @@
 #include <stdbool.h>
 #include "main.h"
 
-/***DEFINE*********/
-#define volt_multiple     (100U)
-#define Current_scal		  (10000U)
+/***default min and max in term of percentage*********/
 
-#define UC_LIMIT				  (0.5*Current_scal) // under current 
-#define OC_LIMIT					(8*Current_scal)  //over current
+typedef enum{
+	MIN_UV =20,
+	MAX_UV=100,
+	
+	MIN_OV=20, 	//over volt
+	MAX_OV=100, 	//over volt
+	
+	MIN_UB_V=5,	//volt unbalanced
+	MAX_UB_V=80,	//volt unbalanced
 
-#define UV_LIMIT				  (180*volt_multiple)  //under volt
-#define OV_LIMIT					(250*volt_multiple) // over volt
+	MIN_UC=10,	//under current
+	MAX_UC=100,	//under current
+
+	MIN_OC=10,	//over current
+	MAX_OC=100,	//over current
+
+	
+	MIN_INVT_OL=10,	//inverse time overload
+	MAX_INVT_OL=100,	//inverse time overload
+
+	MIN_UB_C=5,	//Current unbalanced
+	MAX_UB_C=80,	//Current unbalanced
+
+	MIN_RL=800,		//rotor jam
+	MAX_RL=1000,		//rotor jam
+
+	MIN_PS=400,	//PROLONG START
+	MAX_PS=800,	//PROLONG START
+	
+	MIN_UP,	//under power
+	MAX_UP,	//under power
+
+	MIN_OP,	//over power
+	MAX_OP,	//over power
+
+	
+	MIN_GR_F,	//ground fault
+	MAX_GR_F,	//ground fault
+
+	MIN_O_TEMP, //over temp
+	MAX_O_TEMP, //over temp
+
+	MIN_ER_F,	//earth fault
+	MAX_ER_F,	//earth fault
+
+	MIN_CON_F,	//contatctor failure
+	MAX_CON_F,	//contatctor failure
+
+
+}TRIP_SETTING_RANGE_t;
+
+enum{
+	ALARM_MIN=50,  
+	ALARM_MAX=95,
+};
 
 
 
-/***function defintion here***/
-
-
-int32_t FULL_LOAD_CURRENT(uint16_t percentage); //return full current value for comparing fault
-int32_t NOMINAL_VOLTAGE(uint16_t percentage);
 
 typedef enum
 {
@@ -41,7 +84,7 @@ typedef enum
 	RL,		//rotor jam
 	PS,	//PROLONG START
 	CPH_F,	//Current phase failure
-	CPH_R, //voltage phase reversal
+	CPH_R, //current phase reversal
 	
 	UP,	//under power
 	OP,	//over power
@@ -71,7 +114,7 @@ typedef enum
 	RL_fault=1<<RL,		//rotor jam
 	PS_fault=1<<PS,	//PROLONG START
 	CPH_F_fault=1<<CPH_F,	//Current phase failure
-	CPH_R_fault=1<<CPH_R, //voltage phase reversal
+	CPH_R_fault=1<<CPH_R, //current phase reversal
 	
 	UP_fault=1<<UP,	//under power
 	OP_fault=1<<OP,	//over power
@@ -116,7 +159,14 @@ typedef enum
 	TIM_ER_F,	//earth fault
 	TIM_CON_F,	//contatctor failure
 	
-	TIM_TOTAL_PARA
+	TIM_TOTAL_PARA,
+	
+	/*extra fault enmu which has no timmer */
+	FAULT_VOLT_PHASE_FAILURE,
+	FAULT_VOLT_PHASE_REVERSAL,
+	FAULT_CURR_PHASE_FAILURE,
+	FAULT_CURR_PHASE_REVERSAL,
+	FAULT_NONE
 	
 }timmer_t;
 
@@ -140,11 +190,19 @@ typedef struct{
 	uint32_t fault_status_reg;  // fault status register 
 	uint32_t value_at_fault; // 0 -bit =stop,1-bit =run,2-bit =start
 	//  Use to display falut text on display check range  capture_fault_t enum  
-	uint8_t 	cause_of_trip_reg;
-	
+	uint16_t 	cause_of_trip;
+	//
+	uint16_t  cause_of_alarm;
 }capture_t;
 
 
+/***function defintion here***/
+
+uint32_t capture_fault_data(timmer_t id);
+int32_t FULL_LOAD_CURRENT(uint16_t percentage); //return full current value for comparing fault
+int32_t NOMINAL_VOLTAGE(uint16_t percentage);
+void motorFunctions(void);
+void motor_default_status(void);
 
 
 #ifdef __cplusplus

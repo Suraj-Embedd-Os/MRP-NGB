@@ -44,3 +44,5 @@ mpr\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 mpr\main.o: ..\Core\Store\pt24xx.h
 mpr\main.o: ..\Core\Store\eeprom_addr.h
 mpr\main.o: ..\Core\Core\motor_protection.h
+mpr\main.o: ..\Core\setup\setup.h
+mpr\main.o: ..\Core\Core\common_def.h

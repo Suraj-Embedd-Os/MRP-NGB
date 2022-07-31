@@ -48,7 +48,9 @@ typedef enum
 {
 	SETUP_UV,   //under volt
 	SETUP_OV, 	//over volt
+	SETUP_V_PF, //voltage phasae failure
 	SETUP_UB_V,	//volt unbalanced
+	SETUP_V_PR,	//votl reversal
 	
 	SETUP_UC,	//under current
 	SETUP_OC,	//over current
@@ -56,6 +58,10 @@ typedef enum
 	SETUP_UB_C,	//Current unbalanced
 	SETUP_RL,		//rotor jam
 	SETUP_PS,	//PROLONG START
+	SETUP_C_PF, //current phasae failure
+	SETUP_C_PR,	//current reversal
+
+
 	
 	SETUP_UP,	//under power
 	SETUP_OP,	//over power
@@ -66,7 +72,7 @@ typedef enum
 	SETUP_CON_F,	//contatctor failure
 	SETUP_FULL_LOAD_CURR, //full load current
 	SETUP_NOMINAL_VOLT, // nominal voltage
-	TOTAL_SETUP_PARA
+	TOTAL_SETUP_PARA,
 }setup_t;
 
 enum pos{
@@ -127,35 +133,38 @@ EXAMPLE			= (1.000.0011),(00.0110.0100),(00.0110.0100),(01),(01),(01),(1)
 */
 typedef enum default_value
 {
+	DEF_SETUP_UV=0x564197F,   //under volt
+	DEF_SETUP_OV=0x564197F, 	//over volt
+	DEF_SETUP_V_PF=0x6, //voltage phasae failure
+	DEF_SETUP_UB_V=0x564197F,	//volt unbalanced
+	DEF_SETUP_V_PR=0x6,	//votl reversal
+
 	
-	DEF_SETUP_UV=0x50A0A2B,   //under volt
-	DEF_SETUP_OV=0x50A0A2B, 	//over volt
-	DEF_SETUP_UB_V=0x50A0A2B,	//volt unbalanced
+	DEF_SETUP_UC=0x564197F,	//under current
+	DEF_SETUP_OC=0x564197F,	//over current
+	DEF_SETUP_INVT_OL=0x564197F,	//inverse time overload
+	DEF_SETUP_UB_C=0x564197F,	//Current unbalanced
+	DEF_SETUP_RL=0x565907F,		//rotor jam
+	DEF_SETUP_PS=0x564C87F,	//PROLONG START
+	DEF_SETUP_C_PF=0x6, //current phasae failure
+	DEF_SETUP_C_PR=0x6,	//current reversal
 	
-	DEF_SETUP_UC=0x50A0A2B,	//under current
-	DEF_SETUP_OC=0x50A0A2B,	//over current
-	DEF_SETUP_INVT_OL=0x50A0A2B,	//inverse time overload
-	DEF_SETUP_UB_C=0x50A0A2B,	//Current unbalanced
-	DEF_SETUP_RL=0x50A0A2B,		//rotor jam
-	DEF_SETUP_PS=0x50A0A2B,	//PROLONG START
+	DEF_SETUP_UP=0x564197F,	//under power
+	DEF_SETUP_OP=0x564197F,	//over power
 	
-	DEF_SETUP_UP=0x50A0A2B,	//under power
-	DEF_SETUP_OP=0x50A0A2B,	//over power
-	
-	DEF_SETUP_GR_F=0x50A0A2B,	//ground fault
-	DEF_SETUP_O_TEMP=0x50A0A2B, //over temp
-	DEF_SETUP_ER_F=0x50A0A2B,	//earth fault
-	DEF_SETUP_CON_F=0x50A0A2B,	//contatctor failure
-	DEF_SETUP_FULL_LOAD_CURR=0x50A0A2B, //full load current
-	DEF_SETUP_NOMINAL_VOLT=0x50A0A2B, // nominal voltage
-	DEF_TOTAL_SETUP_PARA
+	DEF_SETUP_GR_F=0x564197F,	//ground fault
+	DEF_SETUP_O_TEMP=0x564197F, //over temp
+	DEF_SETUP_ER_F=0x564197F,	//earth fault
+	DEF_SETUP_CON_F=0x564197F,	//contatctor failure
+	DEF_SETUP_FULL_LOAD_CURR=48000, //full load current 4.8 amp
+	DEF_SETUP_NOMINAL_VOLT=40000, // nominal voltage 400 volt
 	
 }default_value_t;
 
 typedef struct meter_setupxxxx
 {
 	uint32_t meter_setup_menu[TOTAL_SETUP_PARA];
-	uint32_t default_setup_menu[DEF_TOTAL_SETUP_PARA];
+	uint32_t default_setup_menu[TOTAL_SETUP_PARA];
 	
 }meter_setup_t;
 

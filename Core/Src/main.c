@@ -27,6 +27,7 @@
 #include "rms.h"
 #include "pt24xx.h"
 #include "motor_protection.h"
+#include "setup.h"
 
 /* USER CODE END Includes */
 
@@ -136,7 +137,8 @@ static void hardware_init()
 
 }
 
-measured_data_t msd_data;
+extern capture_t							  motor_var;
+
 /* USER CODE END 0 */
 
 /**
@@ -182,7 +184,9 @@ int main(void)
 		hardware_init();
 		/* for reset eeprom */
 	//PT24xx_write(0x00,(uint32_t*)0,512);
-
+		initialised_default_setup();
+		motor_default_status();
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -193,7 +197,7 @@ int main(void)
 		if(acc_data_ready==true)
 		{
 				Rms_Calculations();
-				
+				motorFunctions();
 				acc_data_ready=false;
 		}
     /* USER CODE END WHILE */

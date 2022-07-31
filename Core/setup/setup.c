@@ -28,7 +28,7 @@ void extact_data(uint32_t const *src,uint16_t *dest,uint8_t index,uint8_t num)
 void initialised_default_setup(void)
 {
 	
-		meter_setup.default_setup_menu[SETUP_UV]=DEF_SETUP_UV;  //
+		meter_setup.default_setup_menu[SETUP_UV]=DEF_SETUP_UV;  
 		meter_setup.default_setup_menu[SETUP_OV]=DEF_SETUP_OV;
 	
 		meter_setup.default_setup_menu[SETUP_UB_V]=DEF_SETUP_UB_V;
@@ -50,11 +50,13 @@ void initialised_default_setup(void)
 		meter_setup.default_setup_menu[SETUP_ER_F]=DEF_SETUP_ER_F;
 		
 		meter_setup.default_setup_menu[SETUP_CON_F]=DEF_SETUP_CON_F;
-		meter_setup.default_setup_menu[SETUP_FULL_LOAD_CURR]=DEF_SETUP_FULL_LOAD_CURR;
 		
+		meter_setup.default_setup_menu[SETUP_FULL_LOAD_CURR]=DEF_SETUP_FULL_LOAD_CURR;
 		meter_setup.default_setup_menu[SETUP_NOMINAL_VOLT]=DEF_SETUP_NOMINAL_VOLT;
 		
 		/* copy all default setup first*/
+		
+		
 		
 }
 

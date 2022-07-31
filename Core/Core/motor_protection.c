@@ -8,14 +8,17 @@
 #define SQR(X)	((X)*(X))
 /****START GLOBAL VARIBALE ***/
 
-capture_t motor_var;
+
 bool trip_happens=false;
 uint8_t motor_status=0x01; // 0 bit stop,1 bit start ,2 bit running
 
 enum{
-		MOTOR_STOP=(0x7&(1<<0)),
-		MOTOR_START=(0x7&(1<<1)),
-		MOTOR_RUNNING=(0x7&(1<<2))
+		MOTOR_STOP=(0x1F&(1<<0)),
+		MOTOR_START=(0x1F&(1<<1)),
+		MOTOR_RUNNING=(0x1F&(1<<2)),
+		ALARM_RELAY=(0x1F &(1<<3)),
+		TRIP_RELAY=(0x1F &(1<<4)),
+	
 };
 
 extern rms_data_t   rms;  // all reading parameter
@@ -23,8 +26,8 @@ extern meter_setup_t			meter_setup;
 extern Store_Data_t  		store;
 
 fault_counter_t				 fault_trip_counter;
-delaySetup_t					delaySetupTim;
-
+delaySetup_t				   delaySetupTim;
+capture_t							  motor_var;
 
 /*          helper functions               */
 static bool isUnderVolt(void);
@@ -66,10 +69,15 @@ static void alarmRelay(void);
 */
 void motor_alarm_relay(bool val)
 {
-	if(val)
-	RL1_GPIO_Port->ODR |=RL1_Pin;
+	if(val){
+		RL1_GPIO_Port->ODR |=RL1_Pin;
+		motor_status |=ALARM_RELAY;
+	}
 	else
+	{
 		RL1_GPIO_Port->ODR &=~RL1_Pin;
+		motor_status &=~ALARM_RELAY;
+	}
 }
 
 /*
@@ -79,9 +87,16 @@ void motor_alarm_relay(bool val)
 void motor_trip_relay(bool val)
 {
 	if(val)
-	RL2_GPIO_Port->ODR |=RL2_Pin;
+	{
+		RL2_GPIO_Port->ODR |=RL2_Pin;
+		motor_status |=TRIP_RELAY;
+	}
 	else
-	RL1_GPIO_Port->ODR &=~RL2_Pin;
+	{
+		RL1_GPIO_Port->ODR &=~RL2_Pin;
+		motor_status &=~TRIP_RELAY;
+		
+	}
 }
 
 
@@ -135,7 +150,10 @@ static float find_min(float *x,float *y,float *z)
 
 static  bool isUnderVolt()
 {
-			uint16_t _under_volt_per;//=(uint16_t)menu_config[UV];
+		uint16_t _under_volt_per=0;
+	
+	//extract data from setup variable
+		extact_data(&meter_setup.meter_setup_menu[SETUP_UV],&_under_volt_per,7,10);
 
 	
 	if((rms.voltage[R_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
@@ -162,7 +180,10 @@ helper function to check overvolt
 
 static bool isOverVolt()
 {
-			uint16_t _over_volt_per;//=(uint16_t)menu_config[OV];
+			uint16_t _over_volt_per=0;//=(uint16_t)menu_config[OV];
+	
+	//extract data from setup variable
+		extact_data(&meter_setup.meter_setup_menu[SETUP_OV],&_over_volt_per,7,10);
 	
 	if((rms.voltage[R_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
 		(rms.voltage[Y_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
@@ -187,7 +208,9 @@ Discrption: if any one of phase is less than certain limit consider as phase los
 */
 static bool isPhaseFailueVolt()
 {
-	uint16_t _phase_failure_per= 50;//percent of nominal voltage;
+	uint16_t _phase_failure_per=50;//percent of nominal voltage;
+	
+
 	if((rms.voltage[R_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
 		(rms.voltage[Y_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
 			(rms.voltage[B_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per)))
@@ -211,7 +234,10 @@ Discrption: if any one of two high and low phase is less than certain limit cons
 
 static bool isPhaseUnbalanceVolt(void)
 {
-	uint16_t _phase_ub_volt_per=10;
+	uint16_t _phase_ub_volt_per=0;
+	
+	extact_data(&meter_setup.meter_setup_menu[SETUP_UB_V],&_phase_ub_volt_per,7,10);
+
 	float max_volt =find_max(&rms.voltage[R_PHASE],&rms.voltage[Y_PHASE],&rms.voltage[B_PHASE]);
 	float min_volt =find_min(&rms.voltage[R_PHASE],&rms.voltage[Y_PHASE],&rms.voltage[B_PHASE]);
 	
@@ -263,8 +289,10 @@ static bool isPhaseReversalVolt(void)
 
 static bool isUnderCurr(void)
 {
-	uint16_t _under_curr_per;//=(uint16_t)menu_config[UC];
+	uint16_t _under_curr_per=0;//=(uint16_t)menu_config[UC];
 	
+	extact_data(&meter_setup.meter_setup_menu[SETUP_UC],&_under_curr_per,7,10);
+
 	if((rms.display_currnet[RY_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per))|| \
 		(rms.display_currnet[YB_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per))|| \
 			(rms.display_currnet[BR_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per)))
@@ -287,7 +315,9 @@ static bool isUnderCurr(void)
 */
 static bool isOverCurr(void)
 {
-	uint16_t _oc_per;//=(uint16_t)menu_config[OC];
+	uint16_t _oc_per=0;//=(uint16_t)menu_config[OC];
+	
+		extact_data(&meter_setup.meter_setup_menu[SETUP_OC],&_oc_per,7,10);
 	
 	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per))|| \
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per))|| \
@@ -336,6 +366,8 @@ static bool isPhaseFailueCurr(void)
 static bool isPhaseUnbalanceCurr(void)
 {
 	uint16_t _phase_ub_curr_per=10;
+	extact_data(&meter_setup.meter_setup_menu[SETUP_UB_C],&_phase_ub_curr_per,7,10);
+
 	float max_curr =find_max(&rms.display_currnet[RY_PHASE],&rms.display_currnet[YB_PHASE],&rms.display_currnet[BR_PHASE]);
 	float min_curr =find_min(&rms.display_currnet[RY_PHASE],&rms.display_currnet[YB_PHASE],&rms.display_currnet[BR_PHASE]);
 	
@@ -385,7 +417,10 @@ static bool isPhaseReversalCurr(void)
 
 static bool isRotorLockCurr(void)
 {
-		uint16_t _rotor_lock_Per=500;
+		uint16_t _rotor_lock_Per=0;
+	
+		extact_data(&meter_setup.meter_setup_menu[SETUP_RL],&_rotor_lock_Per,7,10);
+
 	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per))|| \
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per))|| \
 			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per)))
@@ -405,9 +440,11 @@ static bool isRotorLockCurr(void)
 /*
 @helper function to check prolong start
 */
-static bool ProlongStartCurr(void)
+static bool isProlongStartCurr(void)
 {
-			uint16_t _prolong_lock_Per=500;
+			uint16_t _prolong_lock_Per=0;
+	
+	extact_data(&meter_setup.meter_setup_menu[SETUP_PS],&_prolong_lock_Per,7,10);
 	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per))|| \
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per))|| \
 			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per)))
@@ -426,35 +463,35 @@ static bool ProlongStartCurr(void)
 }
 
 
-static bool OverPower(void)
+static bool isOverPower(void)
 {
 	
-	
+	return false;
 }
 
-static bool UnderPower(void)
+static bool isUnderPower(void)
 {
 	
-	
+	return false;
 }
 
 
-static bool GroundFault(void)
+static bool isGroundFault(void)
 {
 	
-	
+	return false;
 }
 
-static bool EarthFault(void)
+static bool isEarthFault(void)
 {
 	
-	
+	return false;
 }
 
-static bool ContactorFault(void)
+static bool isContactorFault(void)
 {
 	
-	
+	return false;
 }
 
 
@@ -483,7 +520,7 @@ static void thermalCapacity(void)
 @ helper function to calculate over current Trip delay
 */
 
-static void InvCurrOverLoad(void)
+static bool isInvCurrOverLoad(void)
 {
 	 float _Ir;//(float)Average_All_phase_Current/(menu_config[FULL_LOAD_CURRENT] * 10);
 	if(_Ir > 1.1)
@@ -492,7 +529,7 @@ static void InvCurrOverLoad(void)
 			/(_Ir*_Ir)-1));
 		 thermalCapacity();
 	}
-	
+		return false;
 }
 
 
@@ -534,7 +571,7 @@ void coolingMotor()
 /*
 @ helper function to update Trip delay time accoudingly the fault conditions
 */
- void delaySelect()
+void delaySelect()
 {	
 	// extrct delay time from setup menu
 		extact_data(&meter_setup.meter_setup_menu[SETUP_UV],&delaySetupTim.delaySetup[TIM_UV],24,7);
@@ -566,40 +603,50 @@ void coolingMotor()
  
 	@ checking is motor start ,stop or running 
  */
- void check_Motor_status()
- {
+void check_Motor_status()
+{
 	 
-	 float _avg_curr=(rms.display_currnet[RY_PHASE]+rms.display_currnet[YB_PHASE]  /
-										rms.display_currnet[BR_PHASE]);
+	 float _avg_curr=(rms.display_currnet[RY_PHASE]+rms.display_currnet[YB_PHASE]+ \
+									rms.display_currnet[BR_PHASE]);
 	 _avg_curr/=3;
-	 
-	 if((motor_status & MOTOR_STOP)==MOTOR_STOP)
-	 {
-		if((motor_status & MOTOR_RUNNING)!=MOTOR_RUNNING)
-		 if(_avg_curr>FULL_LOAD_CURRENT(110))
+	
+		if(_avg_curr >_avg_curr>FULL_LOAD_CURRENT(10))
+		{
+		 if((motor_status & MOTOR_STOP)==MOTOR_STOP)
 		 {
-				motor_status |=MOTOR_START; //set motor_status bit to start conditions
-				motor_status &=~MOTOR_STOP; //Reset stop  motor_status bit since it is start now conditions
+			if((motor_status & MOTOR_RUNNING)!=MOTOR_RUNNING)
+			 if(_avg_curr>FULL_LOAD_CURRENT(110))
+			 {
+					motor_status |=MOTOR_START; //set motor_status bit to start conditions
+					motor_status &=~MOTOR_STOP; //Reset stop  motor_status bit since it is start now conditions
+			 }
+		 }
+		 else if((motor_status & MOTOR_START)==MOTOR_START)
+		 {
+				if(_avg_curr<FULL_LOAD_CURRENT(100))
+			 {
+					motor_status |=MOTOR_RUNNING; //set running  motor_status bit to running conditions
+					motor_status &=~MOTOR_STOP; //Reset stop  motor_status bit since it is start now conditions
+					motor_status &=~MOTOR_START; //Reset start  motor_status bit since it is running now conditions
+			 }
+		 }
+		 else if((motor_status & MOTOR_RUNNING)!=MOTOR_RUNNING)
+		 {
+			 // reset start and running bit and set stop bit since it is stop
+			 motor_status &=~MOTOR_RUNNING;
+			 motor_status &=~MOTOR_START;
+			 motor_status |=MOTOR_STOP;
+			 
 		 }
 	 }
-	 else if((motor_status & MOTOR_START)==MOTOR_START)
-	 {
-			if(_avg_curr<FULL_LOAD_CURRENT(100))
-		 {
-				motor_status |=MOTOR_RUNNING; //set running  motor_status bit to running conditions
-				motor_status &=~MOTOR_STOP; //Reset stop  motor_status bit since it is start now conditions
-				motor_status &=~MOTOR_START; //Reset start  motor_status bit since it is running now conditions
-		 }
-	 }
-	 else
-	 {
-		 // reset start and running bit and set stop bit since it is stop
-		 motor_status &=~MOTOR_RUNNING;
-		 motor_status &=~MOTOR_START;
-		 motor_status |=MOTOR_STOP;
-		 
-	 }
-	 
+		else
+		{
+			// reset start and running bit and set stop bit since it is stop
+			 motor_status &=~MOTOR_RUNNING;
+			 motor_status &=~MOTOR_START;
+			 motor_status |=MOTOR_STOP; 
+			
+		}
 	 
 }
  
@@ -617,10 +664,9 @@ if(motor_status & MOTOR_STOP)
 	#ifdef UV_CHECK
 		if(isUnderVolt())
 		{
-			//clear timmer counter
-			
-			//turn of motor start relay
-			
+			motor_var.cause_of_trip=TIM_UV;
+			//turn off motor start relay
+			motor_trip_relay(OFF);
 			return false;
 		}
 	#endif
@@ -628,10 +674,11 @@ if(motor_status & MOTOR_STOP)
 		#ifdef  OV_CHECK
 		if(isOverVolt())
 		{
-			//clear timmer counter
+			motor_var.cause_of_trip=TIM_OV;
 			
-			//turn of motor start relay
 			
+			//turn off motor start relay
+			motor_trip_relay(OFF);
 			return false;
 		}
 	#endif
@@ -639,9 +686,10 @@ if(motor_status & MOTOR_STOP)
 		#ifdef  VPH_F_CHECK
 		if(isPhaseFailueVolt())
 		{
-			//clear timmer counter
+			motor_var.cause_of_trip=FAULT_VOLT_PHASE_FAILURE;
 			
-			//turn of motor start relay
+			//turn off motor start relay
+			motor_trip_relay(OFF);
 			
 			return false;
 		}
@@ -650,9 +698,10 @@ if(motor_status & MOTOR_STOP)
 		#ifdef  UB_V_CHECK
 		if(isPhaseUnbalanceVolt())
 		{
-			//clear timmer counter
+			motor_var.cause_of_trip=TIM_UB_V;
 			
-			//turn of motor start relay
+			//turn off motor start relay
+			motor_trip_relay(OFF);
 			
 			return false;
 		}
@@ -661,19 +710,30 @@ if(motor_status & MOTOR_STOP)
 		#ifdef  VPH_R_CHECK
 		if(isPhaseReversalVolt())
 		{
-			//clear timmer counter
+			motor_var.cause_of_trip=FAULT_VOLT_PHASE_REVERSAL;
 			
-			//turn of motor start relay
+			//turn off motor start relay
+			motor_trip_relay(OFF);
 			
 			return false;
 		}
 	
 	#endif
 		
-		//Turn on by pass relay 
+		//Turn on trip relay pass relay 
+		motor_trip_relay(ON);
+		
+		//clear timmer counter
+		timmer_t d_time;
+		for(d_time=TIM_UV;d_time<TIM_TOTAL_PARA;d_time++)
+		fault_trip_counter.tripTimer[d_time]=0;
+		
+		
+		motor_var.cause_of_alarm=FAULT_NONE;
+		motor_var.cause_of_trip=FAULT_NONE;
 		
 		return true;
-	
+		
 }
 
 	return true;
@@ -702,8 +762,20 @@ void running_Motor_Fault_Check()
  
 void motorFunctions(void)
 {	
-
-	 
+		/* check for motor status running,stop,start */
+	check_Motor_status();
+	if(is_ok_pre_Start_Motor_Fault_Check())
+	{
+		// CHECK ALL FAULT	
+			voltage_related_fault();
+			current_related_fault();
+			other_related_fault();
+			delaySelect();
+			alarmRelay();
+			tripRelay();
+			
+	}
+	
 
 }
 
@@ -717,25 +789,40 @@ void motorFunctions(void)
 
 static void tripRelay(void)
 {
+	/* check trip relay on or off 
+			if off then go to check trip or else return
+	*/
+	if((motor_status & TRIP_RELAY)!=TRIP_RELAY)
+		return;
 	
- bool delay_elapse=false;
+	setup_t setup_data;
 	timmer_t d_time;
-	for(d_time=TIM_UV;d_time<TIM_TOTAL_PARA && delay_elapse==false;d_time++)
-		{
-			if(meter_setup.meter_setup_menu[d_time] & PARA_TRIP_ENABLE_BIT & PARA_ENABLE_BIT)
+
+	for(setup_data=SETUP_UV,d_time=TIM_UV;setup_data<=SETUP_CON_F;setup_data++)
+	{
+		/* skip trip relay for phase failure and phase reversal for volt,current */
+		if(setup_data==SETUP_V_PF || setup_data==SETUP_V_PR||setup_data==SETUP_C_PF \
+			||setup_data==SETUP_C_PR)
+			continue;
+		
+			if(meter_setup.meter_setup_menu[setup_data] & PARA_TRIP_ENABLE_BIT & PARA_ENABLE_BIT)
 			{
-					if(fault_trip_counter.tripTimer[d_time]>delaySetupTim.delaySetup[d_time])
+				
+					if(fault_trip_counter.tripTimer[d_time]>delaySetupTim.delaySetup[d_time]*10)
 					{
+						//capture value at trip
+								capture_fault_data(d_time);
 							// trip relay 
-							motor_trip_relay(ON);
+							motor_trip_relay(OFF);
 							// reset motor status 
 							clear_flag();
-							//capture value at trip
-
+							
 							//capture cause of fault
-							delay_elapse=true;
+						motor_var.cause_of_trip=d_time;
+							
 					}
 			}
+			d_time++;
 			
 		}
 			
@@ -743,41 +830,73 @@ static void tripRelay(void)
 }
 
 /*
-
+Discriptions:check for alarm relay
 	
 */
  
 static void alarmRelay(void)
 {
-			uint16_t _alarm=0;
+			uint16_t _alarm_per=0;
 			uint16_t alarm_temp=0;
-	/* check alarm relay on /off */
+	/* check alarm relay on /off 
+		if already on no need to continue
+	*/
+	if(motor_status & ALARM_RELAY)
+		return;
 	
 	setup_t setup_data;
+	timmer_t d_time;
 
-	for(setup_data=SETUP_UV;setup_data<=SETUP_CON_F;setup_data++)
+	for(setup_data=SETUP_UV,d_time=TIM_UV;setup_data<=SETUP_CON_F;setup_data++)
 	{
-		// check from setup parameter that parameter and alarm  enable/disable
-		if(meter_setup.meter_setup_menu[setup_data] & PARA_ENABLE_BIT & PARA_ALARM_ENABLE_BIT )
+		/* skip alarm for phase failure and phase reversal for volt,current */
+		if(setup_data==SETUP_V_PF || setup_data==SETUP_V_PR||setup_data==SETUP_C_PF \
+			||setup_data==SETUP_C_PR)
+			continue;
+		
+		// check from parameter and alarm  enable 
+		if(PARA_ENABLE_BIT & meter_setup.meter_setup_menu[setup_data] & PARA_ALARM_ENABLE_BIT )
 			{
-					extact_data(&meter_setup.meter_setup_menu[setup_data],&_alarm,PARA_ALARM_ENABLE_POS,2);
-					if(_alarm>0)
-					{ 
-						alarm_temp=(delaySetupTim.delaySetup[setup_data]*_alarm)/100;
-						if(fault_trip_counter.tripTimer[setup_data]>alarm_temp)
+				
+					extact_data(&meter_setup.meter_setup_menu[d_time],&_alarm_per,PARA_ALARM_ENABLE_POS,2);
+				/* check if alarm in between MIN and MAX else make them alarm min */	
+				if(_alarm_per <ALARM_MIN && _alarm_per>ALARM_MAX)
+							_alarm_per=ALARM_MIN;
+					
+						alarm_temp=(delaySetupTim.delaySetup[d_time]*_alarm_per)/100;
+						
+						//TODO
+						/*
+							check last bit for time in milli or in second
+						*/
+						alarm_temp*=10; //convert in second,warning multilple based on loop running , here is 100ms
+						if(fault_trip_counter.tripTimer[d_time]>alarm_temp)
 						{
 							// turn on relay alarm
+							motor_alarm_relay(ON);
 							
+							// capture cause of alarm
+							motor_var.cause_of_alarm=(uint16_t)setup_data;
+							break;
 						}
 						
-					}
+					
 			}
+			
+			d_time++;
 	}
 			
 				
 }
+
+/*
+		voltage releate fault check
+*/
 static void voltage_related_fault(void)
 {
+	
+	if(motor_status & MOTOR_RUNNING)
+	{
 	#ifdef UV_CHECK   //under volt
 		if(isUnderVolt())
 		{
@@ -810,60 +929,73 @@ static void voltage_related_fault(void)
 		{
 			
 		}
-	
 	#endif
+	}
 }
+
 static void current_related_fault(void)
 {
-#ifdef	UC_fCHECK  //under current
+	if(motor_status & MOTOR_RUNNING)
+	{
+	#ifdef	UC_fCHECK  //under current
+		isUnderCurr();
+	#endif
+	#ifdef	OC_CHECK //over current
+		isOverCurr();
+	#endif	
+	#ifdef	INVT_OL_CHECK //inverse time overload
+		isInvCurrOverLoad();
+	#endif	
+	#ifdef	UB_C_CHECK 	//Current unbalanced
+		isPhaseUnbalanceCurr();
+	#endif
+	#ifdef	RL_CHECK  //rotor jam
+		isRotorLockCurr();
+	#endif	
+		
+	#ifdef	CPH_F_CHECK //Current phase failure
+		isPhaseFailueCurr();
+	#endif
+	#ifdef	CPH_R_CHECK  //current phase reversal
+	isPhaseReversalCurr();
+	#endif
 
-#endif
-#ifdef	OC_CHECK //over current
-
-#endif	
-#ifdef	INVT_OL_CHECK //inverse time overload
-
-#endif	
-#ifdef	UB_C_CHECK 	//Current unbalanced
-	
-#endif
-#ifdef	RL_CHECK  //rotor jam
-	
-#endif	
-#ifdef	PS_CHECK //PROLONG START
-
-#endif	
-#ifdef	CPH_F_CHECK //Current phase failure
-	
-#endif
-#ifdef	CPH_R_CHECK  //current phase reversal
-
-#endif
+	}
+		
+	if(motor_status & MOTOR_START)
+		{
+			#ifdef	PS_CHECK //PROLONG START
+			isProlongStartCurr();
+			#endif
+		}
 }
+
 static void power_related_fault(void)
 {
 #ifdef	UP_CHECK 	//under power
-	
+	isUnderPower();
 #endif
 #ifdef	OP_CHECK 	//over power
-	
+	isOverPower();
 #endif
 }
 static void other_related_fault(void)
 {
 #ifdef	GR_F_CHECK 	//ground fault
-	
+	isGroundFault();
 	#endif
 #ifdef	O_TEMP_CHECK  //over temp
 	
 	#endif
 #ifdef	ER_F_CHECK 	//earth fault
-	
+	isEarthFault();
 	#endif
 #ifdef	CON_F_CHECK 	//contatctor failure
-	
+	isContactorFault();
 	#endif
 }
+
+
 
 static void clear_flag(void)
 {
@@ -873,6 +1005,83 @@ static void clear_flag(void)
 	
 }
 
+
+/*
+
+Descriptions: read fault data based on trip 
+			
+*/
+
+uint32_t capture_fault_data(timmer_t id)
+{
+	uint32_t retVal=0;
+	 switch((int)id)
+	 {
+		 case TIM_UV:   // trip due to under volt
+			 
+		 break;
+		 
+		 case TIM_OV: 	//trip due toover volt
+			
+		 break;
+		 case TIM_UB_V:	//volt unbalanced
+			 
+		 break;
+			
+			case TIM_UC:	//under current
+				
+			break;
+			case TIM_OC:	//over current
+				
+			break;
+			case TIM_INVT_OL:	//inverse time overload
+				
+			break;
+			case TIM_UB_C:	//Current unbalanced
+				
+			break;
+			case TIM_RL:		//rotor jam
+				
+			break;
+			case TIM_PS:	//PROLONG START
+				
+			break;
+			
+			case TIM_UP:	//under power
+				
+			break;
+			case TIM_OP:	//over power
+				
+			break;
+			
+			case TIM_GR_F:	//ground fault
+				
+			break;
+			case TIM_O_TEMP: //over temp
+				
+			break;
+			case TIM_ER_F:	//earth fault
+				
+			break;
+			case TIM_CON_F:	//contatctor failure
+				
+			break;
+			
+			default:
+				retVal=0;
+			break;
+				 
+	 }
+	 return retVal;
+}
+
+void motor_default_status(void)
+{
+		motor_var.cause_of_alarm=FAULT_NONE;
+		motor_var.cause_of_trip=FAULT_NONE;
+		motor_alarm_relay(OFF);
+		motor_trip_relay(OFF);
+}
 /***END of FUNCTIONS belong to other file***/
  
  

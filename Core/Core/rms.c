@@ -539,12 +539,18 @@ void Rms_Calculations(void)
 			rms.power[KW][phase]= ((float)(store.Store_KW_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
 			rms.power[KVAR][phase]=((float)(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_without_gain[phase])/CURRENT_Mul;
 			
+			// copy current for display
+			rms.display_currnet[phase]=rms.current_withoutgain[phase];
+			
 		}
 		else
 		{
 			rms.power[KVA][phase]= ((float)rms.voltage[phase]*rms.current_gain[phase])/CURRENT_Mul;
 			rms.power[KW][phase]= ((float)(store.Store_KW_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
 			rms.power[KVAR][phase]=((float)(store.Store_KVAR_Sample[phase])*scaling_factor.power_scal_gain[phase])/CURRENT_Mul;
+			
+			// copy current for display
+			rms.display_currnet[phase]=rms.current_gain[phase];
 		}
 		
 		
@@ -580,7 +586,7 @@ void Rms_Calculations(void)
 		
 	 }
 	 temp_count++;
-	 if(temp_count==ENERY_PER_SEC)
+	 if(temp_count==ENERY_PER_SEC*10)
 	 {
 		 temp_count=0;
 			/* store energy to eeprom at every sec */
