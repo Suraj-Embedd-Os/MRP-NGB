@@ -156,9 +156,9 @@ static  bool isUnderVolt()
 		extact_data(&meter_setup.meter_setup_menu[SETUP_UV],&_under_volt_per,7,10);
 
 	
-	if((rms.voltage[R_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
-		(rms.voltage[Y_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
-			(rms.voltage[B_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per)))
+	if((rms.voltage_LL[RY_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
+		(rms.voltage_LL[YB_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
+			(rms.voltage_LL[BR_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per)))
 	{
 			motor_var.fault_status_reg |=UV_fault; //set UC bit high
 			fault_trip_counter.tripTimer[UV]++;
@@ -185,9 +185,9 @@ static bool isOverVolt()
 	//extract data from setup variable
 		extact_data(&meter_setup.meter_setup_menu[SETUP_OV],&_over_volt_per,7,10);
 	
-	if((rms.voltage[R_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
-		(rms.voltage[Y_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
-			(rms.voltage[B_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per)))
+	if((rms.voltage_LL[RY_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
+		(rms.voltage_LL[YB_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
+			(rms.voltage_LL[BR_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per)))
 	{
 			motor_var.fault_status_reg |=OV_fault; //set UC bit high
 		fault_trip_counter.tripTimer[OV]++;
@@ -211,9 +211,9 @@ static bool isPhaseFailueVolt()
 	uint16_t _phase_failure_per=50;//percent of nominal voltage;
 	
 
-	if((rms.voltage[R_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
-		(rms.voltage[Y_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
-			(rms.voltage[B_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per)))
+	if((rms.voltage_LL[RY_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
+		(rms.voltage_LL[YB_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
+			(rms.voltage_LL[BR_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per)))
 	{
 			motor_var.fault_status_reg |=VPH_F; //set UC bit high
 			fault_trip_counter.tripTimer[VPH_F]++;
@@ -238,8 +238,8 @@ static bool isPhaseUnbalanceVolt(void)
 	
 	extact_data(&meter_setup.meter_setup_menu[SETUP_UB_V],&_phase_ub_volt_per,7,10);
 
-	float max_volt =find_max(&rms.voltage[R_PHASE],&rms.voltage[Y_PHASE],&rms.voltage[B_PHASE]);
-	float min_volt =find_min(&rms.voltage[R_PHASE],&rms.voltage[Y_PHASE],&rms.voltage[B_PHASE]);
+	float max_volt =find_max(&rms.voltage_LL[RY_PHASE],&rms.voltage_LL[YB_PHASE],&rms.voltage_LL[BR_PHASE]);
+	float min_volt =find_min(&rms.voltage_LL[RY_PHASE],&rms.voltage_LL[YB_PHASE],&rms.voltage_LL[BR_PHASE]);
 	
 	int _per_error = (int)((100*(max_volt-min_volt))/max_volt);
 	
