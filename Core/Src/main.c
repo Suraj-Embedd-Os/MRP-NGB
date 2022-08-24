@@ -28,6 +28,7 @@
 #include "pt24xx.h"
 #include "motor_protection.h"
 #include "setup.h"
+#include "button.h"
 
 /* USER CODE END Includes */
 
@@ -87,7 +88,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 			 acc_data_ready=true;
 			 
 		 }
-	 }
+	 
+		// scan button press event
+	 button_scanEvent();
+	}
+	 
 }
 
 /* USER CODE END PV */
@@ -137,6 +142,42 @@ static void hardware_init()
 
 }
 
+void button_test()
+{
+	static uint8_t temp[4];
+	if(ui_isButtonNormalPressed(BUTTON_ID_B0))
+	{
+		temp[0]++;
+	}
+	else if(ui_isButtonLongPressed(BUTTON_ID_B0))
+	{
+		temp[0]--;
+	}
+	if(ui_isButtonNormalPressed(BUTTON_ID_B1))
+	{
+		temp[1]++;
+	}
+	else if(ui_isButtonLongPressed(BUTTON_ID_B1))
+	{
+		temp[1]--;
+	}
+	if(ui_isButtonNormalPressed(BUTTON_ID_B2))
+	{
+		temp[2]++;
+	}
+	else if(ui_isButtonLongPressed(BUTTON_ID_B2))
+	{
+		temp[2]--;
+	}
+	if(ui_isButtonNormalPressed(BUTTON_ID_B3))
+	{
+		temp[3]++;
+	}
+	else if(ui_isButtonLongPressed(BUTTON_ID_B3))
+	{
+		temp[3]--;
+	}
+}
 extern capture_t							  motor_var;
 
 /* USER CODE END 0 */
@@ -200,6 +241,8 @@ int main(void)
 				motorFunctions();
 				acc_data_ready=false;
 		}
+			
+		 //button_test();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -731,8 +774,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : EXT_RST_Pin LV_RST_Pin SW4_Pin SW2_Pin */
-  GPIO_InitStruct.Pin = EXT_RST_Pin|LV_RST_Pin|SW4_Pin|SW2_Pin;
+  /*Configure GPIO pins : EXT_RST_Pin LV_RST_Pin */
+  GPIO_InitStruct.Pin = EXT_RST_Pin|LV_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
@@ -752,13 +795,19 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : SW3_Pin */
   GPIO_InitStruct.Pin = SW3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(SW3_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : SW4_Pin SW2_Pin */
+  GPIO_InitStruct.Pin = SW4_Pin|SW2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SW1_Pin */
   GPIO_InitStruct.Pin = SW1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(SW1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : Thermal_Pin PD0 PD1 PD2 

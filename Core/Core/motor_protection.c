@@ -1,6 +1,7 @@
 #include "motor_protection.h"
 #include "rms.h"
 #include "setup.h"
+#include "button.h"
 
 
 #define ON  (1U)
@@ -63,6 +64,7 @@ static void clear_flag(void);
 
 static void tripRelay(void);
 static void alarmRelay(void);
+static void clear_fault(void);
 
 /*
 	Alarm relay on /off
@@ -764,7 +766,7 @@ void motorFunctions(void)
 {	
 		/* check for motor status running,stop,start */
 	check_Motor_status();
-	if(is_ok_pre_Start_Motor_Fault_Check())
+	if(is_ok_pre_Start_Motor_Fault_Check() && motor_var.cause_of_trip !=FAULT_NONE)
 	{
 		// CHECK ALL FAULT	
 			voltage_related_fault();
@@ -775,7 +777,8 @@ void motorFunctions(void)
 			tripRelay();
 			
 	}
-	
+	// clear fault manually
+	clear_fault();
 
 }
 
@@ -1021,7 +1024,7 @@ uint32_t capture_fault_data(timmer_t id)
 			 
 		 break;
 		 
-		 case TIM_OV: 	//trip due toover volt
+		 case TIM_OV: 	//trip due to over volt
 			
 		 break;
 		 case TIM_UB_V:	//volt unbalanced
@@ -1081,6 +1084,25 @@ void motor_default_status(void)
 		motor_var.cause_of_trip=FAULT_NONE;
 		motor_alarm_relay(OFF);
 		motor_trip_relay(OFF);
+}
+
+
+static void clear_fault()
+{
+	
+		// manually reset fault
+	if(motor_var.cause_of_trip !=FAULT_NONE)
+	{
+		if(ui_isButtonNormalPressed(BUTTON_ID_B0))
+		{
+			motor_var.cause_of_trip=FAULT_NONE;
+			motor_var.cause_of_alarm=FAULT_NONE;
+			motor_alarm_relay(OFF);
+			motor_trip_relay(ON);
+			
+		}
+		
+	}
 }
 /***END of FUNCTIONS belong to other file***/
  

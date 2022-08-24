@@ -1,9 +1,8 @@
-mpr\button.o: ..\Core\ui\button.c
-mpr\button.o: ..\Core\ui\button.h
+mpr\button.o: ..\Core\Core\button.c
+mpr\button.o: ..\Core\Core\button.h
 mpr\button.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 mpr\button.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 mpr\button.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-mpr\button.o: ..\Core\ui\disp_comn_vari.h
 mpr\button.o: ../Core/Inc/main.h
 mpr\button.o: ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h
 mpr\button.o: ../Core/Inc/stm32g0xx_hal_conf.h

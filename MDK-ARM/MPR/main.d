@@ -46,3 +46,4 @@ mpr\main.o: ..\Core\Store\eeprom_addr.h
 mpr\main.o: ..\Core\Core\motor_protection.h
 mpr\main.o: ..\Core\setup\setup.h
 mpr\main.o: ..\Core\Core\common_def.h
+mpr\main.o: ..\Core\Core\button.h
