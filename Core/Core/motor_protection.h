@@ -13,8 +13,8 @@ typedef enum{
 	MIN_UV =20,
 	MAX_UV=100,
 	
-	MIN_OV=20, 	//over volt
-	MAX_OV=100, 	//over volt
+	MIN_OV=110, 	//over volt
+	MAX_OV=200, 	//over volt
 	
 	MIN_UB_V=5,	//volt unbalanced
 	MAX_UB_V=80,	//volt unbalanced
@@ -22,12 +22,12 @@ typedef enum{
 	MIN_UC=10,	//under current
 	MAX_UC=100,	//under current
 
-	MIN_OC=10,	//over current
-	MAX_OC=100,	//over current
+	MIN_OC=110,	//over current
+	MAX_OC=200,	//over current
 
 	
-	MIN_INVT_OL=10,	//inverse time overload
-	MAX_INVT_OL=100,	//inverse time overload
+	MIN_INVT_OL=110,	//inverse time overload
+	MAX_INVT_OL=200,	//inverse time overload
 
 	MIN_UB_C=5,	//Current unbalanced
 	MAX_UB_C=80,	//Current unbalanced
@@ -162,11 +162,11 @@ typedef enum
 	TIM_TOTAL_PARA,
 	
 	/*extra fault enmu which has no timmer */
-	FAULT_VOLT_PHASE_FAILURE,
+	FAULT_VOLT_PHASE_FAILURE=TIM_TOTAL_PARA,
 	FAULT_VOLT_PHASE_REVERSAL,
 	FAULT_CURR_PHASE_FAILURE,
 	FAULT_CURR_PHASE_REVERSAL,
-	FAULT_NONE
+	FAULT_NONE=0xff
 	
 }timmer_t;
 

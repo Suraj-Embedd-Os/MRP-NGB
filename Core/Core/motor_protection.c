@@ -66,18 +66,28 @@ static void tripRelay(void);
 static void alarmRelay(void);
 static void clear_fault(void);
 
+void check_min_max_limit(uint16_t max_limit,uint16_t min_limit,uint16_t *des)
+{
+	
+	if(*des >=min_limit && *des<=max_limit)
+		return;
+	else
+		*des=min_limit;
+	return;
+}
+
 /*
 	Alarm relay on /off
 */
 void motor_alarm_relay(bool val)
 {
 	if(val){
-		RL1_GPIO_Port->ODR |=RL1_Pin;
+		RL2_GPIO_Port->ODR |=RL1_Pin;
 		motor_status |=ALARM_RELAY;
 	}
 	else
 	{
-		RL1_GPIO_Port->ODR &=~RL1_Pin;
+		RL2_GPIO_Port->ODR &=~RL1_Pin;
 		motor_status &=~ALARM_RELAY;
 	}
 }
@@ -90,7 +100,7 @@ void motor_trip_relay(bool val)
 {
 	if(val)
 	{
-		RL2_GPIO_Port->ODR |=RL2_Pin;
+		RL1_GPIO_Port->ODR |=RL2_Pin;
 		motor_status |=TRIP_RELAY;
 	}
 	else
@@ -157,8 +167,10 @@ static  bool isUnderVolt()
 	//extract data from setup variable
 		extact_data(&meter_setup.meter_setup_menu[SETUP_UV],&_under_volt_per,7,10);
 
+	//check_min_max_limit
+	check_min_max_limit(MAX_UV,MIN_UV,&_under_volt_per);
 	
-	if((rms.voltage_LL[RY_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
+	if((rms.voltage_LL[RY_PHASE]<(float)(NOMINAL_VOLTAGE(_under_volt_per)))|| \
 		(rms.voltage_LL[YB_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
 			(rms.voltage_LL[BR_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per)))
 	{
@@ -187,6 +199,9 @@ static bool isOverVolt()
 	//extract data from setup variable
 		extact_data(&meter_setup.meter_setup_menu[SETUP_OV],&_over_volt_per,7,10);
 	
+	//check_min_max_limit
+	check_min_max_limit(MAX_OV,MIN_OV,&_over_volt_per);
+	
 	if((rms.voltage_LL[RY_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
 		(rms.voltage_LL[YB_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
 			(rms.voltage_LL[BR_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per)))
@@ -210,7 +225,7 @@ Discrption: if any one of phase is less than certain limit consider as phase los
 */
 static bool isPhaseFailueVolt()
 {
-	uint16_t _phase_failure_per=50;//percent of nominal voltage;
+	uint16_t _phase_failure_per=80;//percent of nominal voltage;
 	
 
 	if((rms.voltage_LL[RY_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
@@ -239,13 +254,16 @@ static bool isPhaseUnbalanceVolt(void)
 	uint16_t _phase_ub_volt_per=0;
 	
 	extact_data(&meter_setup.meter_setup_menu[SETUP_UB_V],&_phase_ub_volt_per,7,10);
+	
+	//check_min_max_limit
+	check_min_max_limit(MAX_UB_V,MIN_UB_V,&_phase_ub_volt_per);
 
 	float max_volt =find_max(&rms.voltage_LL[RY_PHASE],&rms.voltage_LL[YB_PHASE],&rms.voltage_LL[BR_PHASE]);
 	float min_volt =find_min(&rms.voltage_LL[RY_PHASE],&rms.voltage_LL[YB_PHASE],&rms.voltage_LL[BR_PHASE]);
 	
 	int _per_error = (int)((100*(max_volt-min_volt))/max_volt);
 	
-	if(_phase_ub_volt_per>_per_error)
+	if(_per_error>=_phase_ub_volt_per)
 	{
 		motor_var.fault_status_reg |=UB_V_fault;
 		fault_trip_counter.tripTimer[UB_V]++;
@@ -294,6 +312,9 @@ static bool isUnderCurr(void)
 	uint16_t _under_curr_per=0;//=(uint16_t)menu_config[UC];
 	
 	extact_data(&meter_setup.meter_setup_menu[SETUP_UC],&_under_curr_per,7,10);
+	
+	//check_min_max_limit
+	check_min_max_limit(MAX_UC,MIN_UC,&_under_curr_per);
 
 	if((rms.display_currnet[RY_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per))|| \
 		(rms.display_currnet[YB_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per))|| \
@@ -321,6 +342,9 @@ static bool isOverCurr(void)
 	
 		extact_data(&meter_setup.meter_setup_menu[SETUP_OC],&_oc_per,7,10);
 	
+		//check_min_max_limit
+		check_min_max_limit(MAX_OC,MIN_OC,&_oc_per);
+	
 	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per))|| \
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per))|| \
 			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per)))
@@ -343,7 +367,7 @@ static bool isOverCurr(void)
 */
 static bool isPhaseFailueCurr(void)
 {
-	uint16_t _phase_failure_per= 50;//percent of nominal voltage;
+	uint16_t _phase_failure_per= 80;//percent of nominal voltage;
 	if((rms.display_currnet[RY_PHASE]<(float)FULL_LOAD_CURRENT(_phase_failure_per))|| \
 		(rms.display_currnet[YB_PHASE]<(float)FULL_LOAD_CURRENT(_phase_failure_per))|| \
 			(rms.display_currnet[BR_PHASE]<(float)FULL_LOAD_CURRENT(_phase_failure_per)))
@@ -369,6 +393,9 @@ static bool isPhaseUnbalanceCurr(void)
 {
 	uint16_t _phase_ub_curr_per=10;
 	extact_data(&meter_setup.meter_setup_menu[SETUP_UB_C],&_phase_ub_curr_per,7,10);
+	
+	//check_min_max_limit
+		check_min_max_limit(MAX_UB_C,MIN_UB_C,&_phase_ub_curr_per);
 
 	float max_curr =find_max(&rms.display_currnet[RY_PHASE],&rms.display_currnet[YB_PHASE],&rms.display_currnet[BR_PHASE]);
 	float min_curr =find_min(&rms.display_currnet[RY_PHASE],&rms.display_currnet[YB_PHASE],&rms.display_currnet[BR_PHASE]);
@@ -422,6 +449,9 @@ static bool isRotorLockCurr(void)
 		uint16_t _rotor_lock_Per=0;
 	
 		extact_data(&meter_setup.meter_setup_menu[SETUP_RL],&_rotor_lock_Per,7,10);
+	
+	//check_min_max_limit
+		check_min_max_limit(MAX_RL,MIN_RL,&_rotor_lock_Per);
 
 	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per))|| \
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per))|| \
@@ -447,6 +477,10 @@ static bool isProlongStartCurr(void)
 			uint16_t _prolong_lock_Per=0;
 	
 	extact_data(&meter_setup.meter_setup_menu[SETUP_PS],&_prolong_lock_Per,7,10);
+	
+	//check_min_max_limit
+		check_min_max_limit(MAX_PS,MIN_PS,&_prolong_lock_Per);
+	
 	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per))|| \
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per))|| \
 			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per)))
@@ -808,7 +842,8 @@ static void tripRelay(void)
 			||setup_data==SETUP_C_PR)
 			continue;
 		
-			if(meter_setup.meter_setup_menu[setup_data] & PARA_TRIP_ENABLE_BIT & PARA_ENABLE_BIT)
+			if((meter_setup.meter_setup_menu[setup_data] & PARA_ENABLE_BIT)&& \
+				(PARA_TRIP_ENABLE_BIT &meter_setup.meter_setup_menu[setup_data]))
 			{
 				
 					if(fault_trip_counter.tripTimer[d_time]>delaySetupTim.delaySetup[d_time]*10)
@@ -858,7 +893,8 @@ static void alarmRelay(void)
 			continue;
 		
 		// check from parameter and alarm  enable 
-		if(PARA_ENABLE_BIT & meter_setup.meter_setup_menu[setup_data] & PARA_ALARM_ENABLE_BIT )
+		if((PARA_ENABLE_BIT & meter_setup.meter_setup_menu[setup_data]) &&  \
+			(PARA_ALARM_ENABLE_BIT &meter_setup.meter_setup_menu[setup_data]))
 			{
 				
 					extact_data(&meter_setup.meter_setup_menu[d_time],&_alarm_per,PARA_ALARM_ENABLE_POS,2);
