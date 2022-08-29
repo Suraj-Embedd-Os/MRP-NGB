@@ -3,7 +3,7 @@
 <title>Static Call Graph - [MPR\MPR.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image MPR\MPR.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat Aug 27 16:05:35 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Aug 29 10:02:24 2022
 <BR><P>
 <H3>Maximum Stack Usage =        248 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -65,7 +65,7 @@ Global Symbols
 <P><STRONG><a name="[23]"></a>__main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry.o(.ARM.Collect$$$$00000000))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32g070xx.o(.text)
 </UL>
-<P><STRONG><a name="[db]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[dd]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[27]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
@@ -75,19 +75,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[dc]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[de]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[dd]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
+<P><STRONG><a name="[df]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
 
-<P><STRONG><a name="[de]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
+<P><STRONG><a name="[e0]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
 
 <P><STRONG><a name="[29]"></a>__rt_lib_shutdown_fini</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry12b.o(.ARM.Collect$$$$0000000E))
 <BR><BR>[Calls]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__arm_fini_ (Weak Reference)
 </UL>
 
-<P><STRONG><a name="[df]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000F))
+<P><STRONG><a name="[e1]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000F))
 
-<P><STRONG><a name="[e0]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$00000011))
+<P><STRONG><a name="[e2]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$00000011))
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, startup_stm32g070xx.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32g070xx.o(RESET)
@@ -171,7 +171,7 @@ Global Symbols
 <P><STRONG><a name="[6]"></a>WWDG_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32g070xx.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32g070xx.o(RESET)
 </UL>
-<P><STRONG><a name="[e1]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
+<P><STRONG><a name="[e3]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
 
 <P><STRONG><a name="[2c]"></a>__aeabi_uidivmod</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, uidiv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = __aeabi_uidivmod
@@ -189,7 +189,7 @@ Global Symbols
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
 
-<P><STRONG><a name="[e2]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, idiv.o(.text), UNUSED)
+<P><STRONG><a name="[e4]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, idiv.o(.text), UNUSED)
 
 <P><STRONG><a name="[2b]"></a>__aeabi_idivmod</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, idiv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = __aeabi_idivmod &rArr; __aeabi_uidivmod
@@ -198,6 +198,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NOMINAL_VOLTAGE
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FULL_LOAD_CURRENT
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;alarmRelay
 </UL>
 
 <P><STRONG><a name="[2e]"></a>__aeabi_memset</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
@@ -205,9 +206,9 @@ Global Symbols
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 
-<P><STRONG><a name="[e3]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[e5]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
-<P><STRONG><a name="[e4]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[e6]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[2d]"></a>__aeabi_memclr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
@@ -222,7 +223,7 @@ Global Symbols
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
 </UL>
 
-<P><STRONG><a name="[e5]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[e7]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[2f]"></a>_memset$wrapper</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, memseta.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
@@ -234,8 +235,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_round
 <LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
+<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
 <LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ProcessFrequencyCalculation
@@ -247,9 +248,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
+<BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ProcessFrequencyCalculation
 </UL>
 
@@ -260,9 +261,9 @@ Global Symbols
 <P><STRONG><a name="[ad]"></a>__aeabi_fmul</STRONG> (Thumb, 122 bytes, Stack size 16 bytes, fmul.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_fmul
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
+<BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Store_Adc_Data
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Read_Eeprom_Data
@@ -273,11 +274,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_round
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
+<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ProcessFrequencyCalculation
 </UL>
@@ -286,7 +287,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Read_Eeprom_Data
 </UL>
 
-<P><STRONG><a name="[e6]"></a>scalbnf</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, fscalb.o(.text), UNUSED)
+<P><STRONG><a name="[e8]"></a>scalbnf</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, fscalb.o(.text), UNUSED)
 
 <P><STRONG><a name="[36]"></a>__aeabi_dmul</STRONG> (Thumb, 202 bytes, Stack size 72 bytes, dmul.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = __aeabi_dmul &rArr; _double_epilogue &rArr; __aeabi_llsr
@@ -301,14 +302,14 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
-<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
+<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
+<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ProcessFrequencyCalculation
 </UL>
@@ -318,7 +319,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
+<BR>[Called By]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Store_Adc_Data
 </UL>
 
@@ -330,13 +331,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 </UL>
 
-<P><STRONG><a name="[cf]"></a>__aeabi_f2iz</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, ffixi.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<P><STRONG><a name="[d0]"></a>__aeabi_f2iz</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, ffixi.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
 </UL>
 
 <P><STRONG><a name="[b1]"></a>__aeabi_f2uiz</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, ffixui.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
+<BR><BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Store_Adc_Data
 </UL>
 
@@ -352,26 +353,26 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 </UL>
 
-<P><STRONG><a name="[e7]"></a>__aeabi_cfcmpeq</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, cfcmple.o(.text), UNUSED)
+<P><STRONG><a name="[e9]"></a>__aeabi_cfcmpeq</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, cfcmple.o(.text), UNUSED)
 
-<P><STRONG><a name="[b9]"></a>__aeabi_cfcmple</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, cfcmple.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_min
+<P><STRONG><a name="[bc]"></a>__aeabi_cfcmple</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, cfcmple.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_min
 </UL>
 
-<P><STRONG><a name="[b8]"></a>__aeabi_cfrcmple</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, cfrcmple.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
-<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_max
+<P><STRONG><a name="[bb]"></a>__aeabi_cfrcmple</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, cfrcmple.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
+<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_max
 </UL>
 
-<P><STRONG><a name="[e8]"></a>__I$use$fp</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, iusefp.o(.text), UNUSED)
+<P><STRONG><a name="[ea]"></a>__I$use$fp</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, iusefp.o(.text), UNUSED)
 
 <P><STRONG><a name="[32]"></a>_float_round</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, fepilogue.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
@@ -421,7 +422,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[e9]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[eb]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
 <P><STRONG><a name="[3d]"></a>__aeabi_llsl</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, llshl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_llsl
@@ -429,7 +430,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 </UL>
 
-<P><STRONG><a name="[ea]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llshl.o(.text), UNUSED)
+<P><STRONG><a name="[ec]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llshl.o(.text), UNUSED)
 
 <P><STRONG><a name="[3e]"></a>__aeabi_llsr</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, llushr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_llsr
@@ -438,7 +439,7 @@ Global Symbols
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dsqrt
 </UL>
 
-<P><STRONG><a name="[eb]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llushr.o(.text), UNUSED)
+<P><STRONG><a name="[ed]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llushr.o(.text), UNUSED)
 
 <P><STRONG><a name="[47]"></a>ADC_Enable</STRONG> (Thumb, 132 bytes, Stack size 24 bytes, stm32g0xx_hal_adc.o(i.ADC_Enable))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = ADC_Enable
@@ -483,11 +484,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
+<BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
 </UL>
 
 <P><STRONG><a name="[50]"></a>HAL_ADC_ConfigChannel</STRONG> (Thumb, 540 bytes, Stack size 32 bytes, stm32g0xx_hal_adc.o(i.HAL_ADC_ConfigChannel))
@@ -968,13 +969,13 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
+<BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
 </UL>
 
-<P><STRONG><a name="[ca]"></a>PT24xx_init</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, pt24xx.o(i.PT24xx_init))
-<BR><BR>[Called By]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hardware_init
+<P><STRONG><a name="[cb]"></a>PT24xx_init</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, pt24xx.o(i.PT24xx_init))
+<BR><BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hardware_init
 </UL>
 
 <P><STRONG><a name="[a9]"></a>PT24xx_read</STRONG> (Thumb, 72 bytes, Stack size 40 bytes, pt24xx.o(i.PT24xx_read))
@@ -1021,7 +1022,7 @@ Global Symbols
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_scalbnf
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PT24xx_read
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hardware_init
+<BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hardware_init
 </UL>
 
 <P><STRONG><a name="[ae]"></a>Rms_Calculations</STRONG> (Thumb, 614 bytes, Stack size 104 bytes, rms.o(i.Rms_Calculations))
@@ -1137,82 +1138,89 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 </UL>
 
-<P><STRONG><a name="[ec]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[ee]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[ed]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[ef]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[ee]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[f0]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[da]"></a>__set_errno</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, errno.o(i.__set_errno))
 <BR><BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sqrt
 </UL>
 
-<P><STRONG><a name="[53]"></a>button_scanEvent</STRONG> (Thumb, 190 bytes, Stack size 20 bytes, button.o(i.button_scanEvent))
+<P><STRONG><a name="[53]"></a>button_scanEvent</STRONG> (Thumb, 194 bytes, Stack size 20 bytes, button.o(i.button_scanEvent))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = button_scanEvent
 </UL>
 <BR>[Called By]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_ConvCpltCallback
 </UL>
 
-<P><STRONG><a name="[b7]"></a>check_Motor_status</STRONG> (Thumb, 168 bytes, Stack size 24 bytes, motor_protection.o(i.check_Motor_status))
+<P><STRONG><a name="[db]"></a>capture_fault_data</STRONG> (Thumb, 6 bytes, Stack size 4 bytes, motor_protection.o(i.capture_fault_data))
+<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = capture_fault_data
+</UL>
+<BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tripRelay
+</UL>
+
+<P><STRONG><a name="[ba]"></a>check_Motor_status</STRONG> (Thumb, 168 bytes, Stack size 24 bytes, motor_protection.o(i.check_Motor_status))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = check_Motor_status &rArr; FULL_LOAD_CURRENT &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FULL_LOAD_CURRENT
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
 <LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
-<P><STRONG><a name="[cc]"></a>check_min_max_limit</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, motor_protection.o(i.check_min_max_limit))
-<BR><BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
+<P><STRONG><a name="[cd]"></a>check_min_max_limit</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, motor_protection.o(i.check_min_max_limit))
+<BR><BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
 </UL>
 
-<P><STRONG><a name="[c5]"></a>delaySelect</STRONG> (Thumb, 234 bytes, Stack size 8 bytes, motor_protection.o(i.delaySelect))
+<P><STRONG><a name="[c7]"></a>delaySelect</STRONG> (Thumb, 234 bytes, Stack size 8 bytes, motor_protection.o(i.delaySelect))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = delaySelect &rArr; extact_data
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
-<P><STRONG><a name="[c6]"></a>extact_data</STRONG> (Thumb, 38 bytes, Stack size 20 bytes, setup.o(i.extact_data))
+<P><STRONG><a name="[b8]"></a>extact_data</STRONG> (Thumb, 38 bytes, Stack size 20 bytes, setup.o(i.extact_data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = extact_data
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delaySelect
-<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
+<BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delaySelect
+<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;alarmRelay
 </UL>
 
-<P><STRONG><a name="[d3]"></a>initialised_default_setup</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, setup.o(i.initialised_default_setup))
+<P><STRONG><a name="[d4]"></a>initialised_default_setup</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, setup.o(i.initialised_default_setup))
 <BR><BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[d2]"></a>is_ok_pre_Start_Motor_Fault_Check</STRONG> (Thumb, 138 bytes, Stack size 16 bytes, motor_protection.o(i.is_ok_pre_Start_Motor_Fault_Check))
+<P><STRONG><a name="[d3]"></a>is_ok_pre_Start_Motor_Fault_Check</STRONG> (Thumb, 138 bytes, Stack size 16 bytes, motor_protection.o(i.is_ok_pre_Start_Motor_Fault_Check))
 <BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = is_ok_pre_Start_Motor_Fault_Check &rArr; isPhaseUnbalanceVolt &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_trip_relay
-<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
+<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_trip_relay
+<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
 <P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 86 bytes, Stack size 0 bytes, main.o(i.main))
@@ -1220,7 +1228,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
-<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hardware_init
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hardware_init
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_init
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART4_UART_Init
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART3_UART_Init
@@ -1232,51 +1240,53 @@ Global Symbols
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_DMA_Init
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_ADC1_Init
-<LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initialised_default_setup
-<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_default_status
-<LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initialised_default_setup
+<LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_default_status
+<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
-<P><STRONG><a name="[d5]"></a>motorFunctions</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, motor_protection.o(i.motorFunctions))
+<P><STRONG><a name="[d6]"></a>motorFunctions</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, motor_protection.o(i.motorFunctions))
 <BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = motorFunctions &rArr; is_ok_pre_Start_Motor_Fault_Check &rArr; isPhaseUnbalanceVolt &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
-<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delaySelect
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
+<BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delaySelect
+<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_Motor_status
+<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tripRelay
-<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;other_related_fault
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
-<LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;alarmRelay
+<LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;other_related_fault
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;alarmRelay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bc]"></a>motor_alarm_relay</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, motor_protection.o(i.motor_alarm_relay))
+<P><STRONG><a name="[b9]"></a>motor_alarm_relay</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, motor_protection.o(i.motor_alarm_relay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = motor_alarm_relay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_default_status
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
+<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_default_status
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;alarmRelay
 </UL>
 
-<P><STRONG><a name="[d4]"></a>motor_default_status</STRONG> (Thumb, 24 bytes, Stack size 4 bytes, motor_protection.o(i.motor_default_status))
+<P><STRONG><a name="[d5]"></a>motor_default_status</STRONG> (Thumb, 24 bytes, Stack size 4 bytes, motor_protection.o(i.motor_default_status))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = motor_default_status &rArr; motor_trip_relay
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_trip_relay
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_alarm_relay
+<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_trip_relay
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_alarm_relay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bd]"></a>motor_trip_relay</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, motor_protection.o(i.motor_trip_relay))
+<P><STRONG><a name="[bf]"></a>motor_trip_relay</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, motor_protection.o(i.motor_trip_relay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = motor_trip_relay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_default_status
-<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
+<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_default_status
+<LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
+<LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tripRelay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
 </UL>
 
 <P><STRONG><a name="[b0]"></a>sqrt</STRONG> (Thumb, 66 bytes, Stack size 24 bytes, sqrt.o(i.sqrt))
@@ -1288,8 +1298,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rms_Calculations
 </UL>
 
-<P><STRONG><a name="[bb]"></a>ui_isButtonNormalPressed</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, button.o(i.ui_isButtonNormalPressed))
-<BR><BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
+<P><STRONG><a name="[be]"></a>ui_isButtonNormalPressed</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, button.o(i.ui_isButtonNormalPressed))
+<BR><BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_fault
 </UL>
 <P>
 <H3>
@@ -1312,208 +1322,222 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Adc_Sample_Calculations
 </UL>
 
-<P><STRONG><a name="[d8]"></a>alarmRelay</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor_protection.o(i.alarmRelay))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = alarmRelay
+<P><STRONG><a name="[b7]"></a>alarmRelay</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.alarmRelay))
+<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = alarmRelay &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_alarm_relay
+<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
+</UL>
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
-<P><STRONG><a name="[ba]"></a>clear_fault</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, motor_protection.o(i.clear_fault))
+<P><STRONG><a name="[bd]"></a>clear_fault</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, motor_protection.o(i.clear_fault))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = clear_fault &rArr; motor_trip_relay
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ui_isButtonNormalPressed
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_trip_relay
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_alarm_relay
+<BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ui_isButtonNormalPressed
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_trip_relay
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_alarm_relay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
-<P><STRONG><a name="[be]"></a>current_related_fault</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, motor_protection.o(i.current_related_fault))
+<P><STRONG><a name="[dc]"></a>clear_flag</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, motor_protection.o(i.clear_flag))
+<BR><BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tripRelay
+</UL>
+
+<P><STRONG><a name="[c0]"></a>current_related_fault</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, motor_protection.o(i.current_related_fault))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = current_related_fault &rArr; isUnderCurr &rArr; FULL_LOAD_CURRENT &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
+<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderCurr
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isRotorLockCurr
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isProlongStartCurr
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverCurr
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
-<P><STRONG><a name="[c7]"></a>find_max</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, motor_protection.o(i.find_max))
+<P><STRONG><a name="[c8]"></a>find_max</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, motor_protection.o(i.find_max))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = find_max
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
 </UL>
 
-<P><STRONG><a name="[c8]"></a>find_min</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, motor_protection.o(i.find_min))
+<P><STRONG><a name="[c9]"></a>find_min</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, motor_protection.o(i.find_min))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = find_min
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
+<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
+<BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceCurr
 </UL>
 
-<P><STRONG><a name="[c1]"></a>isInvCurrOverLoad</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, motor_protection.o(i.isInvCurrOverLoad))
+<P><STRONG><a name="[c3]"></a>isInvCurrOverLoad</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, motor_protection.o(i.isInvCurrOverLoad))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = isInvCurrOverLoad &rArr; thermalCapacity &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
+<BR>[Calls]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;thermalCapacity
 <LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2uiz
 </UL>
-<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
 </UL>
 
-<P><STRONG><a name="[c0]"></a>isOverCurr</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isOverCurr))
+<P><STRONG><a name="[c2]"></a>isOverCurr</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isOverCurr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isOverCurr &rArr; FULL_LOAD_CURRENT &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FULL_LOAD_CURRENT
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
 </UL>
 
-<P><STRONG><a name="[cd]"></a>isOverVolt</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isOverVolt))
+<P><STRONG><a name="[ce]"></a>isOverVolt</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isOverVolt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isOverVolt &rArr; NOMINAL_VOLTAGE &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NOMINAL_VOLTAGE
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
+<BR>[Called By]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
+<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
 </UL>
 
-<P><STRONG><a name="[ce]"></a>isPhaseFailueVolt</STRONG> (Thumb, 98 bytes, Stack size 24 bytes, motor_protection.o(i.isPhaseFailueVolt))
+<P><STRONG><a name="[cf]"></a>isPhaseFailueVolt</STRONG> (Thumb, 98 bytes, Stack size 24 bytes, motor_protection.o(i.isPhaseFailueVolt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isPhaseFailueVolt &rArr; NOMINAL_VOLTAGE &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NOMINAL_VOLTAGE
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
+<BR>[Called By]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
+<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
 </UL>
 
-<P><STRONG><a name="[c2]"></a>isPhaseUnbalanceCurr</STRONG> (Thumb, 126 bytes, Stack size 24 bytes, motor_protection.o(i.isPhaseUnbalanceCurr))
+<P><STRONG><a name="[c4]"></a>isPhaseUnbalanceCurr</STRONG> (Thumb, 126 bytes, Stack size 24 bytes, motor_protection.o(i.isPhaseUnbalanceCurr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isPhaseUnbalanceCurr &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_min
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_max
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_min
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_max
 <LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
 </UL>
-<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
 </UL>
 
-<P><STRONG><a name="[d0]"></a>isPhaseUnbalanceVolt</STRONG> (Thumb, 124 bytes, Stack size 32 bytes, motor_protection.o(i.isPhaseUnbalanceVolt))
+<P><STRONG><a name="[d1]"></a>isPhaseUnbalanceVolt</STRONG> (Thumb, 124 bytes, Stack size 32 bytes, motor_protection.o(i.isPhaseUnbalanceVolt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = isPhaseUnbalanceVolt &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_min
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_max
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_min
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_max
 <LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
+<BR>[Called By]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
+<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
 </UL>
 
-<P><STRONG><a name="[c4]"></a>isProlongStartCurr</STRONG> (Thumb, 134 bytes, Stack size 24 bytes, motor_protection.o(i.isProlongStartCurr))
+<P><STRONG><a name="[c6]"></a>isProlongStartCurr</STRONG> (Thumb, 134 bytes, Stack size 24 bytes, motor_protection.o(i.isProlongStartCurr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isProlongStartCurr &rArr; FULL_LOAD_CURRENT &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FULL_LOAD_CURRENT
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
 </UL>
 
-<P><STRONG><a name="[c3]"></a>isRotorLockCurr</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, motor_protection.o(i.isRotorLockCurr))
+<P><STRONG><a name="[c5]"></a>isRotorLockCurr</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, motor_protection.o(i.isRotorLockCurr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isRotorLockCurr &rArr; FULL_LOAD_CURRENT &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FULL_LOAD_CURRENT
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
 </UL>
 
-<P><STRONG><a name="[bf]"></a>isUnderCurr</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isUnderCurr))
+<P><STRONG><a name="[c1]"></a>isUnderCurr</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isUnderCurr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isUnderCurr &rArr; FULL_LOAD_CURRENT &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FULL_LOAD_CURRENT
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;current_related_fault
 </UL>
 
-<P><STRONG><a name="[d1]"></a>isUnderVolt</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isUnderVolt))
+<P><STRONG><a name="[d2]"></a>isUnderVolt</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, motor_protection.o(i.isUnderVolt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = isUnderVolt &rArr; NOMINAL_VOLTAGE &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;extact_data
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;check_min_max_limit
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NOMINAL_VOLTAGE
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
-<LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
+<BR>[Called By]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_ok_pre_Start_Motor_Fault_Check
+<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;voltage_related_fault
 </UL>
 
-<P><STRONG><a name="[d7]"></a>other_related_fault</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, motor_protection.o(i.other_related_fault))
-<BR><BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<P><STRONG><a name="[d8]"></a>other_related_fault</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, motor_protection.o(i.other_related_fault))
+<BR><BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
-<P><STRONG><a name="[cb]"></a>thermalCapacity</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, motor_protection.o(i.thermalCapacity))
+<P><STRONG><a name="[cc]"></a>thermalCapacity</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, motor_protection.o(i.thermalCapacity))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = thermalCapacity &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
 <LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
+<BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isInvCurrOverLoad
 </UL>
 
-<P><STRONG><a name="[d9]"></a>tripRelay</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, motor_protection.o(i.tripRelay))
-<BR><BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<P><STRONG><a name="[d9]"></a>tripRelay</STRONG> (Thumb, 104 bytes, Stack size 16 bytes, motor_protection.o(i.tripRelay))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = tripRelay &rArr; motor_trip_relay
+</UL>
+<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_trip_relay
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;capture_fault_data
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;clear_flag
+</UL>
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
-<P><STRONG><a name="[d6]"></a>voltage_related_fault</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor_protection.o(i.voltage_related_fault))
+<P><STRONG><a name="[d7]"></a>voltage_related_fault</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, motor_protection.o(i.voltage_related_fault))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = voltage_related_fault &rArr; isPhaseUnbalanceVolt &rArr; __aeabi_fsub &rArr; __aeabi_fadd &rArr; _float_epilogue
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
+<BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isUnderVolt
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseUnbalanceVolt
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isPhaseFailueVolt
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isOverVolt
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motorFunctions
 </UL>
 
 <P><STRONG><a name="[99]"></a>MX_ADC1_Init</STRONG> (Thumb, 280 bytes, Stack size 24 bytes, main.o(i.MX_ADC1_Init))
@@ -1627,10 +1651,10 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[c9]"></a>hardware_init</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, main.o(i.hardware_init))
+<P><STRONG><a name="[ca]"></a>hardware_init</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, main.o(i.hardware_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = hardware_init &rArr; Read_Eeprom_Data &rArr; PT24xx_read &rArr; HAL_I2C_Mem_Read &rArr; I2C_RequestMemoryRead &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PT24xx_init
+<BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PT24xx_init
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Read_Eeprom_Data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main

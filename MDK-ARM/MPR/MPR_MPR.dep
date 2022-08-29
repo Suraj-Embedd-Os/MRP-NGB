@@ -47,7 +47,7 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h)(0x622D6B89)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x622D6B89)
 I (..\Core\Core\rms.h)(0x62D4ED57)
 I (..\Core\setup\setup.h)(0x62E65D7B)
-I (..\Core\Core\motor_protection.h)(0x6309F0FB)
+I (..\Core\Core\motor_protection.h)(0x6309F3C2)
 I (..\Core\Core\common_def.h)(0x62E67AF3)
 F (..\Core\Store\pt24xx.c)(0x62D29FED)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\pt24xx.o --omf_browse mpr\pt24xx.crf --depend mpr\pt24xx.d)
 I (..\Core\Store\pt24xx.h)(0x62D29FEA)
@@ -94,8 +94,8 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x622D6B89)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5F63AAA4)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63AAB2)
 F (..\Core\Core\common_def.h)(0x62E67AF3)()
-F (..\Core\Core\motor_protection.c)(0x6309F34D)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\motor_protection.o --omf_browse mpr\motor_protection.crf --depend mpr\motor_protection.d)
-I (..\Core\Core\motor_protection.h)(0x6309F0FB)
+F (..\Core\Core\motor_protection.c)(0x6309F74B)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\motor_protection.o --omf_browse mpr\motor_protection.crf --depend mpr\motor_protection.d)
+I (..\Core\Core\motor_protection.h)(0x6309F3C2)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63AAA4)
 I (../Core/Inc/main.h)(0x6309F05F)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x622D6B89)
@@ -138,7 +138,7 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x622D6B89)
 I (..\Core\Core\rms.h)(0x62D4ED57)
 I (..\Core\setup\setup.h)(0x62E65D7B)
 I (..\Core\Core\common_def.h)(0x62E67AF3)
-I (..\Core\Core\button.h)(0x6305B2D3)
+I (..\Core\Core\button.h)(0x630C4143)
 F (..\Core\setup\setup.c)(0x62E65D8F)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\setup.o --omf_browse mpr\setup.crf --depend mpr\setup.d)
 I (..\Core\setup\setup.h)(0x62E65D7B)
 I (../Core/Inc/main.h)(0x6309F05F)
@@ -181,12 +181,12 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h)(0x622D6B89)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x622D6B89)
 I (..\Core\Core\rms.h)(0x62D4ED57)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63AAA4)
-I (..\Core\Core\motor_protection.h)(0x6309F0FB)
+I (..\Core\Core\motor_protection.h)(0x6309F3C2)
 I (..\Core\Core\common_def.h)(0x62E67AF3)
 I (..\Core\Store\pt24xx.h)(0x62D29FEA)
 I (..\Core\Store\eeprom_addr.h)(0x62D39BE9)
-F (..\Core\Core\button.c)(0x6305B421)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\button.o --omf_browse mpr\button.crf --depend mpr\button.d)
-I (..\Core\Core\button.h)(0x6305B2D3)
+F (..\Core\Core\button.c)(0x630C4152)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\button.o --omf_browse mpr\button.crf --depend mpr\button.d)
+I (..\Core\Core\button.h)(0x630C4143)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63AAA4)
 I (C:\Keil_v5\ARM\ARMCC\include\stddef.h)(0x5F63AAA4)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63AAA4)
@@ -227,7 +227,7 @@ I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h)(0x622D6B89)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h)(0x622D6B89)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h)(0x622D6B89)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63AAB2)
-F (../Core/Src/main.c)(0x6309F05F)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\main.o --omf_browse mpr\main.crf --depend mpr\main.d)
+F (../Core/Src/main.c)(0x630C406B)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\main.o --omf_browse mpr\main.crf --depend mpr\main.d)
 I (../Core/Inc/main.h)(0x6309F05F)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x622D6B89)
 I (../Core/Inc/stm32g0xx_hal_conf.h)(0x6309F05E)
@@ -271,10 +271,10 @@ I (..\Core\Core\rms.h)(0x62D4ED57)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63AAA4)
 I (..\Core\Store\pt24xx.h)(0x62D29FEA)
 I (..\Core\Store\eeprom_addr.h)(0x62D39BE9)
-I (..\Core\Core\motor_protection.h)(0x6309F0FB)
+I (..\Core\Core\motor_protection.h)(0x6309F3C2)
 I (..\Core\setup\setup.h)(0x62E65D7B)
 I (..\Core\Core\common_def.h)(0x62E67AF3)
-I (..\Core\Core\button.h)(0x6305B2D3)
+I (..\Core\Core\button.h)(0x630C4143)
 F (../Core/Src/stm32g0xx_it.c)(0x6309F05D)(--c99 -c --cpu Cortex-M0+ -D__EVAL -D__MICROLIB -g -O1 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ..\Core\Core -I ..\Core\ui -I ..\Core\Store -I ..\Core\serialcomm -I .\MPR -I ..\Core\setup-I.\RTE\_MPR-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Users\EmbedOs\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.3.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx -DUSE_HAL_DRIVER -DSTM32G070xx-o mpr\stm32g0xx_it.o --omf_browse mpr\stm32g0xx_it.crf --depend mpr\stm32g0xx_it.d)
 I (../Core/Inc/main.h)(0x6309F05F)
 I (../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h)(0x622D6B89)

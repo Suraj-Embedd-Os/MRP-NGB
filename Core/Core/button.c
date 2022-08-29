@@ -33,11 +33,11 @@ void button_scanEvent ( void )
 	static uint8_t btnState[BUTTON_TOTAL] = {0}; // 0=release, 1=press, b1=prev state, b0=curr state
 	/* Determine button press:
 	*/	
-	if(btn == BUTTON_TOTAL)btn = 0;
+	if(btn == BUTTON_TOTAL/2)btn = 0;
 	
 	if(((ButtonPort[btn]->IDR & ButtonPin[btn])>>state_shifter[btn]) == GPIO_PIN_RESET)
 	{
-		if(btnEventPressedCntr[btn] > 600) // Press Debounce
+		if(btnEventPressedCntr[btn] > 8000) // Press Debounce
 		{
 			btnEventPressedCntr[btn] = 0;
 			currState[btn] = 0x1;
@@ -53,7 +53,7 @@ void button_scanEvent ( void )
 	{
 		btnEventPressedCntr[btn] = 0;
 		
-		if(btnEventReleasedCntr[btn] > 100) // Release Debounce
+		if(btnEventReleasedCntr[btn] > 2000) // Release Debounce
 		{
 			btnEventReleasedCntr[btn] = 0;
 			currState[btn] = 0x0;
@@ -69,7 +69,7 @@ void button_scanEvent ( void )
 	
 	if( btnState[btn] == 0x3 )
 	{
-		if(btnEventLongPressedCntr[btn] > 3000) // Release Debounce
+		if(btnEventLongPressedCntr[btn] > 20000) // Release Debounce
 		{
 			btnEventLongPressedCntr[btn] = 0;
 			btnEventLongPressed[btn] = 1;

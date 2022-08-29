@@ -90,7 +90,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 		 }
 	 
 		// scan button press event
-	 button_scanEvent();
+			button_scanEvent();
 	}
 	 
 }
