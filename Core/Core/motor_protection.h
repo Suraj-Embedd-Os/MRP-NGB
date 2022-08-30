@@ -10,7 +10,7 @@
 /***default min and max in term of percentage*********/
 
 typedef enum{
-	MIN_UV =20,
+	MIN_UV =10,
 	MAX_UV=100,
 	
 	MIN_OV=110, 	//over volt

@@ -474,7 +474,7 @@ void Scaling_Calculations(void)
 	  		
 	// current scalling without gain
 		//TODO GAIN
-		scaling_factor.curr_scal_gain[phase]= scaling_factor.curr_scal_without_gain[phase]/(float)GAIN; //GAIN :check the gain fator and define
+		scaling_factor.curr_scal_without_gain[phase]= scaling_factor.curr_scal_gain[phase]/(float)GAIN; //GAIN :check the gain fator and define
 		
 		// volatge scalling with gain
 		scaling_factor.volt_scal[phase]= (float)VOLT_MULTIPLIER/\

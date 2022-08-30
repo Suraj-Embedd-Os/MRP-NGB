@@ -133,7 +133,7 @@ EXAMPLE			= (1.000.0011),(00.0110.0100),(00.0110.0100),(01),(01),(01),(1)
 */
 typedef enum default_value
 {
-	DEF_SETUP_UV=0x564197F,   //under volt
+	DEF_SETUP_UV=0x55640579,   //under volt
 	DEF_SETUP_OV=0x564197F, 	//over volt
 	DEF_SETUP_V_PF=0x6, //voltage phasae failure
 	DEF_SETUP_UB_V=0x564197F,	//volt unbalanced

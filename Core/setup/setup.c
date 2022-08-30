@@ -56,7 +56,9 @@ void initialised_default_setup(void)
 		
 		/* copy all default setup first*/
 		
-		
+		setup_t setup;
+		for(setup=SETUP_UV;setup<TOTAL_SETUP_PARA;setup++)
+			meter_setup.meter_setup_menu[setup]=meter_setup.default_setup_menu[setup];
 		
 }
 
