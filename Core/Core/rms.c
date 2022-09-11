@@ -542,6 +542,9 @@ void Rms_Calculations(void)
 			// copy current for display
 			rms.display_currnet[phase]=rms.current_withoutgain[phase];
 			
+			if(rms.display_currnet[phase]<3000)
+				rms.display_currnet[phase]=0;
+			
 		}
 		else
 		{
@@ -551,6 +554,9 @@ void Rms_Calculations(void)
 			
 			// copy current for display
 			rms.display_currnet[phase]=rms.current_gain[phase];
+			
+			if(rms.display_currnet[phase]<3000)
+				rms.display_currnet[phase]=0;
 		}
 		
 		

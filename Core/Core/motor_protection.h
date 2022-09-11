@@ -67,67 +67,6 @@ enum{
 
 
 
-
-typedef enum
-{
-	NONE,
-	UV,   //under volt
-	OV, 	//over volt
-	VPH_F,	//volt phase failure 
-	UB_V,	//volt unbalanced
-	VPH_R, //voltage phase reversal
-	
-	UC,	//under current
-	OC,	//over current
-	INVT_OL,	//inverse time overload
-	UB_C,	//Current unbalanced
-	RL,		//rotor jam
-	PS,	//PROLONG START
-	CPH_F,	//Current phase failure
-	CPH_R, //current phase reversal
-	
-	UP,	//under power
-	OP,	//over power
-	
-	GR_F,	//ground fault
-	O_TEMP, //over temp
-	ER_F,	//earth fault
-	CON_F,	//contatctor failure
-	
-	TOTAL_PARA_FAILURE
-	
-}capture_fault_t;
-
- enum{
-	
-	NONE_fault=0,
-	UV_fault=1<<UV,   //under volt
-	OV_fault=1<<OV, 	//over volt
-	VPH_F_fault=1<<VPH_F,	//volt phase failure 
-	UB_V_fault=1<<UB_V,	//volt unbalanced
-	VPH_R_fault=1<<VPH_R, //voltage phase reversal
-	
-	UC_fault=1<<UC,	//under current
-	OC_fault=1<<OC,	//over current
-	INVT_OL_fault=1<<INVT_OL,	//inverse time overload
-	UB_C_fault=1<<UB_C,	//Current unbalanced
-	RL_fault=1<<RL,		//rotor jam
-	PS_fault=1<<PS,	//PROLONG START
-	CPH_F_fault=1<<CPH_F,	//Current phase failure
-	CPH_R_fault=1<<CPH_R, //current phase reversal
-	
-	UP_fault=1<<UP,	//under power
-	OP_fault=1<<OP,	//over power
-	
-	GR_F_fault=1<<GR_F,	//ground fault
-	O_TEMP_fault=1<<O_TEMP, //over temp
-	ER_F_fault=1<<ER_F,	//earth fault
-	CON_F_fault=1<<CON_F,	//contatctor failure
-	
-};
-
-
-
 typedef struct{
 	/*
 		bits (0-2) =volgate phase failure
@@ -180,6 +119,9 @@ typedef struct
 	uint16_t delaySetup[TIM_TOTAL_PARA];
 }delaySetup_t;
 
+
+
+
 /*
 	All fault related paramerte 
 */
@@ -187,7 +129,6 @@ typedef struct{
 	uint32_t 	capture_fault_value; //strored capure value
 	/* see capture_fault_t enum for all bit
 		eg OV-0bit, UV-1 bit,.....etc*/
-	uint32_t fault_status_reg;  // fault status register 
 	uint32_t value_at_fault; // 0 -bit =stop,1-bit =run,2-bit =start
 	//  Use to display falut text on display check range  capture_fault_t enum  
 	uint16_t 	cause_of_trip;

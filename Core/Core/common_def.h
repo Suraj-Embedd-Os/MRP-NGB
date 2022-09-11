@@ -12,9 +12,9 @@
 #define	UB_V_CHECK 	//volt unbalanced
 //#define	VPH_R_CHECK  //voltage phase reversal
 	
-#define	UC_fCHECK 	//under current
+#define	UC_CHECK 	//under current
 #define	OC_CHECK 	//over current
-#define	INVT_OL_CHECK 	//inverse time overload
+//#define	INVT_OL_CHECK 	//inverse time overload
 #define	UB_C_CHECK 	//Current unbalanced
 #define	RL_CHECK 		//rotor jam
 #define	PS_CHECK 	//PROLONG START

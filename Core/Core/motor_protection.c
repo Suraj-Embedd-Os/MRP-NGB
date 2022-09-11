@@ -69,7 +69,7 @@ static void clear_fault(void);
 void check_min_max_limit(uint16_t max_limit,uint16_t min_limit,uint16_t *des)
 {
 	
-	if(*des >=min_limit && *des<=max_limit)
+	if(*des>=min_limit && *des<=max_limit)
 		return;
 	else
 		*des=min_limit;
@@ -81,7 +81,8 @@ void check_min_max_limit(uint16_t max_limit,uint16_t min_limit,uint16_t *des)
 */
 void motor_alarm_relay(bool val)
 {
-	if(val){
+	if(val)
+	{
 		RL2_GPIO_Port->ODR |=RL1_Pin;
 		motor_status |=ALARM_RELAY;
 	}
@@ -174,15 +175,13 @@ static  bool isUnderVolt()
 		(rms.voltage_LL[YB_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per))|| \
 			(rms.voltage_LL[BR_PHASE]<(float)NOMINAL_VOLTAGE(_under_volt_per)))
 	{
-			motor_var.fault_status_reg |=UV_fault; //set UC bit high
-			fault_trip_counter.tripTimer[UV]++;
+			fault_trip_counter.tripTimer[TIM_UV]++;
 		
 			return true;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=(~UV_fault); //Reset UC bit high
-			fault_trip_counter.tripTimer[UV]=0;
+			fault_trip_counter.tripTimer[TIM_UV]=0;
 			return false;
 	}
 }
@@ -206,14 +205,12 @@ static bool isOverVolt()
 		(rms.voltage_LL[YB_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per))|| \
 			(rms.voltage_LL[BR_PHASE]>(float)NOMINAL_VOLTAGE(_over_volt_per)))
 	{
-			motor_var.fault_status_reg |=OV_fault; //set UC bit high
-		fault_trip_counter.tripTimer[OV]++;
+		fault_trip_counter.tripTimer[TIM_OV]++;
 			return true;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=(~OV_fault); //Reset UC bit high
-		fault_trip_counter.tripTimer[OV]=0;
+		fault_trip_counter.tripTimer[TIM_OV]=0;
 			return false;
 	}
 }
@@ -227,19 +224,14 @@ static bool isPhaseFailueVolt()
 {
 	uint16_t _phase_failure_per=80;//percent of nominal voltage;
 	
-
 	if((rms.voltage_LL[RY_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
 		(rms.voltage_LL[YB_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per))|| \
 			(rms.voltage_LL[BR_PHASE]<(float)NOMINAL_VOLTAGE(_phase_failure_per)))
 	{
-			motor_var.fault_status_reg |=VPH_F; //set UC bit high
-			fault_trip_counter.tripTimer[VPH_F]++;
 			return true;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=(~VPH_F_fault); //Reset UC bit high
-		fault_trip_counter.tripTimer[VPH_F]=0;
 			return false;
 	}
 }
@@ -265,15 +257,13 @@ static bool isPhaseUnbalanceVolt(void)
 	
 	if(_per_error>=_phase_ub_volt_per)
 	{
-		motor_var.fault_status_reg |=UB_V_fault;
-		fault_trip_counter.tripTimer[UB_V]++;
+		fault_trip_counter.tripTimer[TIM_UB_V]++;
 		return true;
 		
 	}
 	else
 	{
-		motor_var.fault_status_reg &=(~UB_V_fault);
-		fault_trip_counter.tripTimer[UB_V]=0;
+		fault_trip_counter.tripTimer[TIM_UB_V]=0;
 		return false;
 	}
 	
@@ -292,12 +282,10 @@ static bool isPhaseReversalVolt(void)
 	if((store.Store_phase_shift_count[0][0] >= (_noofsample120-3)  \
 		  && store.Store_phase_shift_count[0][0] <= (_noofsample120+3)) && \
 			store.Store_phase_shift_count[0][1] >= (_noofsample120-3)  \
-		  && store.Store_phase_shift_count[0][1] <= (_noofsample120+3)	
-		)
-	return false;
+		  && store.Store_phase_shift_count[0][1] <= (_noofsample120+3))
+			return false;
 	else
 	{
-		motor_var.fault_status_reg |=VPH_R_fault;
 		return true;
 	}
 
@@ -320,14 +308,12 @@ static bool isUnderCurr(void)
 		(rms.display_currnet[YB_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per))|| \
 			(rms.display_currnet[BR_PHASE]<(float)FULL_LOAD_CURRENT(_under_curr_per)))
 	{
-			motor_var.fault_status_reg |=UC_fault; //set UC bit high
-			fault_trip_counter.tripTimer[UC]++;
+			fault_trip_counter.tripTimer[TIM_UC]++;
 			return true;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=(~UC_fault); //Reset UC bit high
-			fault_trip_counter.tripTimer[UC]=0;
+			fault_trip_counter.tripTimer[TIM_UC]=0;
 			return false ;
 	
 	}
@@ -349,14 +335,12 @@ static bool isOverCurr(void)
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per))|| \
 			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_oc_per)))
 	{
-			motor_var.fault_status_reg |=OC_fault; //set UC bit high
-			fault_trip_counter.tripTimer[OC]++;
+			fault_trip_counter.tripTimer[TIM_OC]++;
 			return true;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=~(OC_fault); //Reset UC bit high
-			fault_trip_counter.tripTimer[OC]=0;
+			fault_trip_counter.tripTimer[TIM_OC]=0;
 			return false;
 	}
 	
@@ -367,19 +351,17 @@ static bool isOverCurr(void)
 */
 static bool isPhaseFailueCurr(void)
 {
+	
 	uint16_t _phase_failure_per= 80;//percent of nominal voltage;
 	if((rms.display_currnet[RY_PHASE]<(float)FULL_LOAD_CURRENT(_phase_failure_per))|| \
 		(rms.display_currnet[YB_PHASE]<(float)FULL_LOAD_CURRENT(_phase_failure_per))|| \
 			(rms.display_currnet[BR_PHASE]<(float)FULL_LOAD_CURRENT(_phase_failure_per)))
 	{
-			motor_var.fault_status_reg |=CPH_F; //set UC bit high
-			fault_trip_counter.tripTimer[CPH_F]++;
+		
 			return true;
 	}
 	else
 	{
-			motor_var.fault_status_reg &=(~CPH_F_fault); //Reset UC bit high
-		fault_trip_counter.tripTimer[CPH_F]=0;
 			return false;
 	}
 	
@@ -404,15 +386,13 @@ static bool isPhaseUnbalanceCurr(void)
 	
 	if(_phase_ub_curr_per>_per_error)
 	{
-		motor_var.fault_status_reg |=UB_C_fault;
-		fault_trip_counter.tripTimer[UB_C]++;
+		fault_trip_counter.tripTimer[TIM_UB_C]++;
 		return true;
 		
 	}
 	else
 	{
-		motor_var.fault_status_reg &=(~UB_C_fault);
-		fault_trip_counter.tripTimer[UB_C]=0;
+		fault_trip_counter.tripTimer[TIM_UB_C]=0;
 		return false;
 	}
 	
@@ -429,12 +409,11 @@ static bool isPhaseReversalCurr(void)
 	if((store.Store_phase_shift_count[1][0] >= (_noofsample120-3)  \
 		  && store.Store_phase_shift_count[1][0] <= (_noofsample120+3)) && \
 			store.Store_phase_shift_count[1][1] >= (_noofsample120-3)  \
-		  && store.Store_phase_shift_count[1][1] <= (_noofsample120+3)	
+		  && store.Store_phase_shift_count[1][1] <= (_noofsample120+3)
 		)
 	return false;
 	else
 	{
-		motor_var.fault_status_reg |=CPH_R_fault;
 		return true;
 	}
 	
@@ -450,21 +429,19 @@ static bool isRotorLockCurr(void)
 	
 		extact_data(&meter_setup.meter_setup_menu[SETUP_RL],&_rotor_lock_Per,7,10);
 	
-	//check_min_max_limit
+		//check_min_max_limit
 		check_min_max_limit(MAX_RL,MIN_RL,&_rotor_lock_Per);
 
 	if((rms.display_currnet[RY_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per))|| \
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per))|| \
 			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_rotor_lock_Per)))
 			{
-				motor_var.fault_status_reg |=RL_fault; //set UC bit high
-				fault_trip_counter.tripTimer[RL]++;
+				fault_trip_counter.tripTimer[TIM_RL]++;
 				return true;
 			}
 	else
 			{
-				motor_var.fault_status_reg &=~(RL_fault); //Reset UC bit high
-				fault_trip_counter.tripTimer[RL]=0;
+				fault_trip_counter.tripTimer[TIM_RL]=0;
 				return false;
 			}
 }
@@ -485,14 +462,12 @@ static bool isProlongStartCurr(void)
 		(rms.display_currnet[YB_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per))|| \
 			(rms.display_currnet[BR_PHASE]>(float)FULL_LOAD_CURRENT(_prolong_lock_Per)))
 			{
-				motor_var.fault_status_reg |=PS_fault; //set UC bit high
-				fault_trip_counter.tripTimer[PS]++;
+				fault_trip_counter.tripTimer[TIM_PS]++;
 				return true;
 			}
 	else
 			{
-				motor_var.fault_status_reg &=~(PS_fault); //Reset UC bit high
-				fault_trip_counter.tripTimer[PS]=0;
+				fault_trip_counter.tripTimer[TIM_PS]=0;
 				return false;
 			}
 	
@@ -576,28 +551,28 @@ static bool isInvCurrOverLoad(void)
 */
 void coolingMotor()
 {
-	uint8_t runningCoolingConst=15*2;
-	uint8_t stopCoolingConst=15*4;
-	float __temp ;
-   if(presentTHCapacity>0)  
-		 {
-		//if(Average_All_phase_Current<FULL_LOAD_CURRENT_PERCENTAGE(100))
-		{
-			__temp=(float)10/runningCoolingConst;
-				presentTHCapacity =previousTHCapacity-__temp;
-			if(presentTHCapacity<0)
-					presentTHCapacity=0;
-			    previousTHCapacity=presentTHCapacity;
-		}
-		//else if(stop)
-		{
-			__temp=(float)10/stopCoolingConst;
-				presentTHCapacity =previousTHCapacity-__temp;
+		uint8_t runningCoolingConst=15*2;
+		uint8_t stopCoolingConst=15*4;
+		float __temp ;
+		 if(presentTHCapacity>0)  
+			 {
+			//if(Average_All_phase_Current<FULL_LOAD_CURRENT_PERCENTAGE(100))
+			{
+				__temp=(float)10/runningCoolingConst;
+					presentTHCapacity =previousTHCapacity-__temp;
 				if(presentTHCapacity<0)
-					presentTHCapacity=0;
-				previousTHCapacity=presentTHCapacity;
+						presentTHCapacity=0;
+						previousTHCapacity=presentTHCapacity;
+			}
+			//else if(stop)
+			{
+				__temp=(float)10/stopCoolingConst;
+					presentTHCapacity =previousTHCapacity-__temp;
+					if(presentTHCapacity<0)
+						presentTHCapacity=0;
+					previousTHCapacity=presentTHCapacity;
+			}
 		}
-	}
 }
 /*
 	check the presentage
@@ -646,7 +621,7 @@ void check_Motor_status()
 									rms.display_currnet[BR_PHASE]);
 	 _avg_curr/=3;
 	
-		if(_avg_curr >_avg_curr>FULL_LOAD_CURRENT(10))
+		if(_avg_curr >FULL_LOAD_CURRENT(10))
 		{
 		 if((motor_status & MOTOR_STOP)==MOTOR_STOP)
 		 {
@@ -668,19 +643,19 @@ void check_Motor_status()
 		 }
 		 else if((motor_status & MOTOR_RUNNING)!=MOTOR_RUNNING)
 		 {
-			 // reset start and running bit and set stop bit since it is stop
-			 motor_status &=~MOTOR_RUNNING;
-			 motor_status &=~MOTOR_START;
-			 motor_status |=MOTOR_STOP;
+					 // reset start and running bit and set stop bit since it is stop
+					 motor_status &=~MOTOR_RUNNING;
+					 motor_status &=~MOTOR_START;
+					 motor_status |=MOTOR_STOP;
 			 
 		 }
 	 }
 		else
 		{
-			// reset start and running bit and set stop bit since it is stop
-			 motor_status &=~MOTOR_RUNNING;
-			 motor_status &=~MOTOR_START;
-			 motor_status |=MOTOR_STOP; 
+				// reset start and running bit and set stop bit since it is stop
+				 motor_status &=~MOTOR_RUNNING;
+				 motor_status &=~MOTOR_START;
+				 motor_status |=MOTOR_STOP; 
 			
 		}
 	 
@@ -694,40 +669,40 @@ void check_Motor_status()
 bool is_ok_pre_Start_Motor_Fault_Check()
 {
 	/* check only volatge related parameter beacuse only voltage will present if motor not running */
-	
 if(motor_status & MOTOR_STOP)
 {
 	#ifdef UV_CHECK
 		if(isUnderVolt())
 		{
-			motor_var.cause_of_trip=TIM_UV;
-			//turn off motor start relay
-			motor_trip_relay(OFF);
-			return false;
+				motor_var.cause_of_trip=TIM_UV;
+				//turn off motor start relay
+				motor_trip_relay(OFF);
+				motor_alarm_relay(OFF);
+				return false;
 		}
 	#endif
 	
 		#ifdef  OV_CHECK
 		if(isOverVolt())
 		{
-			motor_var.cause_of_trip=TIM_OV;
-			
-			
-			//turn off motor start relay
-			motor_trip_relay(OFF);
-			return false;
+				motor_var.cause_of_trip=TIM_OV;
+				//turn off motor start relay
+				motor_trip_relay(OFF);
+				motor_alarm_relay(OFF);
+				return false;
 		}
 	#endif
 	
 		#ifdef  VPH_F_CHECK
 		if(isPhaseFailueVolt())
 		{
-			motor_var.cause_of_trip=FAULT_VOLT_PHASE_FAILURE;
-			
-			//turn off motor start relay
-			motor_trip_relay(OFF);
-			
-			return false;
+				motor_var.cause_of_trip=FAULT_VOLT_PHASE_FAILURE;
+				
+				//turn off motor start relay
+				motor_trip_relay(OFF);
+				motor_alarm_relay(OFF);
+				
+				return false;
 		}
 	#endif
 	
@@ -738,6 +713,7 @@ if(motor_status & MOTOR_STOP)
 			
 			//turn off motor start relay
 			motor_trip_relay(OFF);
+			motor_alarm_relay(OFF);
 			
 			return false;
 		}
@@ -755,20 +731,30 @@ if(motor_status & MOTOR_STOP)
 		}
 	
 	#endif
+		static uint8_t _thresold_delay=0;
 		
+		_thresold_delay++;
 		//Turn on trip relay pass relay 
-		motor_trip_relay(ON);
-		
-		//clear timmer counter
-		timmer_t d_time;
-		for(d_time=TIM_UV;d_time<TIM_TOTAL_PARA;d_time++)
-		fault_trip_counter.tripTimer[d_time]=0;
-		
-		
-		motor_var.cause_of_alarm=FAULT_NONE;
-		motor_var.cause_of_trip=FAULT_NONE;
-		
-		return true;
+		if(_thresold_delay>=20)//2 sec for thresold delay
+		{
+				_thresold_delay=0;
+				motor_trip_relay(ON);
+				
+				
+				//clear timmer counter
+				timmer_t d_time;
+				for(d_time=TIM_UV;d_time<TIM_TOTAL_PARA;d_time++)
+				fault_trip_counter.tripTimer[d_time]=0;
+				
+				
+				motor_var.cause_of_alarm=FAULT_NONE;
+				motor_var.cause_of_trip=FAULT_NONE;
+				
+				return true;
+			
+		}
+		motor_alarm_relay(OFF);
+		return false;
 		
 }
 
@@ -800,16 +786,20 @@ void motorFunctions(void)
 {	
 		/* check for motor status running,stop,start */
 	check_Motor_status();
-	if(is_ok_pre_Start_Motor_Fault_Check() && motor_var.cause_of_trip !=FAULT_NONE)
+	if(motor_var.cause_of_trip==FAULT_NONE)
 	{
-		// CHECK ALL FAULT	
-			voltage_related_fault();
-			current_related_fault();
-			other_related_fault();
-			delaySelect();
-			alarmRelay();
-			tripRelay();
+		if(is_ok_pre_Start_Motor_Fault_Check())
+		{
 			
+			// CHECK ALL FAULT	
+				voltage_related_fault();
+				current_related_fault();
+				other_related_fault();
+				delaySelect();
+				alarmRelay();
+				tripRelay();
+				
+		}
 	}
 	// clear fault manually
 	clear_fault();
@@ -823,7 +813,6 @@ void motorFunctions(void)
 */
 
 
-
 static void tripRelay(void)
 {
 	/* check trip relay on or off 
@@ -834,7 +823,10 @@ static void tripRelay(void)
 	
 	setup_t setup_data;
 	timmer_t d_time;
-
+	
+if((motor_status & MOTOR_RUNNING)||(motor_status & MOTOR_START))
+	{
+	
 	for(setup_data=SETUP_UV,d_time=TIM_UV;setup_data<=SETUP_CON_F;setup_data++)
 	{
 		/* skip trip relay for phase failure and phase reversal for volt,current */
@@ -856,20 +848,19 @@ static void tripRelay(void)
 							clear_flag();
 							
 							//capture cause of fault
-						motor_var.cause_of_trip=d_time;
+							motor_var.cause_of_trip=d_time;
 							
 					}
 			}
 			d_time++;
 			
 		}
+	}
 			
-	
 }
 
 /*
 Discriptions:check for alarm relay
-	
 */
  
 static void alarmRelay(void)
@@ -884,7 +875,9 @@ static void alarmRelay(void)
 	
 	setup_t setup_data;
 	timmer_t d_time;
-
+	
+	if((motor_status & MOTOR_RUNNING)||(motor_status & MOTOR_START))
+	{
 	for(setup_data=SETUP_UV,d_time=TIM_UV;setup_data<=SETUP_CON_F;setup_data++)
 	{
 		/* skip alarm for phase failure and phase reversal for volt,current */
@@ -902,7 +895,7 @@ static void alarmRelay(void)
 				if(_alarm_per <ALARM_MIN && _alarm_per>ALARM_MAX)
 							_alarm_per=ALARM_MIN;
 					
-						alarm_temp=(delaySetupTim.delaySetup[d_time]*_alarm_per)/100;
+						alarm_temp=(uint16_t)(delaySetupTim.delaySetup[d_time]*_alarm_per)/100;
 						
 						//TODO
 						/*
@@ -924,7 +917,7 @@ static void alarmRelay(void)
 			
 			d_time++;
 	}
-			
+}		
 				
 }
 
@@ -976,7 +969,7 @@ static void current_related_fault(void)
 {
 	if(motor_status & MOTOR_RUNNING)
 	{
-	#ifdef	UC_fCHECK  //under current
+	#ifdef	UC_CHECK  //under current
 		isUnderCurr();
 	#endif
 	#ifdef	OC_CHECK //over current
@@ -1011,27 +1004,29 @@ static void current_related_fault(void)
 
 static void power_related_fault(void)
 {
-#ifdef	UP_CHECK 	//under power
-	isUnderPower();
-#endif
-#ifdef	OP_CHECK 	//over power
-	isOverPower();
-#endif
+	#ifdef	UP_CHECK 	//under power
+		isUnderPower();
+	#endif
+	#ifdef	OP_CHECK 	//over power
+		isOverPower();
+	#endif
 }
+
+
 static void other_related_fault(void)
 {
-#ifdef	GR_F_CHECK 	//ground fault
-	isGroundFault();
-	#endif
-#ifdef	O_TEMP_CHECK  //over temp
-	
-	#endif
-#ifdef	ER_F_CHECK 	//earth fault
-	isEarthFault();
-	#endif
-#ifdef	CON_F_CHECK 	//contatctor failure
-	isContactorFault();
-	#endif
+	#ifdef	GR_F_CHECK 	//ground fault
+		isGroundFault();
+		#endif
+	#ifdef	O_TEMP_CHECK  //over temp
+		
+		#endif
+	#ifdef	ER_F_CHECK 	//earth fault
+		isEarthFault();
+		#endif
+	#ifdef	CON_F_CHECK 	//contatctor failure
+		isContactorFault();
+		#endif
 }
 
 
@@ -1114,6 +1109,7 @@ uint32_t capture_fault_data(timmer_t id)
 	 return retVal;
 }
 
+
 void motor_default_status(void)
 {
 		motor_var.cause_of_alarm=FAULT_NONE;
@@ -1121,7 +1117,6 @@ void motor_default_status(void)
 		motor_alarm_relay(OFF);
 		motor_trip_relay(OFF);
 }
-
 
 static void clear_fault()
 {
@@ -1132,10 +1127,7 @@ static void clear_fault()
 		if(ui_isButtonNormalPressed(BUTTON_ID_B0))
 		{
 			motor_var.cause_of_trip=FAULT_NONE;
-			motor_var.cause_of_alarm=FAULT_NONE;
-			motor_alarm_relay(OFF);
-			motor_trip_relay(ON);
-			
+			motor_var.cause_of_alarm=FAULT_NONE; 
 		}
 		
 	}

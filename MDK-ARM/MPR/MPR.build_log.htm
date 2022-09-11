@@ -22,19 +22,110 @@ Dialog DLL:      TARMCM1.DLL V1.14.3.0
  
 <h2>Project:</h2>
 D:\Nagoba\MPR\MRP-NGB\MDK-ARM\MPR.uvprojx
-Project File Date:  08/27/2022
+Project File Date:  09/08/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Build target 'MPR'
+Rebuild target 'MPR'
+assembling startup_stm32g070xx.s...
+compiling pt24xx.c...
+compiling rms.c...
+..\Core\Core\rms.c(319): warning:  #188-D: enumerated type mixed with another type
+  	for(phase=0; phase< TOTAL_PHASE;phase++)
+..\Core\Core\rms.c(390): warning:  #188-D: enumerated type mixed with another type
+  	for(phase=0; phase<TL_NO_PHASE;phase++)
+..\Core\Core\rms.c(465): warning:  #188-D: enumerated type mixed with another type
+  	for(phase=0; phase<	TL_NO_PHASE;phase++)
+..\Core\Core\rms.c(506): warning:  #188-D: enumerated type mixed with another type
+  		energy_t energy_IDX=0;
+..\Core\Core\rms.c(512): warning:  #188-D: enumerated type mixed with another type
+  	for(phase=0; phase<TL_NO_PHASE;phase++)
+..\Core\Core\rms.c(586): warning:  #188-D: enumerated type mixed with another type
+  	for(energy_IDX=0;energy_IDX<TL_PARA_ENERGY;energy_IDX++)
+..\Core\Core\rms.c(507): warning:  #177-D: variable "_energy"  was declared but never referenced
+  	 float _energy[TL_PARA_POWER][TL_NO_PHASE]={0};
+..\Core\Core\rms.c(509): warning:  #177-D: variable "_total_energy"  was declared but never referenced
+  	 float _total_energy[TL_PARA_POWER]={0};
+..\Core\Core\rms.c(642): warning:  #188-D: enumerated type mixed with another type
+  	for(phase=0; phase<TL_NO_PHASE;phase++)
+..\Core\Core\rms.c(25): warning:  #177-D: function "processFrequencyCalculations"  was declared but never referenced
+  static inline void processFrequencyCalculations(int32_t currSample);
+..\Core\Core\rms.c(151): warning:  #177-D: function "phaseShiftCount"  was declared but never referenced
+  static void phaseShiftCount(int16_t voltsample[],int16_t currsample[])
+..\Core\Core\rms.c: 11 warnings, 0 errors
+compiling motor_protection.c...
+..\Core\Core\motor_protection.c(278): warning:  #177-D: function "isPhaseReversalVolt"  was declared but never referenced
+  static bool isPhaseReversalVolt(void)
+..\Core\Core\motor_protection.c(352): warning:  #177-D: function "isPhaseFailueCurr"  was declared but never referenced
+  static bool isPhaseFailueCurr(void)
+..\Core\Core\motor_protection.c(405): warning:  #177-D: function "isPhaseReversalCurr"  was declared but never referenced
+  static bool isPhaseReversalCurr(void)
+..\Core\Core\motor_protection.c(534): warning:  #177-D: function "isInvCurrOverLoad"  was declared but never referenced
+  static bool isInvCurrOverLoad(void)
+..\Core\Core\motor_protection.c(477): warning:  #177-D: function "isOverPower"  was declared but never referenced
+  static bool isOverPower(void)
+..\Core\Core\motor_protection.c(483): warning:  #177-D: function "isUnderPower"  was declared but never referenced
+  static bool isUnderPower(void)
+..\Core\Core\motor_protection.c(490): warning:  #177-D: function "isGroundFault"  was declared but never referenced
+  static bool isGroundFault(void)
+..\Core\Core\motor_protection.c(496): warning:  #177-D: function "isEarthFault"  was declared but never referenced
+  static bool isEarthFault(void)
+..\Core\Core\motor_protection.c(502): warning:  #177-D: function "isContactorFault"  was declared but never referenced
+  static bool isContactorFault(void)
+..\Core\Core\motor_protection.c: 9 warnings, 0 errors
 compiling button.c...
 ..\Core\Core\button.c(36): warning:  #188-D: enumerated type mixed with another type
-  	if(btn == BUTTON_TOTAL/2)btn = 0;
+  	if(btn == BUTTON_TOTAL)btn = 0;
 ..\Core\Core\button.c: 1 warning, 0 errors
+compiling setup.c...
+..\Core\setup\setup.c(68): warning:  #177-D: variable "_temp_setup_para"  was declared but never referenced
+  		uint32_t _temp_setup_para[TOTAL_SETUP_PARA]; 
+..\Core\setup\setup.c: 1 warning, 0 errors
+compiling main.c...
+../Core/Src/main.c(338): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.LowPowerAutoWait = DISABLE;
+../Core/Src/main.c(339): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.LowPowerAutoPowerOff = DISABLE;
+../Core/Src/main.c(340): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.ContinuousConvMode = DISABLE;
+../Core/Src/main.c(342): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.DiscontinuousConvMode = DISABLE;
+../Core/Src/main.c(345): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.DMAContinuousRequests = ENABLE;
+../Core/Src/main.c(348): warning:  #188-D: enumerated type mixed with another type
+    hadc1.Init.OversamplingMode = DISABLE;
+../Core/Src/main.c: 6 warnings, 0 errors
+compiling stm32g0xx_hal_gpio.c...
+compiling stm32g0xx_it.c...
+compiling stm32g0xx_hal_msp.c...
+compiling stm32g0xx_ll_adc.c...
+compiling stm32g0xx_hal_adc_ex.c...
+compiling stm32g0xx_hal_adc.c...
+compiling stm32g0xx_hal_i2c.c...
+compiling stm32g0xx_hal_i2c_ex.c...
+compiling stm32g0xx_hal_rtc.c...
+compiling stm32g0xx_hal_rtc_ex.c...
+compiling stm32g0xx_hal_tim_ex.c...
+compiling stm32g0xx_hal_tim.c...
+compiling stm32g0xx_hal_uart.c...
+compiling stm32g0xx_hal_uart_ex.c...
+compiling stm32g0xx_ll_rcc.c...
+compiling stm32g0xx_hal_rcc_ex.c...
+compiling stm32g0xx_hal_rcc.c...
+compiling stm32g0xx_hal_dma.c...
+compiling stm32g0xx_hal_flash_ex.c...
+compiling stm32g0xx_hal_flash.c...
+compiling stm32g0xx_hal_pwr.c...
+compiling stm32g0xx_hal_pwr_ex.c...
+compiling stm32g0xx_hal_dma_ex.c...
+compiling stm32g0xx_hal_cortex.c...
+compiling stm32g0xx_hal_exti.c...
+compiling stm32g0xx_hal.c...
+compiling system_stm32g0xx.c...
 linking...
-Program Size: Code=20020 RO-data=344 RW-data=132 ZI-data=2964  
+Program Size: Code=19792 RO-data=344 RW-data=128 ZI-data=2960  
 FromELF: creating hex file...
-"MPR\MPR.axf" - 0 Error(s), 1 Warning(s).
+"MPR\MPR.axf" - 0 Error(s), 28 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -57,7 +148,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.5.0
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:33
 </pre>
 </body>
 </html>
